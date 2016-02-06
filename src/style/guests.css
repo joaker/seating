@@ -1,0 +1,19 @@
+.guest {
+  cursor: pointer;
+}
+
+.guest:hover {
+  cursor: pointer;
+  background-color:#777;
+}
+
+/* WARNING: overriding important is bad.  TODO: Fix this*/
+.guest > a {
+  
+  color: #000;
+  text-decoration: none !important;
+}
+
+.guest:not(:hover) a{
+  color:#333;
+}

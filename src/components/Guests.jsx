@@ -1,4 +1,8 @@
+import styles from '../style/guests.css';
+import cnames from 'classnames/dedupe';
+
 import React from 'react';
+import {Link} from 'react-router';
 import { connect } from 'react-redux';
 import { addGuest } from '../app/action_creators';
 import {InputGroup, GroupButton, GroupInput} from './pure/GroupButton';
@@ -28,8 +32,8 @@ class Guests extends React.Component {
         <ul className="guests">
           {
             this.props.guests.map(g => (
-              <li key={g}>
-                {g}
+              <li key={g} className={cnames(styles.guest)}>
+                <Link to={`/Guests/` + g }>{g}</Link>
               </li>
             ))
           }

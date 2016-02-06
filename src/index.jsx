@@ -10,7 +10,7 @@ require('./style/global.css');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router,Route, browserHistory} from 'react-router';
+import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import {createStore,  applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 //import io from 'socket.io-client';
@@ -24,6 +24,7 @@ import {setGuests} from './app/action_creators';
 import App from './components/App';
 import Main from './components/Main';
 import Guests from './components/Guests';
+import Guest from './components/Guest';
 
 import initialGuests from './data/guests';
 
@@ -50,16 +51,19 @@ const store = createStore(reducer);
 store.dispatch(setGuests(initialGuests));
 
 const routes = (
-  <Route history={browserHistory} component={App}>
-    <Route path="/" component={Main}/>
-    <Route path="/Guests" component={Guests} />
+  <Route path="/" component={App} title="Home">
+    <IndexRoute component={Main} title="Main"/>
+    <Route path="Guests" title="Guest List">
+      <IndexRoute component={Guests} title="Guest"/>
+      <Route path=":id" component={Guest} title="Guest"></Route>
+    </Route>
   </Route>
 );
 
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>{routes}</Router>
+    <Router  history={browserHistory}>{routes}</Router>
   </Provider>,
   document.getElementById('app')
 );
