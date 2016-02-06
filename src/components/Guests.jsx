@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGuest } from '../app/action_creators';
-
+import {InputGroup, GroupButton, GroupInput} from './pure/GroupButton';
 class Guests extends React.Component {
   constructor(props) {
     super(props);
@@ -34,13 +34,26 @@ class Guests extends React.Component {
             ))
           }
         </ul>
-        <input type="text" ref="potentialGuest" onChange={this.potentialGuestChanged} />
-        <button
-          onClick={(() => this.props.addGuest(this.state.newGuest)).bind(this)}
-          disabled={this.addDisabled()}
-          >
-          Add Guest
-        </button>
+        { (
+          <InputGroup>
+            <GroupInput type="text" onChange={this.potentialGuestChanged} />
+            <GroupButton
+              onClick={(() => this.props.addGuest(this.state.newGuest)).bind(this)}
+              disabled={this.addDisabled()}>
+              Add
+            </GroupButton>
+          </InputGroup>
+        )
+        // (
+        // <input type="text" ref="potentialGuest" onChange={this.potentialGuestChanged} />
+        // <button
+        //   onClick={(() => this.props.addGuest(this.state.newGuest)).bind(this)}
+        //   disabled={this.addDisabled()}
+        //   >
+        //   Add Guest
+        // </button>)
+        //
+        }
       </div>
     );
   }

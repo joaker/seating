@@ -1,6 +1,16 @@
+/*
+Styles are defined in:
+-Bootstrap CDN reference in the index.html file
+-the react-overlays package (http://react-bootstrap.github.io/react-overlays/examples/)
+-the global css reference below
+*/
+require('./style/global.css');
+
+
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router,Route} from 'react-router';
+import {Router,Route, browserHistory} from 'react-router';
 import {createStore,  applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 //import io from 'socket.io-client';
@@ -16,6 +26,7 @@ import Main from './components/Main';
 import Guests from './components/Guests';
 
 import initialGuests from './data/guests';
+
 
 // Handle socket events
 // This is not in use yet
@@ -39,7 +50,7 @@ const store = createStore(reducer);
 store.dispatch(setGuests(initialGuests));
 
 const routes = (
-  <Route component={App}>
+  <Route history={browserHistory} component={App}>
     <Route path="/" component={Main}/>
     <Route path="/Guests" component={Guests} />
   </Route>
