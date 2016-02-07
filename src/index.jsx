@@ -10,7 +10,8 @@ require('./style/global.css');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+import {Router, Route, IndexRoute} from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory'
 import {createStore,  applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 //import io from 'socket.io-client';
@@ -30,6 +31,7 @@ import SeatGuest from './components/SeatGuest';
 
 import initialGuests from './data/guests';
 
+const history = createBrowserHistory();
 
 // Handle socket events
 // This is not in use yet
@@ -66,10 +68,11 @@ const routes = (
   </Route>
 );
 
-
+console.log('browser history:')
+console.log(history);
 ReactDOM.render(
   <Provider store={store}>
-    <Router  history={browserHistory}>{routes}</Router>
+    <Router  history={history}>{routes}</Router>
   </Provider>,
   document.getElementById('app')
 );

@@ -36,20 +36,11 @@ class Table extends React.Component {
     return (
       <div className="Table">
         <h3>Table</h3>
-      <div className={cnames('seatingTable', styles.seatingTable)}>
-        <TableRow {...this.props} rowIndex={0} />
-        <TableRow {...this.props} table={true} />
-        <TableRow {...this.props} rowIndex={1} />
-      </div>
-        <ul className="guests">
-          {
-            this.props.guests.map(g => (
-              <li key={g} className={cnames(guestStyles.guest)}>
-                <Link to={`/Guest/` + g }>{g}</Link>
-              </li>
-            ))
-          }
-        </ul>
+        <div className={cnames('seatingTable', styles.seatingTable)}>
+          <TableRow {...this.props} rowIndex={0} />
+          <TableRow {...this.props} table={true} />
+          <TableRow {...this.props} rowIndex={1} />
+        </div>
       </div>
     );
   }
