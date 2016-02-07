@@ -12,22 +12,52 @@ import { seatGuest } from '../app/action_creators';
 const maxColumns = 12;
 const offsetColumns = 2;
 const maxSeatCount = (maxColumns - offsetColumns) * 2;
-const defaultSeatCount = 20;
+const defaultSeatCount = 14;
 
 const placeholder = 'Empty';
 
-const EmptyPlace = (props) => (<div className={cnames(styles.emptyPlace, styles.place)}>{placeholder}</div>);
-const GuestPlace = (<div className={cnames(styles.guestPlace, styles.place, 'glyphicon','glyphicon-user')} aria-hidden="true"></div>)
+const EmptyPlace = (props) => (<div className={cnames(styles.emptyPlace)}>{placeholder}</div>);
+const GuestPlace = (props) => (<div className={cnames(styles.guestPlace, 'glyphicon','glyphicon-user')} aria-hidden="true"></div>)
 
-const Seat = ({seatIndex, seats, columnsPerSeat}) => {
-  var colClass = "col-md-" + columnsPerSeat;
-  var guest = seats[seatIndex];
-  var placeIcon = true ? GuestPlace : EmptyPlace;
-  var placeName = guest || ("Seat " + seatIndex);
+const showAvailableGuests = (seatIndex, history, location) => {
+  const current = (location && location.pathname) || '/Table';
+  const next = (current + '/' + seatIndex);
+  history.push(next);
+}
+
+const PlaceIcon = ({guest}) => {
   return (
-    <div className={cnames(styles.seat, colClass)}>
-        <div className={cnames(styles.placeName)}>{placeName}</div>
-        <div className={cnames(styles.placeSeat)}>{placeIcon}</div>
+    <div className={cnames(styles.placeSeat, styles.place)}>
+      {guest ? (<GuestPlace />) : (<EmptyPlace />)}
+    </div>
+  );
+}
+
+const PlaceName = ({guest}) => {
+  var name = guest || 'Open Seat';
+  return (
+    <div className={cnames(styles.placeName, styles.place, 'noselect')}>
+      {name}
+    </div>
+  );
+}
+
+const Seat = ({seatIndex, seats, columnsPerSeat, rowIndex, history, location}) => {
+  const colClass = "col-md-" + columnsPerSeat;
+  const guest = seats[seatIndex];
+  const seatingStyle = guest ? styles.seated : styles.unseated;
+
+  let lines = [
+    (<PlaceName guest={guest} key="b" />),
+    (<PlaceIcon guest={guest} key="a" />),
+    ];
+
+  // if the row is facing down, flip the order
+  if(rowIndex) lines = lines.reverse();
+
+  return (
+    <div className={cnames(styles.seat, seatingStyle, colClass)} onClick={showAvailableGuests.bind(this, seatIndex, history, location)}>
+      {lines}
     </div>
   );
 };
@@ -59,7 +89,7 @@ const TableSeatingRow = (props = {}) => {
   const end = start + seatsPerSide;
 
   for(let i = start; i < end; i++){
-    rowSeats.push(<Seat {...props} seatIndex={i}/>)
+    rowSeats.push(<Seat key={i} {...props} seatIndex={i}/>)
   }
 
   return (
@@ -79,7 +109,7 @@ const TableTableRow = (props = {}) => {
   const start = seatsPerSide * rowIndex;
 
   for(let i = 0; i < seatsPerSide; i++){
-    rowSeats.push(<TableCell {...props} />)
+    rowSeats.push(<TableCell key={i} {...props} />)
   }
 
   return (

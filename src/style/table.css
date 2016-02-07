@@ -3,6 +3,7 @@
 }
 
 .tableCell {
+  height:2.5em;
   background-color: #966F33
 }
 
@@ -11,7 +12,12 @@
 }
 
 .place{
+  margin:.5em 0;
+}
 
+.placeName{
+  font-size: .75em;
+  line-height:1.2em;
 }
 
 .guestPlace{
@@ -27,9 +33,24 @@
 }
 
 .seat {
+  line-height: 1.5em;
+}
 
+.seat:hover {
+  color:black;
+  background: #AAA;
+}
+
+.seat.seated {
+  color: #7A7;
+}
+
+.seat.unseated {
+  color: #77A;
+  font-weight:bold;
 }
 
 .seat > * {
   text-align:center;
+  cursor: pointer;
 }
