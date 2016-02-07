@@ -1,0 +1,35 @@
+.seatingTable {
+  background-color:#EEE;
+}
+
+.tableCell {
+  background-color: #966F33
+}
+
+.tableRow{
+  line-height: 2em;
+}
+
+.place{
+
+}
+
+.guestPlace{
+
+}
+
+.emptyPlace{
+
+}
+
+.placeSeat{
+  text-align:center;
+}
+
+.seat {
+
+}
+
+.seat > * {
+  text-align:center;
+}
