@@ -25,6 +25,7 @@ import App from './components/App';
 import Main from './components/Main';
 import Guests from './components/Guests';
 import Guest from './components/Guest';
+import Table from './components/Table';
 
 import initialGuests from './data/guests';
 
@@ -56,6 +57,8 @@ const routes = (
     <Route path="Guests" title="Guest List">
       <IndexRoute component={Guests} title="Guest"/>
       <Route path=":id" component={Guest} title="Guest"></Route>
+    </Route>
+    <Route path="Table" title="Guest List" component={Table}>
     </Route>
   </Route>
 );

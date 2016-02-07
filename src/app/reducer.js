@@ -12,9 +12,11 @@ export default function(state = Map(), action){
     case 'SET_GUESTS':
       return reductions.setGuests(state, action.guests);
     case 'ADD_GUEST':
-      return reductions.addGuest(state, action.guest)
+      return reductions.addGuest(state, action.guest);
     case 'DROP_GUEST':
-      return reductions.dropGuest(state, action.guest)
+      return reductions.dropGuest(state, action.guest);
+    case 'SEAT_GUEST':
+      return reductions.seatGuest(state, action.seating);
   }
   return state;
 }

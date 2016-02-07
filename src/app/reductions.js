@@ -24,3 +24,11 @@ export const dropGuest = (state, guest) => {
     guests => guests.filter(g => g != guest)
   );
 }
+
+
+export const seatGuest = (state, { guest = 'Unknown', seat = 0 }) => {
+  return state.setIn(
+    ['seats', seat ],
+    guest
+  );
+}

@@ -16,6 +16,12 @@ export const addGuest = (guest) => ({
     guest
 })
 
+export const seatGuest = ( guest, seat ) => ({
+    meta: { remote: false },
+    type: 'SEAT_GUEST',
+    seating: { guest, seat }
+})
+
 
 /*
 export function next(){
