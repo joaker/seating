@@ -55,12 +55,12 @@ store.dispatch(setGuests(initialGuests));
 const routes = (
   <Route path="/" component={App} title="Home">
     <IndexRoute component={Main} title="Main"/>
-    <Route path="Guests" title="Guest List">
-      <IndexRoute component={Guests} title="Guests"/>
+    <Route path="Guests" title="Guests">
+      <IndexRoute component={Guests} title="Guest List"/>
       <Route path=":id" component={Guest} title="Guest"></Route>
     </Route>
     <Route path="Table" title="Table">
-      <IndexRoute title="Table" component={Table}></IndexRoute>
+      <IndexRoute title="Arrange" component={Table}></IndexRoute>
       <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
     </Route>
   </Route>
