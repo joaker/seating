@@ -17,7 +17,7 @@ import {Provider} from 'react-redux';
 //import io from 'socket.io-client';
 
 import reducer from './app/reducer';
-import {setGuests} from './app/action_creators';
+import {setGuests, setRelationships} from './app/action_creators';
 // We don't need this because we're not using remote content yet
 //import remoteActionMiddleware from './remote_action_middleware';
 
@@ -30,8 +30,9 @@ import Table from './components/Table';
 import SeatGuest from './components/SeatGuest';
 
 import initialGuests from './data/guests';
+import relationships from './data/relationships';
 
-const history = createBrowserHistory();
+const history = undefined; //createBrowserHistory();
 
 // Handle socket events
 // This is not in use yet
@@ -53,6 +54,7 @@ const store = createStoreWithMiddleware(reducer);
 const store = createStore(reducer);
 
 store.dispatch(setGuests(initialGuests));
+store.dispatch(setRelationships(relationships));
 
 const routes = (
   <Route path="/" component={App} title="Home">

@@ -58,7 +58,8 @@ const mapStateToProps = (state = Map(), props = {}) => {
     seatsPerSide: seatsPerSide,
     columnsPerSeat: columnsPerSeat,
     seats: state.get('seats', Map()).toJS() || {},
-    guests: state.get('guests', List()).toJS() || []
+    guests: state.get('guests', List()).toJS() || [],
+    relationships: state.get('relationships', Map()).toJS()
   };
 };
 

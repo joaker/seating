@@ -1,4 +1,7 @@
 const initialGuestList = [
+  "Hater McHaterson",
+  "GoodGuy Greg",
+  "McLovin",
   "Tim Timmerson",
   "Mary Mathews",
   "Sharon Sugars",

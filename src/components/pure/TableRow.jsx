@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { seatGuest } from '../../app/action_creators';
 import range from '../../util/range';
 
-import {BufferCell, TableCell, SeatCell} from './cells';
+import {BufferCell, TableCell, SeatCell} from './Cells';
 
 
 // A row of seats along a table

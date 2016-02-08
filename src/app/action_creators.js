@@ -10,6 +10,13 @@ export const setGuests = (guests) => ({
     guests
 })
 
+
+export const setRelationships = (relationships) => ({
+    meta: { remote: false },
+    type: 'SET_RELATIONSHIPS',
+    relationships
+})
+
 export const addGuest = (guest) => ({
     meta: { remote: false },
     type: 'ADD_GUEST',
@@ -20,6 +27,12 @@ export const seatGuest = ( guest, seat ) => ({
     meta: { remote: false },
     type: 'SEAT_GUEST',
     seating: { guest, seat }
+})
+
+export const clearSeat = ( seat ) => ({
+    meta: { remote: false },
+    type: 'CLEAR_SEAT',
+    seat: seat
 })
 
 

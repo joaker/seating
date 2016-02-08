@@ -52,6 +52,41 @@
   font-weight:bold;
 }
 
+
+
+.rating-type-bad {
+  background-color: hsl(0, 75%, 75%);
+}
+
+.rating-type-good {
+  background-color: hsl(120, 75%, 75%);
+}
+
+.rating-type-good.rating-score-1{
+  background-color: hsl(120, 50%, 75%);
+}
+
+.rating-type-good.rating-score-2{
+  background-color: hsl(120, 75%, 75%);
+}
+
+.rating-type-good.rating-score-3{
+  background-color: hsl(120, 100%, 75%);
+}
+
+
+.rating-type-bad.rating-score-1{
+  background-color: hsl(0, 50%, 75%);
+}
+
+.rating-type-bad.rating-score-2{
+  background-color: hsl(0, 75%, 75%);
+}
+
+.rating-type-bad.rating-score-3{
+  background-color: hsl(0, 100%, 75%);
+}
+
 .seat > * {
   text-align:center;
   cursor: pointer;

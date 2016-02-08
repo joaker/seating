@@ -42,10 +42,46 @@ const PlaceName = ({guest}) => (
   </div>
 );
 
-export const SeatCell = ({seatIndex, seats, columnsPerSeat, rowIndex, history, location}) => {
+const getNeighborIDs = (seatIndex, seatsPerSide) => (
+  seatIndex >= seatsPerSide ? {
+    leftID: Math.max(seatIndex - 1, seatsPerSide),
+    rightID: Math.min(seatIndex + 1, seatsPerSide * 2),
+    oppositeID: seatIndex % seatsPerSide
+  } : {
+    leftID: Math.max(seatIndex - 1, 0),
+    rightID: Math.min(seatIndex + 1, seatsPerSide),
+    oppositeID: seatIndex + seatsPerSide
+  }
+);
+
+const scorer = (name, likes, dislikes) => {
+  const lscore = likes.includes(name) ? 1 : 0;
+  const dlscore = dislikes.includes(name) ? 1 : 0;
+  const score = lscore - dlscore;
+  return score;
+};
+
+const UnconnectedSeatCell = ({seatIndex, guest, likes, dislikes, seats, seatsPerSide, columnsPerSeat, rowIndex, history, location}) => {
   const colClass = "col-md-" + columnsPerSeat;
-  const guest = seats[seatIndex];
   const seatingStyle = guest ? styles.seated : styles.unseated;
+
+  const {leftID, rightID, oppositeID} = getNeighborIDs(seatIndex, seatsPerSide);
+  const left = seats[leftID];
+  const right = seats[rightID];
+  const opposite = seats[oppositeID];
+
+  const neighbors = [left, right, opposite];
+  const scores = neighbors.map(n => scorer(n, likes, dislikes));
+  const score = scores.reduce(((sum, ith) => sum+ith), 0);
+
+  const ascore = Math.abs(score);
+  const stype = score > 0 ? 'good' : (score == 0 ? 'neutral' : 'bad');
+
+  const ratingType = 'rating-type-' + stype;
+  const ratingScore = 'rating-score-' + ascore;
+
+  const ratingTypeStyle = styles[ratingType];
+  const ratingScoreStyle = styles[ratingScore];
 
   let lines = [
     (<PlaceName guest={guest} key="b" />),
@@ -56,8 +92,27 @@ export const SeatCell = ({seatIndex, seats, columnsPerSeat, rowIndex, history, l
   if(rowIndex) lines = lines.reverse();
 
   return (
-    <div className={cnames(styles.seat, seatingStyle, colClass)} onClick={showAvailableGuests.bind(this, seatIndex, history, location)}>
+    <div className={cnames(styles.seat, seatingStyle, ratingTypeStyle, ratingScoreStyle, colClass)} onClick={showAvailableGuests.bind(this, seatIndex, history, location)}>
       {lines}
     </div>
   );
 };
+
+const mapStateToProps = (state = Map(), props = {}) => {
+  var guest = props.seats[props.seatIndex];
+
+  return {
+    props,
+    guest: guest,
+    likes: state.getIn(['relationships', guest, 'likes'], List()).toJS(),
+    dislikes: state.getIn(['relationships', guest, 'dislikes'], List()).toJS()
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+});
+
+export const SeatCell = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UnconnectedSeatCell);

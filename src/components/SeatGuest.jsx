@@ -31,6 +31,9 @@ class SeatGuest extends React.Component {
       <div className="SeatGuest">
         <h3>Available Guests</h3>
         <ul className="availableGuests">
+          <li key={'empty'} className={cnames(styles.guest, styles.emptyguest)} onClick={this.guestChosen.bind(this, 'Empty')}>
+            <a className={cnames('guest-link')}>Empty</a>
+          </li>
           {
             this.props.available.map(g => (
               <li key={g} className={cnames(styles.guest)} onClick={this.guestChosen.bind(this, g)}>
