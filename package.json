@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app/server.js",
-    "postinstall": "webpack --config ./webpack.config.js --progress --colors",
+    "postinstall": "webpack --config ./webpack.config.js",
 
     "test": "test"
   },
