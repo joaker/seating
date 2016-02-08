@@ -14,23 +14,3 @@ const Nav = () => (
 );
 
 export default Nav;
-//
-// export const NavLinks = () => (
-//   <ul className={cnames(styles["links"])}>
-//     <li key={'main'}><Link to={`/`}>Main</Link></li>
-//     <li key={'guests'}><Link to={`/Guests`}>View Guests</Link></li>
-//   </ul>
-// );
-//
-//
-// export class NavAffix extends React.Component {
-//   render(){
-//     return (
-//       <div className='applicationSidebar'>
-//         <AutoAffix viewportOffsetTop={15} container={this}>
-//           <NavLinks/>
-//         </AutoAffix>
-//       </div>
-//     );
-//   }
-// }

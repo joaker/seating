@@ -28,12 +28,12 @@ class Guests extends React.Component {
   render(){
     return (
       <div className="Guests">
-        <h3>Guests</h3>
+        <h2>Guests</h2>
         <ul className="guests">
           {
             this.props.guests.map(g => (
               <li key={g} className={cnames(styles.guest)}>
-                <Link to={`/Guests/` + g }>{g}</Link>
+                <Link to={`/Guests/` + g } className={cnames(styles.guestlink)}>{g}</Link>
               </li>
             ))
           }

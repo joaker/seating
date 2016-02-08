@@ -30,6 +30,10 @@ ul {
   padding: .5em .25em;
 }
 
+:global .text-very-muted {
+  color: #AAA;
+}
+
 :global .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */

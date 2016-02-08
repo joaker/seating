@@ -2,6 +2,12 @@
   cursor: pointer;
 }
 
+.guestlink {
+  cursor: pointer;
+  width:100%;
+  display:inline-block;
+}
+
 .emptyguest {
   font-style: italic;
 }
@@ -20,4 +26,12 @@
 
 .guest:not(:hover) a{
   color:#333;
+}
+
+.textLike {
+  color: hsl(0, 75%, 75%);
+}
+
+.textDislike {
+  color: hsl(120, 75%, 75%);
 }

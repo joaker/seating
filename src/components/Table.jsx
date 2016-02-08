@@ -35,7 +35,7 @@ class Table extends React.Component {
 
     return (
       <div className="Table">
-        <h3>Table</h3>
+        <h2>Table</h2>
         <div className={cnames('seatingTable', styles.seatingTable)}>
           <TableRow {...this.props} rowIndex={0} />
           <TableRow {...this.props} table={true} />

@@ -4,7 +4,11 @@ import React from 'react';
 import {Link} from 'react-router';
 import Nav from './Nav';
 
-//const App = (props) => props && props.children;
+
+const LTitle = ({item = {}, params = {}}) => {
+  const title = (item.title == 'Guest' && params && params.id) || item.title || 'unknown'
+  return <span>{title}</span>;
+};
 
 const App = (props) => (
   <div className="AppComponent row" >
@@ -14,14 +18,17 @@ const App = (props) => (
     <div className="col-xs-12 col-sm-9 col-md-10">
       <main>
         <ul className={styles["breadcrumbs-list"]}>
-          {props.routes.map((item, index) =>
+          {props.routes.filter(r => true).map((item, index) =>
             <li key={index}>
+              {
               <Link
                 onlyActiveOnIndex={true}
                 activeClassName={styles["breadcrumb-active"]}
-                to={item.path || ''}>
-                {item.title}
+                to={item.path || item.to || ''}>
+                <LTitle params={props.params} item={item} />
+
               </Link>
+              }
               {(index + 1) < props.routes.length && '\u2192'}
             </li>
           )}
