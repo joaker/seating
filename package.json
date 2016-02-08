@@ -44,6 +44,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "connect": "^3.4.1",
     "history": "^2.0.0",
     "immutable": "^3.7.6",
     "react": "^0.14.6",
