@@ -1,7 +1,7 @@
 node_modules
 npm-debug.log
 .DS_Store
-dist
+dist/bundle*
 nested-dispatch.js
 test.js
 .idea
