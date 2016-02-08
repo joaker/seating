@@ -1,1 +1,1 @@
-web: npm install -g --save webpack webpack-dev-server
+web: 1 + 1
