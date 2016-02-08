@@ -27,7 +27,6 @@ const Breadcrumbs = ({routes = [], params, router}) => {
         <li key={index}>
           {
           <Link
-            onlyActiveOnIndex={true}
             activeClassName={styles["breadcrumb-active"]}
             to={
               (item.path == ':id' && (index+1) == pathRoutes.length && hashpath) ||

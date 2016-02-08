@@ -12,11 +12,16 @@ aside {
 ul.breadcrumbs-list {
   margin: 0;
   padding: 0;
+  line-height: 1.5em;
 }
 
 ul.breadcrumbs-list li {
   display: inline-block;
   margin-right: 20px;
+}
+
+ul.breadcrumbs-list > li > span {
+  margin-left:.75em;
 }
 
 ul.breadcrumbs-list li a:not(.breadcrumb-active) {
