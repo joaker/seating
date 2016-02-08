@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app/server.js",
+    "postinstall": "webpack --config ./webpack-prod.config.js --progress --colors",
     "setup": "npm install -g webpack webpack-dev-server",
     "test": "test"
   },
