@@ -4,12 +4,27 @@ import {List, Map} from 'immutable';
 import React from 'react';
 import {Link} from 'react-router';
 import { connect } from 'react-redux';
+import {hashHistory} from 'react-router';
 import { seatGuest } from '../app/action_creators';
 import {InputGroup, GroupButton, GroupInput} from './pure/GroupButton';
 
+
+// class Component extends React.Component {
+//   constructor(props, ctx) {
+//     super(props, ctx)
+//     context = ctx
+//   }
+//   render() { return null }
+// }
+//
+// Component.contextTypes = {
+//   router: React.PropTypes.object.isRequired
+// }
+
 class SeatGuest extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, ctx) {
+    super(props, ctx);
+    this.context = ctx;
     //this.state = {count: props.initialCount};
 
     // Bind instance methods that need the "this" context
@@ -22,8 +37,10 @@ class SeatGuest extends React.Component {
     this.props.seatGuest(guest);
 
     // Go back to where you came from
-    this.props.history.goBack();
+    //this.props.history.goBack();
+    //hashHistory.goBack();
 
+    this.context.router.goBack();
   }
 
   render(){
@@ -45,6 +62,10 @@ class SeatGuest extends React.Component {
       </div>
     );
   }
+}
+
+SeatGuest.contextTypes = {
+  router: React.PropTypes.object.isRequired
 }
 
 const getSeated = (state) => {

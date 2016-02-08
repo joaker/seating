@@ -20,6 +20,17 @@
 .placeName{
   font-size: .75em;
   line-height:1.2em;
+  text-align:center;
+}
+
+.textUp{
+  transform: rotate(-90deg);
+  transform-origin: left top 0;
+}
+
+.textDown{
+  transform: rotate(90deg);
+  transform-origin: left top 0;
 }
 
 .guestPlace{
@@ -44,11 +55,11 @@
 }
 
 .seat.seated {
-  color: #7A7;
+  color: #343;
 }
 
 .seat.unseated {
-  color: #77A;
+  color: #334;
   font-weight:bold;
 }
 

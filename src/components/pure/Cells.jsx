@@ -24,10 +24,12 @@ const placeholder = 'Empty';
 const EmptyPlace = (props) => (<div className={cnames(styles.emptyPlace)}>{placeholder}</div>);
 const GuestPlace = (props) => (<div className={cnames(styles.guestPlace, 'glyphicon','glyphicon-user')} aria-hidden="true"></div>)
 
-const showAvailableGuests = (seatIndex, history, location) => {
+const showAvailableGuests = (seatIndex, location, router) => {
   const current = (location && location.pathname) || '/Table';
   const next = (current + '/' + seatIndex);
-  history.push(next);
+
+  //history.push(next);
+  router.push(next);
 }
 
 const PlaceIcon = ({guest}) => (
@@ -36,8 +38,8 @@ const PlaceIcon = ({guest}) => (
   </div>
 );
 
-const PlaceName = ({guest}) => (
-  <div className={cnames(styles.placeName, styles.place, 'noselect')}>
+const PlaceName = ({guest, textStyle}) => (
+  <div className={cnames(styles.placeName, styles.place, textStyle, 'noselect')}>
     {guest || 'Open Seat'}
   </div>
 );
@@ -61,7 +63,7 @@ const scorer = (name, likes, dislikes) => {
   return score;
 };
 
-const UnconnectedSeatCell = ({seatIndex, guest, likes, dislikes, seats, seatsPerSide, columnsPerSeat, rowIndex, history, location}) => {
+const UnconnectedSeatCell = ({seatIndex, guest, likes, dislikes, seats, seatsPerSide, columnsPerSeat, rowIndex, history, location}, context) => {
   const colClass = "col-md-" + columnsPerSeat;
   const seatingStyle = guest ? styles.seated : styles.unseated;
 
@@ -83,20 +85,28 @@ const UnconnectedSeatCell = ({seatIndex, guest, likes, dislikes, seats, seatsPer
   const ratingTypeStyle = styles[ratingType];
   const ratingScoreStyle = styles[ratingScore];
 
+  const textStyle = rowIndex ? styles.textDown : styles.textUp;
+
   let lines = [
-    (<PlaceName guest={guest} key="b" />),
+    (<PlaceName guest={guest} key="b" textStyle={textStyle}/>),
     (<PlaceIcon guest={guest} key="a" />),
     ];
 
   // if the row is facing down, flip the order
   if(rowIndex) lines = lines.reverse();
 
+  const router = context.router;
+
   return (
-    <div className={cnames(styles.seat, seatingStyle, ratingTypeStyle, ratingScoreStyle, colClass)} onClick={showAvailableGuests.bind(this, seatIndex, history, location)}>
+    <div className={cnames(styles.seat, seatingStyle, ratingTypeStyle, ratingScoreStyle, colClass)} onClick={showAvailableGuests.bind(this, seatIndex, location, router)}>
       {lines}
     </div>
   );
 };
+
+UnconnectedSeatCell.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
 
 const mapStateToProps = (state = Map(), props = {}) => {
   var guest = props.seats[props.seatIndex];
