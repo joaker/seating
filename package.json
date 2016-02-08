@@ -11,6 +11,9 @@
     "type": "git",
     "url": "seating.git"
   },
+  "engines": {
+    "node": "0.12.7"
+  },
   "keywords": [
     "react",
     "webpack",
