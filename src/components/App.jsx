@@ -10,33 +10,56 @@ const LTitle = ({item = {}, params = {}}) => {
   return <span>{title}</span>;
 };
 
-const App = (props) => (
+const getHashPath = () => {
+  const bigHash = window.location.hash.substring(1);
+
+  const hashpath = (bigHash.match(/^[^?]*/i) || [])[0];
+
+  return hashpath;
+};
+
+const Breadcrumbs = ({routes = [], params, router}) => {
+  const pathRoutes = routes.filter(r => r.path);
+  const hashpath = getHashPath();
+  return (
+    <ul className={styles["breadcrumbs-list"]}>
+      {pathRoutes.map((item, index) => (
+        <li key={index}>
+          {
+          <Link
+            onlyActiveOnIndex={true}
+            activeClassName={styles["breadcrumb-active"]}
+            to={
+              (item.path == ':id' && (index+1) == pathRoutes.length && hashpath) ||
+              (index == pathRoutes.length && router.getCurrentPathname()) ||
+              item.to ||
+              ''}>
+            <LTitle params={params} item={item} />
+          </Link>
+          }
+          {(index + 1) < pathRoutes.length && '\u2192'}
+        </li>))
+      }
+    </ul>
+    );
+}
+
+const App = (props, context) => (
   <div className="AppComponent row" >
     <div className="hidden-xs col-sm-3 col-md-2">
       <Nav/>
     </div>
     <div className="col-xs-12 col-sm-9 col-md-10">
       <main>
-        <ul className={styles["breadcrumbs-list"]}>
-          {props.routes.filter(r => true).map((item, index) =>
-            <li key={index}>
-              {
-              <Link
-                onlyActiveOnIndex={true}
-                activeClassName={styles["breadcrumb-active"]}
-                to={item.path || item.to || ''}>
-                <LTitle params={props.params} item={item} />
-
-              </Link>
-              }
-              {(index + 1) < props.routes.length && '\u2192'}
-            </li>
-          )}
-        </ul>
+        <Breadcrumbs {...props} router={context.router}/>
         {props.children}
       </main>
     </div>
   </div>
 );
+
+App.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
 
 export default App;
