@@ -1,1 +1,1 @@
-web: npm install; webpack; npm start
+web: npm install; npm setup; webpack; npm start
