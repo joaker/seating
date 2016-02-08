@@ -40,7 +40,7 @@ const PlaceIcon = ({guest}) => (
 
 const PlaceName = ({guest, textStyle}) => (
   <div className={cnames(styles.placeName, styles.place, textStyle, 'noselect')}>
-    {guest || 'Open Seat'}
+    {guest || <div style={{height: '1em'}}></div>}
   </div>
 );
 
