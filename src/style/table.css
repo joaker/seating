@@ -75,36 +75,36 @@
 
 
 .rating-type-bad {
-  background-color: hsl(0, 75%, 75%);
+  background-color: hsl(0, 60%, 70%);
 }
 
 .rating-type-good {
-  background-color: hsl(120, 75%, 75%);
+  background-color: hsl(120, 60%, 70%);
 }
 
 .rating-type-good.rating-score-1{
-  background-color: hsl(120, 50%, 75%);
+  background-color: hsl(120, 20%, 80%);
 }
 
 .rating-type-good.rating-score-2{
-  background-color: hsl(120, 75%, 75%);
+  background-color: hsl(120, 60%, 70%);
 }
 
 .rating-type-good.rating-score-3{
-  background-color: hsl(120, 100%, 75%);
+  background-color: hsl(120, 100%, 60%);
 }
 
 
 .rating-type-bad.rating-score-1{
-  background-color: hsl(0, 50%, 75%);
+  background-color: hsl(0, 20%, 80%);
 }
 
 .rating-type-bad.rating-score-2{
-  background-color: hsl(0, 75%, 75%);
+  background-color: hsl(0, 60%, 70%);
 }
 
 .rating-type-bad.rating-score-3{
-  background-color: hsl(0, 100%, 75%);
+  background-color: hsl(0, 100%, 60%);
 }
 
 .seat > * {
