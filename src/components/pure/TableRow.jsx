@@ -21,7 +21,7 @@ const TableRow = (props = {}) => {
   const end = start + seatsPerSide;
 
   const bufferStart = start - 1;
-  const bufferEnd = end + 1;
+  const bufferEnd = end; // this is an inclusive index
 
   const r = range;
   const cells = range(bufferEnd, bufferStart);
