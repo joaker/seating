@@ -1,3 +1,4 @@
+
 export const setState = (state) => ({
   meta: { remote: false },
   type: 'SET_STATE',
@@ -18,19 +19,19 @@ export const setRelationships = (relationships) => ({
 })
 
 export const addGuest = (guest) => ({
-    meta: { remote: false },
+    meta: { remote: true },
     type: 'ADD_GUEST',
     guest
 })
 
 export const seatGuest = ( guest, seat ) => ({
-    meta: { remote: false },
+    meta: { remote: true },
     type: 'SEAT_GUEST',
     seating: { guest, seat }
 })
 
 export const clearSeat = ( seat ) => ({
-    meta: { remote: false },
+    meta: { remote: true },
     type: 'CLEAR_SEAT',
     seat: seat
 })

@@ -7,7 +7,7 @@ Styles are defined in:
 require('./style/global.css');
 
 
-
+import io from 'socket.io-client';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
@@ -16,8 +16,8 @@ import {createStore,  applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 //import io from 'socket.io-client';
 
-import reducer from './app/reducer';
-import {setGuests, setRelationships} from './app/action_creators';
+import reducer, {defaultState} from './app/reducer';
+import {setGuests, setRelationships, setState} from './app/action_creators';
 // We don't need this because we're not using remote content yet
 //import remoteActionMiddleware from './remote_action_middleware';
 
@@ -31,28 +31,33 @@ import SeatGuest from './components/SeatGuest';
 
 import initialGuests from './data/guests';
 import relationships from './data/relationships';
+import {action_message} from './app/messages';
+import messenger from './action_messenger';
 
 // Handle socket events
-// This is not in use yet
-/*
-const socket = io(`${location.protocol}//${location.hostname}:8090`);
-socket.on('state', state =>
-  store.dispatch(setState(state))
+const serverPortString = `${window.location.port}` || 80;
+const port = Number(serverPortString);
+const ioPort = port + 1;
+const ioLocation = `${location.protocol}//${location.hostname}:${ioPort}`;
+console.log(ioLocation);
+const socket = io(ioLocation);
+
+
+socket.on(action_message, state => {
+  store.dispatch(state)
+});
+
+const middleware = applyMiddleware(messenger(socket));
+
+// Store that messenges
+const store = createStore(
+  reducer,
+  defaultState,
+  middleware
 );
 
-const createStoreWithMiddleware = applyMiddleware(
-  remoteActionMiddleware(socket)
-)(createStore);
-
-// The single redux store that the entire application will use
-const store = createStoreWithMiddleware(reducer);
-*/
-
-// This store only communicates locally, without middleware
-const store = createStore(reducer);
-
-store.dispatch(setGuests(initialGuests));
-store.dispatch(setRelationships(relationships));
+//store.dispatch(setGuests(initialGuests));
+//store.dispatch(setRelationships(relationships));
 
 const routes =  (
   <Route path="/" component={App} title="Home">

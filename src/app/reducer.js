@@ -1,9 +1,14 @@
-import {List, Map} from 'immutable';
+import {fromJS, List, Map} from 'immutable';
 import * as reductions from './reductions.js';
 
+export const defaultState = fromJS({
+  guests: [],
+  seats: {}
+});
 
-
-export default function(state = Map(), action){
+export default function(state = defaultState, action){
+  let act = action;
+  console.log('action');
   switch(action.type){
     case 'SET_STATE':
       return reductions.setState(state, action.state);
