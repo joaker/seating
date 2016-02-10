@@ -18,7 +18,7 @@ const ioserver = {
 
     logger('Creating IO.  ioParam is: ' + ioParam);
 
-    const io = ioParam ? new Server(ioParam) : new Server().attach(ioport);
+    const io = ioParam ? new Server(ioParam, {secure: true}) : new Server().attach(ioport);
 
 
     logger('Starting IO server');
