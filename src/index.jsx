@@ -33,9 +33,12 @@ import initialGuests from './data/guests';
 import relationships from './data/relationships';
 import {action_message} from './app/messages';
 import messenger from './action_messenger';
+import logger from '../server/logger';
+
+import port from './app/port';
 
 // Handle socket events
-const serverPortString = `${window.location.port}` || 80;
+const serverPortString = `${window.location.port}` || port;
 const port = Number(serverPortString);
 const ioPort = port;// + 1;
 const ioLocation = `${location.protocol}//${location.hostname}:${ioPort}`;
