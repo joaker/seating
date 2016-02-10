@@ -36,12 +36,18 @@ import messenger from './action_messenger';
 import logger from '../server/logger';
 
 //import port from './app/port';
+portConfig = portConfig || {};
+
+
+var host = location.origin.replace(/^http/, 'ws');
+
 
 // Handle socket events
-const serverPortString = `${window.location.port}` || portConfig.port;
-const appPort = Number(serverPortString);
-const ioPort = appPort;// + 1;
-const ioLocation = `${location.protocol}//${location.hostname}:${ioPort}`;
+// const serverPortString = portConfig.ioPort || `${window.location.port}`;
+// const appPort = Number(serverPortString);
+// const ioPort = appPort;// + 1;
+// const portString = ':' + ioPort;
+const ioLocation = host;//`${location.protocol}//${location.hostname}``:${ioPort}`;
 console.log(ioLocation);
 const socket = io(ioLocation);
 
