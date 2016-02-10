@@ -17,8 +17,8 @@ module.exports = {
   debug: true,
   // Starting point for the application server
   entry: [
-    //'webpack-dev-server/client?http://localhost:8080',
-    //'webpack/hot/only-dev-server',
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
     './src/index.jsx'
   ],
   // Define resource loaders
@@ -52,9 +52,9 @@ module.exports = {
   // externals: nodeModules,
   devServer: {
     contentBase: './dist',
-    //hot: true
+    hot: true
   },
   plugins: [
-    //new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin()
   ]
 }

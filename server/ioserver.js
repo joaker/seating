@@ -11,10 +11,15 @@ import initialGuests from '../src/data/guests';
 import relationships from '../src/data/relationships';
 import logger from './logger';
 
-const getIOPort = (port) => port + 1;
+const ioport = port + 1;
 
 const ioserver = {
-  start: () => {
+  start: (ioParam) => {
+
+    logger('Creating IO.  ioParam is: ' + ioParam);
+
+    const io = ioParam ? new Server(ioParam) : new Server().attach(ioport);
+
 
     logger('Starting IO server');
 
@@ -25,9 +30,7 @@ const ioserver = {
     };
 
 
-    const ioport = getIOPort(port);
-    logger('attaching io to port: ' + port);
-    const io = new Server().attach(ioport);
+
 
     // Listen up for socket events
     io.on('connection', function (socket) {

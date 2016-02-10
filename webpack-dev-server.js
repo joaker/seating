@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const WebpackDevServer = require('webpack-dev-server')
+const WebpackDevServer = require('webpack-dev-server-hot')
 const config = require('./webpack.config');
 const ioFactory = require('socket.io');
 import Server from 'socket.io';

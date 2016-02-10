@@ -1,8 +1,14 @@
 import ioserver from './server/ioserver';
-import server from './server/server';
+import port from './src/app/port'
 
-// Start the io server
-ioserver.start();
+const express = require('express');
+var app = express();
+var server = require('http').createServer(app);
 
-// Start the
-server.start();
+// Create the IO server with the content server
+ioserver.start(server);
+
+// Server the /dist directory
+app.use(express.static('dist'));
+
+server.listen(port);
