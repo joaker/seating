@@ -35,10 +35,10 @@ import {action_message} from './app/messages';
 import messenger from './action_messenger';
 import logger from '../server/logger';
 
-import port from './app/port';
+//import port from './app/port';
 
 // Handle socket events
-const serverPortString = `${window.location.port}` || port;
+const serverPortString = `${window.location.port}` || portConfig.port;
 const appPort = Number(serverPortString);
 const ioPort = appPort;// + 1;
 const ioLocation = `${location.protocol}//${location.hostname}:${ioPort}`;
