@@ -1,3 +1,5 @@
+// Prod webpack config - build a bundle that doesn't expect hot reloading
+
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server-hot')
 const config = require('./webpack.config');

@@ -1,15 +1,8 @@
-const webpack = require('webpack');
-const path = require('path');
-const fs = require('fs');
+// Development server config.  Suppports hot reloading
 
-// var nodeModules = {};
-// fs.readdirSync('node_modules')
-//   .filter(function(x) {
-//     return ['.bin'].indexOf(x) === -1;
-//   })
-//   .forEach(function(mod) {
-//     nodeModules[mod] = 'commonjs ' + mod;
-//   });
+var webpack = require('webpack');
+var path = require('path');
+var fs = require('fs');
 
 module.exports = {
   devtool: 'source-map',
