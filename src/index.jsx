@@ -35,12 +35,14 @@ portConfig = portConfig || {};
 var host = location.origin.replace(/^http/, 'ws');
 
 
+var debugLocation = portConfig.ioClientLocation;
+
 // This wasn't working great on heroku.  May need to tweak this for wds
 // const serverPortString = portConfig.ioPort || `${window.location.port}`;
 // const appPort = Number(serverPortString);
 // const ioPort = appPort;// + 1;
 // const portString = ':' + ioPort;
-const ioLocation = host;//`${location.protocol}//${location.hostname}``:${ioPort}`;
+const ioLocation = debugLocation || host;//`${location.protocol}//${location.hostname}``:${ioPort}`;
 console.log(ioLocation);
 const socket = io(ioLocation);
 

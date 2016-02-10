@@ -1,8 +1,8 @@
 // Prod webpack config - build a bundle that doesn't expect hot reloading
 
 const webpack = require('webpack')
-const WebpackDevServer = require('webpack-dev-server-hot')
-const config = require('./webpack.config');
+const WebpackDevServer = require('webpack-dev-server')
+const config = require('./webpack.config-hot');
 const ioFactory = require('socket.io');
 import Server from 'socket.io';
 
