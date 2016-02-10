@@ -39,8 +39,8 @@ import port from './app/port';
 
 // Handle socket events
 const serverPortString = `${window.location.port}` || port;
-const port = Number(serverPortString);
-const ioPort = port;// + 1;
+const appPort = Number(serverPortString);
+const ioPort = appPort;// + 1;
 const ioLocation = `${location.protocol}//${location.hostname}:${ioPort}`;
 console.log(ioLocation);
 const socket = io(ioLocation);
