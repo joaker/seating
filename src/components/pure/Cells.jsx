@@ -21,7 +21,7 @@ export const TableCell = ({seatIndex, seats = {}, columnsPerSeat = 1}) => (
 
 const placeholder = 'Empty';
 
-const EmptyPlace = ({seatIndex}) => (<div className={cnames(styles.emptyPlace)}>Seat {seatIndex}</div>);
+const EmptyPlace = ({seatIndex}) => (<div className={cnames(styles.emptyPlace)}>{placeholder}</div>);
 const GuestPlace = (props) => (<div className={cnames(styles.guestPlace, 'glyphicon','glyphicon-user')} aria-hidden="true"></div>)
 
 const showAvailableGuests = (seatIndex, location, router) => {
