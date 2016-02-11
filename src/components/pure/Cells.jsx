@@ -21,7 +21,7 @@ export const TableCell = ({seatIndex, seats = {}, columnsPerSeat = 1}) => (
 
 const placeholder = 'Empty';
 
-const EmptyPlace = (props) => (<div className={cnames(styles.emptyPlace)}>{placeholder}</div>);
+const EmptyPlace = ({seatIndex}) => (<div className={cnames(styles.emptyPlace)}>Seat {seatIndex}</div>);
 const GuestPlace = (props) => (<div className={cnames(styles.guestPlace, 'glyphicon','glyphicon-user')} aria-hidden="true"></div>)
 
 const showAvailableGuests = (seatIndex, location, router) => {
@@ -32,9 +32,9 @@ const showAvailableGuests = (seatIndex, location, router) => {
   router.push(next);
 }
 
-const PlaceIcon = ({guest}) => (
+const PlaceIcon = ({guest, seatIndex}) => (
   <div className={cnames(styles.placeSeat, styles.place)}>
-    {guest ? (<GuestPlace />) : (<EmptyPlace />)}
+    {guest ? (<GuestPlace seatIndex={seatIndex}/>) : (<EmptyPlace />)}
   </div>
 );
 
