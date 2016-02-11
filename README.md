@@ -23,12 +23,14 @@ $ npm start
 <!-- ## Tests
 
 TODO: npm test -->
-<!--
-## Stack
+
+## Modules
 react, redux, react-router
-nodejs, socketio
-mongodb
- -->
+socketio, webpack/express
+css-modules
+
+<!-- mongodb -->
+
 ## Contributors
 
 Jack Ofnotrade
