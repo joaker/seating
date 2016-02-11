@@ -50,7 +50,14 @@ const App = (props, context) => (
     </div>
     <div className="col-xs-12 col-sm-9 col-md-10">
       <main>
+        <div className="row">
+        <div className="col-xs-6">
         <Breadcrumbs {...props} router={context.router}/>
+        </div>
+        <div className="col-xs-6" style={{textAlign: 'right'}}>
+          <h2 style={{display: 'inline-block', marginTop: '.25em', marginBottom: 0, color:'#AAA'}}><strong>Seatable</strong></h2>
+        </div>
+        </div>
         {props.children}
       </main>
     </div>
