@@ -89,7 +89,7 @@ const UnconnectedSeatCell = ({seatIndex, guest, likes, dislikes, seats, seatsPer
 
   let lines = [
     (<PlaceName guest={guest} key="b" textStyle={textStyle}/>),
-    (<PlaceIcon guest={guest} key="a" />),
+    (<PlaceIcon guest={guest} key="a" seatIndex={seatIndex}/>),
     ];
 
   // if the row is facing down, flip the order
