@@ -11,7 +11,7 @@ const Main = (props) => (
     </p>
 
     <p style={pstyle}>
-      On the <Link to={`/Guests`}>View Guests Page</Link>, you can see a list of all the guests currently available.  Click on a guest's name to see what other guests they like or dislike
+      On the <Link to={`/Guests`}>View Guests Page</Link>, you can see a list of all the guests currently available.  Click on a guest's name to see who they like or dislike
     </p>
 
     <p style={pstyle}>
