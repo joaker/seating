@@ -34,7 +34,7 @@ const showAvailableGuests = (seatIndex, location, router) => {
 
 const PlaceIcon = ({guest, seatIndex}) => (
   <div className={cnames(styles.placeSeat, styles.place)}>
-    {guest ? (<GuestPlace seatIndex={seatIndex}/>) : (<EmptyPlace />)}
+    {guest ? (<GuestPlace seatIndex={seatIndex}/>) : (<EmptyPlace seatIndex={seatIndex}/>)}
   </div>
 );
 
