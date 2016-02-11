@@ -29,9 +29,9 @@
 }
 
 .textLike {
-  color: hsl(0, 75%, 75%);
+  color: hsl(120, 75%, 75%);
 }
 
 .textDislike {
-  color: hsl(120, 75%, 75%);
+  color: hsl(0, 75%, 75%);
 }
