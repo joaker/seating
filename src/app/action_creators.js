@@ -36,6 +36,10 @@ export const clearSeat = ( seat ) => ({
     seat: seat
 })
 
+export const clearTable = () => ({
+    meta: { remote: true },
+    type: 'CLEAR_TABLE',
+})
 
 /*
 export function next(){

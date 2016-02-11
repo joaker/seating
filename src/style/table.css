@@ -1,7 +1,7 @@
 .seatingTable {
   background-color:#EEE;
   padding: 2em 0;
-  margin-right: 2em;
+  /*margin-right: 2em;*/
 }
 
 .tableCell {

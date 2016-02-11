@@ -26,6 +26,11 @@ ul {
   padding-left: 0;
 }
 
+:global .AppComponent .container-fluid {
+  padding-left: 0;
+  padding-right:0;
+}
+
 :global #app  .nav > li > a{
   padding: .5em .25em;
 }

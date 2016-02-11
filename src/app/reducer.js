@@ -25,7 +25,9 @@ export default function(state = defaultState, action){
     case 'SEAT_GUEST':
       return reductions.seatGuest(state, action.seating);
     case 'CLEAR_SEAT':
-      return reductions.seatGuest(state, action.seat);
+      return reductions.clearSeat(state, action.seat);
+    case 'CLEAR_TABLE':
+      return reductions.clearTable(state);
   }
   return state;
 }

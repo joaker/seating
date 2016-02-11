@@ -46,7 +46,7 @@ class SeatGuest extends React.Component {
   render(){
     return (
       <div className="SeatGuest">
-        <h3>Available Guests</h3>
+        <h2>Available Guests</h2>
         <ul className="availableGuests">
           <li key={'empty'} className={cnames(styles.guest, styles.emptyguest)} onClick={this.guestChosen.bind(this, 'Empty')}>
             <a className={cnames('guest-link')}>Empty</a>

@@ -7,7 +7,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import { connect } from 'react-redux';
 
-import { seatGuest } from '../app/action_creators';
+import { clearTable } from '../app/action_creators';
 import range from '../util/range';
 
 import TableRow from './pure/TableRow';
@@ -33,9 +33,20 @@ class Table extends React.Component {
 
   render(){
 
+    const clearTableStyle = {
+      display: 'inline-block',
+      float: 'right',
+    };
     return (
-      <div className="Table">
-        <h2>Table</h2>
+      <div className={"Table", 'container-fluid'}>
+          <div className={cnames('row')}>
+            <div className={cnames('col-xs-12')}>
+              <h2 style={{display: 'block'}}>
+                Table
+              <button className={cnames('btn btn-default ')} onClick={() => this.props.clearTable()} style={clearTableStyle}>Clear Table</button>
+              </h2>
+            </div>
+          </div>
         <div className={cnames('seatingTable', styles.seatingTable)}>
           <TableRow {...this.props} rowIndex={0} />
           <TableRow {...this.props} table={true} />
@@ -64,7 +75,7 @@ const mapStateToProps = (state = Map(), props = {}) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  seatGuest: (guest,seat) => dispatch(addGuest( guest, seat ))
+  clearTable: () => dispatch(clearTable())
 });
 
 const ConnectedTable = connect(

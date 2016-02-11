@@ -47,3 +47,9 @@ export const clearSeat = (state, seat) => {
     ['seats', seat ]
   );
 }
+
+export const clearTable = (state) => {
+  return state.set(
+    'seats', Map()
+  );
+}
