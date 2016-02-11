@@ -30,7 +30,7 @@ class Guest extends React.Component {
     return (
       <div className="Guest">
         <h2>{this.props.name || defaultGuest}</h2>
-        <h3 className={styles.textLike}>Likes</h3>
+        <h4 className={styles.textLike}>Likes</h4>
         <ul>
           {
             this.props.likes.length ? (this.props.likes).map(g => (
