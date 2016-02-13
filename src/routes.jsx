@@ -8,6 +8,7 @@ import Guests from './components/Guests';
 import Guest from './components/Guest';
 import Table from './components/Table';
 import SeatGuest from './components/SeatGuest';
+import Venue from './components/Venue';
 
 const routes = (
     <Route path="/" component={App} title="Home">
@@ -19,6 +20,10 @@ const routes = (
       <Route path="Table" title="Table">
         <IndexRoute to="/Table" title="Arrange" component={Table}></IndexRoute>
         <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
+      </Route>
+      <Route path="Venue" title="Venue">
+        <IndexRoute to="/Venue" title="Venue" component={Venue}></IndexRoute>
+        // <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
       </Route>
     </Route>
 );

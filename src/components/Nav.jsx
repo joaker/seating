@@ -10,6 +10,7 @@ const Nav = () => (
     <li key={'main'}><Link to={`/`}>Main</Link></li>
     <li key={'guests'}><Link to={`/Guests`}>View Guests</Link></li>
     <li key={'table'}><Link to={`/Table`}>Table</Link></li>
+    <li key={'venue'}><Link to={`/Venue`}>Venue</Link></li>
   </ul>
 );
 

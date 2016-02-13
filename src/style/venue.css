@@ -1,0 +1,35 @@
+.venueGrid {
+  background-color:#EEE;
+  padding: 2em 0;
+  /*margin-right: 2em;*/
+}
+
+.table{
+    font-size:70%;
+    text-align:center;
+    margin:2px;
+    margin-bottom:1em;
+}
+
+.table label{
+  white-space:nowrap;
+  margin-bottom: 0;
+}
+
+.seat{
+  width: 100%;
+  height:100%;
+}
+
+.seat.happy{
+  background-color: green;
+}
+
+.seatRow{
+  line-height: 0;
+}
+
+.venue :global .col-xs-1 {
+  padding-left: 1px;
+  padding-right: 1px;
+}
