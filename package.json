@@ -6,7 +6,7 @@
   "scripts": {
     "start": "babel-node index.js",
     "debug": "babel-node index-debug.js",
-    "pack" : "webpack",
+    "pack": "webpack",
     "webpack": "babel-snode server/server.js",
     "postinstall": "webpack --config ./webpack.config.js",
     "test": "test"
@@ -49,6 +49,8 @@
     "immutable": "^3.7.6",
     "jsdom": "^7.2.2",
     "mocha": "^2.3.4",
+    "mongodb": "^2.1.7",
+    "mongoose": "^4.4.3",
     "react": "^0.14.6",
     "react-addons-pure-render-mixin": "^0.14.6",
     "react-dom": "^0.14.6",

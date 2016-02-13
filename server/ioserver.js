@@ -10,6 +10,43 @@ import port from '../src/app/port';
 import initialGuests from '../src/data/guests';
 import relationships from '../src/data/relationships';
 import logger from './logger';
+import db from '../db/db';
+import Guest from '../db/models/Guest';
+
+
+const nextRand = () => Math.round(Math.random() * 100);
+
+const rand1 = nextRand();
+const rand2 = nextRand();
+const rand3 = nextRand();
+console.log('adding examples <'+rand1+'>, <'+rand2+'>, <'+rand3+'>');
+
+const saveGuest = (err, guest) => {
+  if (err) return console.error(err);
+  console.log('saved guest: ' + guest.name);
+}
+
+const rands = [rand1, rand2, rand3];
+const robjects = rands.map(r => {
+  const guestName = 'guest' + r;
+  db.execute(() => {
+    var nthGuest = new Guest({name: guestName });
+    //nthGuest.save(saveGuest);
+  });
+
+});
+
+
+Guest.find({}, (err, guests) => {
+  console.log('guest found')
+  guests.forEach(guest => {
+    console.log('guest:');
+    console.log(guest);
+  })
+});
+
+
+
 
 const ioport = port + 1;
 
