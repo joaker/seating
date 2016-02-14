@@ -41,6 +41,43 @@ export const clearTable = () => ({
     type: 'CLEAR_TABLE',
 })
 
+export const populateVenue = (guestCount) => ({
+    meta: { remote: false },
+    type: 'POPULATE_VENUE',
+    guestCount
+})
+
+
+export const quenchVenue = (tableSize, temperature = 120, maxTemperature = 120) => ({
+    meta: { remote: false },
+    type: 'QUENCH_VENUE',
+    tableSize,
+    temperature,
+    maxTemperature
+})
+
+
+
+export const scoreVenue = (tableSize) => ({
+    meta: { remote: false },
+    type: 'SCORE_VENUE',
+    tableSize
+})
+
+
+export const startOptimization = () => ({
+    meta: { remote: false },
+    type: 'START_VENUE_OPTIMIZATION',
+})
+
+
+
+export const endOptimization = () => ({
+    meta: { remote: false },
+    type: 'END_VENUE_OPTIMIZATION',
+})
+
+
 /*
 export function next(){
   return {

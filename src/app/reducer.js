@@ -3,7 +3,8 @@ import * as reductions from './reductions.js';
 
 export const defaultState = fromJS({
   guests: [],
-  seats: {}
+  seats: {},
+  venueGuests: [],
 });
 
 export default function(state = defaultState, action){
@@ -28,6 +29,16 @@ export default function(state = defaultState, action){
       return reductions.clearSeat(state, action.seat);
     case 'CLEAR_TABLE':
       return reductions.clearTable(state);
+    case 'POPULATE_VENUE':
+      return reductions.populateVenue(state, action.guestCount);
+    case 'QUENCH_VENUE':
+      return reductions.quenchVenue(state, action.tableSize, action.temperature, action.maxTemperature);
+    case 'SCORE_VENUE':
+      return reductions.scoreVenue(state, action.tableSize);
+    case 'START_VENUE_OPTIMIZATION':
+      return reductions.startOptimization(state);
+    case 'END_VENUE_OPTIMIZATION':
+      return reductions.endOptimization(state);
   }
   return state;
 }

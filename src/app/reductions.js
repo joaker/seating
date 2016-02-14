@@ -1,4 +1,7 @@
 import Immutable, {List, Map} from 'immutable';
+import range from '../util/range';
+import shuffle from '../util/shuffle';
+import GuestFactory from './GuestFactory';
 
 export const setState = (state, newState) => state.merge(newState);
 
@@ -52,4 +55,113 @@ export const clearTable = (state) => {
   return state.set(
     'seats', Map()
   );
+}
+
+export const populateVenue = (state, guestCount) => {
+  const factory = new GuestFactory(guestCount);
+  const guests = factory.createAll();
+  const randoGuests = shuffle(guests);
+  const venueGuests = Immutable.fromJS(randoGuests);
+  const newState = state
+    .set('venueGuests', venueGuests)
+    .set('guestCount', guestCount);
+
+  return newState;
+}
+
+const likeWeight = 0.25;
+const scoreTable = (table) => {
+  const guestIDs = table.map(g => g.id);
+  const hateScore = table.map(g => {
+    const hates = guestIDs.filter(gid => g.hates.includes(gid)).length;
+    return hates;
+  }).reduce((total, i) => (total + i), 0)
+  const likeScore = table.map(g => {
+    const likes = guestIDs.filter(gid => g.likes.includes(gid)).length * likeWeight;
+    return likes;
+  }).reduce((total, i) => (total + i), 0)
+
+  return likeScore - hateScore;
+}
+
+export const quenchVenue = (state, tableSize, temperature = 120, maxTemperature = 120) => {
+  const guests = state.get('venueGuests', List()).toJS();
+
+  if(!guests.length) return state;
+
+  const guestCount = state.get('guestCount');
+
+  const guest1Index = Math.round(Math.random()*guestCount);
+  const guest2Index = Math.round(Math.random()*guestCount);
+
+  const table1Start = guest1Index - Math.round(guest1Index%tableSize);
+  const table1End = table1Start + tableSize;
+
+  const table2Start = guest2Index - Math.round(guest2Index%tableSize);
+  const table2End = table2Start + tableSize;
+
+  // If the tables are the same, don't bother
+  if(table1Start == table2Start) return state;
+
+  const table1 = guests.slice(table1Start, table1End);
+  const table2 = guests.slice(table1Start, table1End);
+
+  const table1Score = scoreTable(table1);
+  const table2Score = scoreTable(table2);
+
+  const initialScore = table1Score + table2Score;
+
+  const guest1TableIndex = guest1Index - (table1Start);
+  const guest2TableIndex = guest2Index - (table2Start);
+  table1.splice(guest1TableIndex, 1, guests[guest2Index]);
+  table2.splice(guest2TableIndex, 1, guests[guest1Index]);
+
+  const table1SwappedScore = scoreTable(table1);
+  const table2SwappedScore = scoreTable(table2);
+
+  const swappedScore = table1SwappedScore + table2SwappedScore;
+
+  const diff = swappedScore - initialScore;
+  const swap = (diff > 0) || (temperature * Math.random()) > maxTemperature / 2;
+
+  if(!swap) return state;
+
+  const g1 = state.getIn(['venueGuests', guest1Index]);
+  const g2 = state.getIn(['venueGuests', guest2Index]);
+  const newState = state.setIn(
+    ['venueGuests', guest1Index],
+    g2
+  ).setIn(
+    ['venueGuests', guest2Index],
+    g1
+  );
+  return newState;
+
+}
+
+export const scoreVenue = (state, tableSize) => {
+  const guests = state.get('venueGuests').toJS();
+
+  if(!guests.length) return state;
+
+  let score = 0;
+  for(let i = 0; i < guests.length; i += tableSize){
+    score += scoreTable(guests.slice(i, i+tableSize));
+  }
+
+  const newState = state.set('venueScore', score);
+
+  return newState;
+}
+
+
+
+export const startOptimization = (state) => {
+  const newState = state.set('optimizing', true);
+  return newState;
+}
+
+export const endOptimization = (state) => {
+  const newState = state.set('optimizing', false);
+  return newState;
 }
