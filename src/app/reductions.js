@@ -71,7 +71,9 @@ export const populateVenue = (state, guestCount) => {
 
 const likeWeight = 0.25;
 const scoreTable = (table) => {
-  const guestIDs = table.map(g => g.id);
+  const guestIDs = table.map(g => {
+    return g.id
+  });
   const hateScore = table.map(g => {
     const hates = guestIDs.filter(gid => g.hates.includes(gid)).length;
     return hates;
@@ -113,16 +115,21 @@ export const quenchVenue = (state, tableSize, temperature = 120, maxTemperature 
 
   const guest1TableIndex = guest1Index - (table1Start);
   const guest2TableIndex = guest2Index - (table2Start);
-  table1.splice(guest1TableIndex, 1, guests[guest2Index]);
-  table2.splice(guest2TableIndex, 1, guests[guest1Index]);
 
-  const table1SwappedScore = scoreTable(table1);
-  const table2SwappedScore = scoreTable(table2);
+  const table1Swapped = table1.map(g => g);
+  const table2Swapped = table2.map(g => g);
+
+  table1Swapped.splice(guest1TableIndex, 1, guests[guest2Index]);
+  table2Swapped.splice(guest2TableIndex, 1, guests[guest1Index]);
+
+  const table1SwappedScore = scoreTable(table1Swapped);
+  const table2SwappedScore = scoreTable(table2Swapped);
 
   const swappedScore = table1SwappedScore + table2SwappedScore;
 
   const diff = swappedScore - initialScore;
-  const swap = (diff > 0) || (temperature * Math.random()) > maxTemperature / 2;
+  const percentOfTemp = temperature / maxTemperature;
+  const swap = (diff > 0) || (Math.random() < percentOfTemp);
 
   if(!swap) return state;
 

@@ -207,38 +207,51 @@ const mapStateToProps = (state = Map(), props = {}) => {
   };
 };
 
-function delayedDispatch(dispatch, action, ith) {
-    //normal async work will probably have its own promise, but we need to create our own:
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () {
-            dispatch(action);
-            resolve('completed');
-        }, Math.floor(Math.random() * 300) + 1 + ith * 10)
-    });
+const wait = 20;
+const longSize = 10;
+const longWait = 500;
+const waitAndAct = (dispatch, actions) => {
+
+    // console.log('dispatching...');
+    if (!actions || !actions.length) return;
+
+    const act = actions.shift();
+    dispatch(act);
+    const nextWait = (actions.length % longSize) ? wait : longWait;
+    setTimeout(() => waitAndAct(dispatch, actions), wait);
 }
 
 function dispatchActions(dispatch, actions) {
     var iterations = [];
-    actions.forEach((action, ith) => {
-        iterations.push(delayedDispatch(dispatch, action, ith));
-    });
-
-    return Promise.all(iterations).then(function(output) {
-      dispatch(scoreVenue(seatsPerTable));
-      dispatch(endOptimization());
-      return 'victory';
-    });
+    waitAndAct(dispatchActions, actions);
+    // actions.forEach((action, ith) => {
+    //     iterations.push(delayedDispatch(dispatch, actions, ith));
+    // });
+    //
+    // return Promise.all(iterations).then(function(output) {
+    //   dispatch(scoreVenue(seatsPerTable));
+    //   dispatch(endOptimization());
+    //   return 'victory';
+    // });
 }
+
+const temperatures = (max) => range(max).reverse();
 
 const dispatchOptimizations = (dispatch) => {
   dispatch(startOptimization());
-  const maxTemperature = 150;
-  const quenchActions = range(maxTemperature).map(temp => quenchVenue(seatsPerTable, temp, maxTemperature));
-//  dispatchActions(dispatch, quenchActions);
-  quenchActions.push(scoreVenue(seatsPerTable))
-  quenchActions.reduce(dispatch);
-  dispatch(scoreVenue(seatsPerTable))
-  dispatch(endOptimization());
+  const maxTemperature = 300;
+  const quenchActions = temperatures(maxTemperature).map((temp, index) => {
+    return quenchVenue(seatsPerTable, temp, maxTemperature);
+  });
+  /* clean up steps */
+  quenchActions.push(scoreVenue(seatsPerTable));
+  quenchActions.push(endOptimization());
+
+  waitAndAct(dispatch, quenchActions);
+  // quenchActions.push(scoreVenue(seatsPerTable))
+  // quenchActions.reduce(dispatch);
+  // dispatch(scoreVenue(seatsPerTable))
+  // dispatch(endOptimization());
 }
 
 const mapDispatchToProps = (dispatch) => ({

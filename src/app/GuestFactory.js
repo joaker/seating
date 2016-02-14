@@ -1,7 +1,7 @@
 import range from '../util/range';
 
-const defaultLikeCount = 3;
-const defaultHateCount = 3;
+const defaultLikeCount = 2;
+const defaultHateCount = 2;
 const defaultGuestCount = 100;
 
 class GuestFactory {
