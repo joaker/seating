@@ -1,15 +1,21 @@
 import range from '../util/range';
 
-const defaultLikeCount = 2;
-const defaultHateCount = 2;
+const defaultLikeCount = 4;
+const defaultHateCount = 4;
 const defaultGuestCount = 100;
+
+const relate = (count) => {
+  const size = Math.round(Math.random() * count);
+  const relationships = range(size);
+  return relationships;
+};
 
 class GuestFactory {
   constructor(guestCount){
     const hateCount = defaultHateCount, likeCount = defaultLikeCount;
     this.guestCount = guestCount;
-    this.hates = range(hateCount);
-    this.likes = range(likeCount);
+    this.hates = relate(hateCount);
+    this.likes = relate(likeCount);
   }
 
   randomGuestID(id){
