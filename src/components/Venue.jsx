@@ -245,6 +245,7 @@ class Venue extends React.Component {
               <h2 style={{display: 'block'}}>
                 Venue
                 {scoring}
+                {}
                 {this.props.optimizing ? optimizationIndicator : ''}
                 <button
                   className={cnames('btn btn-default ')}
