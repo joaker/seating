@@ -6,8 +6,10 @@ import React from 'react';
 import {Link} from 'react-router';
 import { connect } from 'react-redux';
 
-import {populateVenue, quenchVenue, scoreVenue, startOptimization, endOptimization} from '../app/action_creators';
+import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization} from '../app/action_creators';
 import range from '../util/range';
+import anneal from '../app/annealing';
+import * as scorer from '../app/scorer';
 
 const maxColumns = 12;
 const offsetColumns = 2;
@@ -32,44 +34,35 @@ const rows = range(rowCount).map(rowIndex => {
 });
 
 const UnconnectedSeat = ({seat, angry, happy, moodScore}) => {
-  const moodClass = angry ? styles.happy : (happy ? styles.angry : 'neutral');
+  const moodClass = angry ? styles.angry : (happy ? styles.happy : 'neutral');
   return (
     <div className={cnames("GuestSeat", styles.seat, moodClass)}></div>
   );
 }
 
 const mapStateSeat = (state = Map(), ownProps) => {
+
+  const score = state.get('venueScore');
   const start = ownProps.tableStart;
   const end = ownProps.tableEnd;
-  const tableGuests = state.get('venueGuests', List()).slice(start, end).toJS();
-
+  const table = state.get('venueGuests', List()).slice(start, end).toJS();
   const seat = ownProps.seat;
 
-  const hates = state.getIn(
-    ['venueGuests', seat, 'hates'],
-    List()
-  ).toJS();
+  const guest = table[seat];
+  const ids = scorer.toIDs(table);
+  const guestAnger = scorer.scoreGuest(guest, ids) * -1;
 
-  const likes = state.getIn(
-    ['venueGuests', seat, 'likes'],
-    List()
-  ).toJS();
+  const moodScore = 0 - guestAnger;
 
-  const angry = tableGuests.filter(g => hates.includes(g.id)).length;
-  const happy = tableGuests.filter(g => likes.includes(g.id)).length;
-
-  const moodScore = angry > 0 ? (angry * -1) : happy;
-
-  let whatever = 0;
-  if(angry){
-    whatever = 'super angry';
-  }
+  const angry = guestAnger;
+  const happy = 0;
 
   return {
     ownProps,
     angry: angry,
     happy: (!angry && happy > 0),
     moodScore: moodScore,
+    score: score,
   };
 }
 
@@ -184,8 +177,11 @@ class Venue extends React.Component {
                 <button className={cnames('btn btn-default ')} onClick={() => this.props.populate()} style={clearTableStyle}>
                   Populate Table
                 </button>
-                <button className={cnames('btn btn-default ')} onClick={() => this.props.optimize()} style={clearTableStyle}>
+                <button className={cnames('btn btn-default ')} onClick={() => this.props.optimizeGuests(this.props.guests)} style={clearTableStyle}>
                   Optimize
+                </button>
+                <button className={cnames('btn btn-default ')} onClick={() => this.props.scoreTables()} style={clearTableStyle}>
+                  Score
                 </button>
               </h2>
             </div>
@@ -199,6 +195,73 @@ class Venue extends React.Component {
   }
 }
 
+const opimizationDispatchRelay = (dispatch) => ({
+  start: () => dispatch(startOptimization()),
+  update: (list) => dispatch(setVenueGuests(list)),
+  finish: (list) => {
+    dispatch(setVenueGuests(list));
+    dispatch(endOptimization());
+    dispatch(scoreVenue(seatsPerTable));
+  },
+});
+
+const temperatures = (max) => range(max).reverse();
+
+
+const step = (tableSize = 9, maxTemperature = 200) => (list, currentTemperature) => {
+  return anneal(list, tableSize, currentTemperature, maxTemperature);
+}
+
+const isFrozen = (t) => t < 1;
+const defaultBatchDelay = 200;
+
+const nextBatch = (list, t, props) => (
+  setTimeout(() => {
+    batch(list, t, props)
+  }), props.delay);
+
+const batch = (list, startT, props) => {
+  if(isFrozen(startT)) {
+    props.relay.finish(list);
+    return;
+  }
+  const batchEnd = Math.max(startT - props.size, 0);
+  for(let t = startT; t > batchEnd; t--){
+    list = props.stepper(list, t);
+  }
+
+  // Post the updated lists
+  props.relay.update(list);
+
+  nextBatch(list, batchEnd, props);
+
+}
+
+const batchProps = (batchSize, relay, stepper, delay = defaultBatchDelay) => ({
+  size: batchSize,
+  relay, stepper,
+  stepper: stepper,
+  delay: delay,
+});
+
+const optimize = (guests, relay) => {
+
+    relay.start();
+
+    const tableSize = seatsPerTable;
+    const maxTemperature = 2000;
+    const temps = temperatures(maxTemperature);
+    let list = guests;
+
+    const batchSize = maxTemperature/20;
+
+    const stepper = step(tableSize, maxTemperature);
+
+    const props = batchProps(batchSize, relay, stepper);
+    batch(list, maxTemperature, props);
+
+}
+
 const mapStateToProps = (state = Map(), props = {}) => {
   return {
     guests: state.get('venueGuests', List()).toJS(),
@@ -207,56 +270,10 @@ const mapStateToProps = (state = Map(), props = {}) => {
   };
 };
 
-const wait = 20;
-const longSize = 10;
-const longWait = 500;
-const waitAndAct = (dispatch, actions) => {
-
-    // console.log('dispatching...');
-    if (!actions || !actions.length) return;
-
-    const act = actions.shift();
-    dispatch(act);
-    const nextWait = (actions.length % longSize) ? wait : longWait;
-    setTimeout(() => waitAndAct(dispatch, actions), wait);
-}
-
-function dispatchActions(dispatch, actions) {
-    var iterations = [];
-    waitAndAct(dispatchActions, actions);
-    // actions.forEach((action, ith) => {
-    //     iterations.push(delayedDispatch(dispatch, actions, ith));
-    // });
-    //
-    // return Promise.all(iterations).then(function(output) {
-    //   dispatch(scoreVenue(seatsPerTable));
-    //   dispatch(endOptimization());
-    //   return 'victory';
-    // });
-}
-
-const temperatures = (max) => range(max).reverse();
-
-const dispatchOptimizations = (dispatch) => {
-  dispatch(startOptimization());
-  const maxTemperature = 300;
-  const quenchActions = temperatures(maxTemperature).map((temp, index) => {
-    return quenchVenue(seatsPerTable, temp, maxTemperature);
-  });
-  /* clean up steps */
-  quenchActions.push(scoreVenue(seatsPerTable));
-  quenchActions.push(endOptimization());
-
-  waitAndAct(dispatch, quenchActions);
-  // quenchActions.push(scoreVenue(seatsPerTable))
-  // quenchActions.reduce(dispatch);
-  // dispatch(scoreVenue(seatsPerTable))
-  // dispatch(endOptimization());
-}
-
 const mapDispatchToProps = (dispatch) => ({
   populate: () => {dispatch(populateVenue(guestCount)); dispatch(scoreVenue(seatsPerTable));},
-  optimize: () => dispatchOptimizations(dispatch)
+  optimizeGuests: (guests) => optimize(guests, opimizationDispatchRelay(dispatch)),
+  scoreTables: () => dispatch(scoreVenue(seatsPerTable))
 });
 
 const ConnectedVenue = connect(

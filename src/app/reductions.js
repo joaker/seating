@@ -57,19 +57,25 @@ export const clearTable = (state) => {
   );
 }
 
-export const populateVenue = (state, guestCount) => {
-  const factory = new GuestFactory(guestCount);
-  const guests = factory.createAll();
-  const randoGuests = shuffle(guests);
-  const venueGuests = Immutable.fromJS(randoGuests);
+export const setVenueGuests = (state, guests = []) => {
+  const venueGuests = Immutable.fromJS(guests);
   const newState = state
     .set('venueGuests', venueGuests)
-    .set('guestCount', guestCount);
+    .set('guestCount', guests.length);
 
   return newState;
 }
 
-const likeWeight = 0.25;
+export const populateVenue = (state, guestCount) => {
+  const factory = new GuestFactory(guestCount);
+  const guests = factory.createAll();
+  const randoGuests = shuffle(guests);
+
+  const newState = setVenueGuests(state, randoGuests);
+  return newState;
+}
+
+const likeWeight = 0;
 const scoreTable = (table) => {
   const guestIDs = table.map(g => {
     return g.id
@@ -96,10 +102,10 @@ export const quenchVenue = (state, tableSize, temperature = 120, maxTemperature 
   const guest1Index = Math.round(Math.random()*guestCount);
   const guest2Index = Math.round(Math.random()*guestCount);
 
-  const table1Start = guest1Index - Math.round(guest1Index%tableSize);
+  const table1Start = guest1Index - Math.floor(guest1Index%tableSize);
   const table1End = table1Start + tableSize;
 
-  const table2Start = guest2Index - Math.round(guest2Index%tableSize);
+  const table2Start = guest2Index - Math.floor(guest2Index%tableSize);
   const table2End = table2Start + tableSize;
 
   // If the tables are the same, don't bother

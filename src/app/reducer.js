@@ -29,6 +29,8 @@ export default function(state = defaultState, action){
       return reductions.clearSeat(state, action.seat);
     case 'CLEAR_TABLE':
       return reductions.clearTable(state);
+    case 'SET_VENUE_GUESTS':
+      return reductions.setVenueGuests(state, action.guests);
     case 'POPULATE_VENUE':
       return reductions.populateVenue(state, action.guestCount);
     case 'QUENCH_VENUE':

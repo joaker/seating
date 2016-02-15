@@ -41,6 +41,12 @@ export const clearTable = () => ({
     type: 'CLEAR_TABLE',
 })
 
+export const setVenueGuests = (guests) => ({
+    meta: { remote: false },
+    type: 'SET_VENUE_GUESTS',
+    guests
+})
+
 export const populateVenue = (guestCount) => ({
     meta: { remote: false },
     type: 'POPULATE_VENUE',
