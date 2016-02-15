@@ -147,6 +147,8 @@ const VenueRow = ({row}) => {
   );
 }
 
+const maxScore = 100;
+
 class Venue extends React.Component {
   constructor(props) {
     super(props);
@@ -154,6 +156,10 @@ class Venue extends React.Component {
 
     // Bind instance methods that need the "this" context
     this.handleChange = this.handleChange.bind(this);
+    this.getRawScore = this.getRawScore.bind(this);
+    this.hasGuests = this.hasGuests.bind(this);
+    this.getFriendlyScore = this.getFriendlyScore.bind(this);
+    this.getScoreType = this.getScoreType.bind(this);
   }
 
   handleChange(event){
@@ -161,27 +167,85 @@ class Venue extends React.Component {
     this.setState({ newGuest: event.target.value });
   }
 
+  getRawScore(){
+    return this.props.score;
+  }
+
+
+  getFriendlyScore(){
+    const friendly = maxScore + this.getRawScore();
+    return friendly;
+  }
+
+  getScoreType() {
+    if(!this.hasGuests()) return '';
+    const s = this.getFriendlyScore();
+    if(s >= maxScore) return "perfect";
+    if( s > 90) return "good";
+    if( s > 75) return "ok";
+    return "bad";
+  }
+
+  hasGuests() {
+    return this.props.guests && this.props.guests.length;
+  }
+
   render(){
+
+    const hasGuests = this.props.guests && this.props.guests.length;
+    const noGuests = !hasGuests;
+
+    const optimizeTip = hasGuests ? 'Search for a better arrangement' : 'Populate the venue to allow searching';
+    const populateTip = hasGuests ? 'Clear and make new guests with new seat assignments' : 'Randomly fill the venue with new guests';
+
     const clearTableStyle = {
       display: 'inline-block',
+      marginLeft: '.5em',
       float: 'right',
     };
     const vRows = rows.map( (row, index) => (<VenueRow key={index} row={row} />));
+
+    const ibStyle = {display: 'inline-block'};
+    const scoreType = this.getScoreType();
+    const scoreStyle = styles[scoreType];
+    const scoring = this.props.score ?
+      (<div className={cnames(styles.scoring, "Scoring", scoreStyle)} style={ibStyle}>
+        <div className={cnames(styles.title, "title")} style={ibStyle}>Scoring</div>
+        <div className={cnames(styles.value, "scoring")} style={ibStyle}>{this.getFriendlyScore()}</div>
+      </div>):
+      ('-');
+
     return (
       <div className={cnames(styles.venue, "Venue")}>
         <div className={cnames('headerTable', 'container-fluid')}>
           <div className={cnames('row')}>
             <div className={cnames('col-xs-12')}>
               <h2 style={{display: 'block'}}>
-                Venue {this.props.score ? '(Score: '+this.props.score+')' : '-'}
+                Venue
+                {scoring}
                 {this.props.optimizing ? <div style={{display: 'inline-block', textAlign: 'center', color: 'green'}}>Optimizing</div> : ''}
-                <button className={cnames('btn btn-default ')} onClick={() => this.props.populate()} style={clearTableStyle}>
+                <button
+                  className={cnames('btn btn-default ')}
+                  onClick={() => this.props.populate()}
+                  style={clearTableStyle}
+                  title={populateTip}
+                  >
                   Populate Table
                 </button>
-                <button className={cnames('btn btn-default ')} onClick={() => this.props.optimizeGuests(this.props.guests)} style={clearTableStyle}>
+                <button
+                  className={cnames('btn btn-default ')}
+                  onClick={() => this.props.optimizeGuests(this.props.guests)}
+                  style={clearTableStyle}
+                  title={optimizeTip}
+                  disabled={noGuests}
+                  >
                   Optimize
                 </button>
-                <button className={cnames('btn btn-default ')} onClick={() => this.props.scoreTables()} style={clearTableStyle}>
+                <button
+                  className={cnames('btn btn-default', 'hidden')}
+                  onClick={() => this.props.scoreTables()}
+                  style={clearTableStyle}
+                  >
                   Score
                 </button>
               </h2>

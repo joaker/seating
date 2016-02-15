@@ -1,7 +1,7 @@
 import range from '../util/range';
 
-const defaultLikeCount = 3;
-const defaultHateCount = 3;
+const defaultLikeCount = 4;
+const defaultHateCount = 4;
 const defaultGuestCount = 100;
 
 const relate = (count) => {
