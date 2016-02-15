@@ -33,8 +33,8 @@ const rows = range(rowCount).map(rowIndex => {
   return row;
 });
 
-const UnconnectedSeat = ({seat, angry, happy, moodScore}) => {
-  const moodClass = angry ? styles.angry : (happy ? styles.happy : 'neutral');
+const UnconnectedSeat = ({seat, angry, happy, moodScore, empty}) => {
+  const moodClass = angry ? styles.angry : (happy ? styles.happy : (empty? styles.empty : 'neutral'));
   return (
     <div className={cnames("GuestSeat", styles.seat, moodClass)}></div>
   );
@@ -63,6 +63,7 @@ const mapStateSeat = (state = Map(), ownProps) => {
     happy: (!angry && happy > 0),
     moodScore: moodScore,
     score: score,
+    empty: !guest,
   };
 }
 
