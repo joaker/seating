@@ -5,6 +5,7 @@ import {List, Map} from 'immutable';
 import React from 'react';
 import {Link} from 'react-router';
 import { connect } from 'react-redux';
+import {Loader} from 'react-loaders';
 
 import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization} from '../app/action_creators';
 import range from '../util/range';
@@ -120,6 +121,13 @@ const Grid = ({height, width, table}) => {
   );
 }
 
+const StartHint = ({children}) => (
+  <div className="startHint text-success" style={{display:'inline-block', float: 'right',}}>
+    <label style={{display:'inline-block', marginRight: '.5em', marginTop:'-1em'}}>{children}</label>
+    <span style={{fontSize:'80%'}} className="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+  </div>
+);
+
 const VTable = ({table}) => {
   return (
     <div className={styles.table}>
@@ -148,6 +156,13 @@ const VenueRow = ({row}) => {
 }
 
 const maxScore = 100;
+
+// const Loader = ({type = 'ball-grid-beat'}) => (
+//   <div className="loader">
+//     <div className={cnames('loader-inner', type)}>
+//       <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+//     </div>
+//   </div>);
 
 class Venue extends React.Component {
   constructor(props) {
@@ -215,6 +230,13 @@ class Venue extends React.Component {
       </div>):
       ('-');
 
+    const optimizationIndicator = (
+      <div className={cnames(styles.busy)}>
+        Optimizing
+        <Loader type='ball-grid-beat' active={true}/>
+      </div>
+    );
+
     return (
       <div className={cnames(styles.venue, "Venue")}>
         <div className={cnames('headerTable', 'container-fluid')}>
@@ -223,15 +245,7 @@ class Venue extends React.Component {
               <h2 style={{display: 'block'}}>
                 Venue
                 {scoring}
-                {this.props.optimizing ? <div style={{display: 'inline-block', textAlign: 'center', color: 'green'}}>Optimizing</div> : ''}
-                <button
-                  className={cnames('btn btn-default ')}
-                  onClick={() => this.props.populate()}
-                  style={clearTableStyle}
-                  title={populateTip}
-                  >
-                  Populate Table
-                </button>
+                {this.props.optimizing ? optimizationIndicator : ''}
                 <button
                   className={cnames('btn btn-default ')}
                   onClick={() => this.props.optimizeGuests(this.props.guests)}
@@ -248,6 +262,15 @@ class Venue extends React.Component {
                   >
                   Score
                 </button>
+                <button
+                  className={cnames('btn btn-default ')}
+                  onClick={() => this.props.populate()}
+                  style={clearTableStyle}
+                  title={populateTip}
+                  >
+                  {(this.hasGuests() ? 'Discard and ' : '') + 'Create Guests'}
+                </button>
+                {this.hasGuests() ? '' : <StartHint>start here</StartHint>}
               </h2>
             </div>
           </div>

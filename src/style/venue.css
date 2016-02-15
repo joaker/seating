@@ -81,3 +81,10 @@
 .scoring.bad .value{
   color:red;
 }
+
+.busy {
+  display: inline-block;
+  margin-left: 0.5em;
+  text-align: center;
+  color: green;
+}
