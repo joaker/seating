@@ -48,3 +48,67 @@ ul {
   user-select: none;           /* non-prefixed version, currently
                                   not supported by any browser */
 }
+
+
+/* Override Menu Styles, if you've got them */
+:global .dropdown-menu>li>a.text-success:hover,
+:global .dropdown-menu>li>a.text-success:focus {
+  color: #2b542c;
+}
+:global .text-info {
+  color: #31708f;
+}
+:global .dropdown-menu>li>a.text-info:hover,
+:global .dropdown-menu>li>a.text-info:focus {
+  color: #245269;
+}
+:global .text-warning {
+  color: #8a6d3b;
+}
+:global .dropdown-menu>li>a.text-warning:hover,
+:global .dropdown-menu>li>a.text-warning:focus {
+  color: #66512c;
+}
+:global .text-danger {
+  color: #a94442;
+}
+:global .dropdown-menu>li>a.text-danger:hover,
+:global .dropdown-menu>li>a.text-danger:focus {
+  color: #843534;
+}
+:global .bg-primary {
+  color: #fff;
+  background-color: #337ab7;
+}
+:global .dropdown-menu>li>a.bg-primary:hover,
+:global .dropdown-menu>li>a.bg-primary:focus {
+  background-color: #286090;
+}
+:global .bg-success {
+  background-color: #dff0d8;
+}
+:global .dropdown-menu>li>a.bg-success:hover,
+:global .dropdown-menu>li>a.bg-success:focus {
+  background-color: #c1e2b3;
+}
+:global .bg-info {
+  background-color: #d9edf7;
+}
+:global .dropdown-menu>li>a.bg-info:hover,
+:global .dropdown-menu>li>a.bg-info:focus {
+  background-color: #afd9ee;
+}
+:global .bg-warning {
+  background-color: #fcf8e3;
+}
+:global .dropdown-menu>li>a.bg-warning:hover,
+:global .dropdown-menu>li>a.bg-warning:focus {
+  background-color: #f7ecb5;
+}
+:global .bg-danger {
+  background-color: #f2dede;
+}
+:global .dropdown-menu>li>a.bg-danger:hover,
+:global .dropdown-menu>li>a.bg-danger:focus {
+  background-color: #e4b9b9;
+}

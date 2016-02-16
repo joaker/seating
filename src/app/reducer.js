@@ -1,10 +1,12 @@
 import {fromJS, List, Map} from 'immutable';
+import {normal} from '../components/pure/DifficultyChooser';
 import * as reductions from './reductions.js';
 
 export const defaultState = fromJS({
   guests: [],
   seats: {},
   venueGuests: [],
+  difficulty: normal,
 });
 
 export default function(state = defaultState, action){
@@ -41,6 +43,8 @@ export default function(state = defaultState, action){
       return reductions.startOptimization(state);
     case 'END_VENUE_OPTIMIZATION':
       return reductions.endOptimization(state);
+    case 'SET_MAX_DIFFICULTY':
+      return reductions.setMaxDifficulty(state, action.difficulty);
   }
   return state;
 }

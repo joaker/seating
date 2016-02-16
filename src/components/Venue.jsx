@@ -7,10 +7,11 @@ import {Link} from 'react-router';
 import { connect } from 'react-redux';
 import {Loader} from 'react-loaders';
 
-import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization} from '../app/action_creators';
+import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty} from '../app/action_creators';
 import range from '../util/range';
 import anneal from '../app/annealing';
 import * as scorer from '../app/scorer';
+import DifficultyChooser from './pure/DifficultyChooser';
 
 const maxColumns = 12;
 const offsetColumns = 2;
@@ -164,10 +165,14 @@ const maxScore = 100;
 //     </div>
 //   </div>);
 
+const Expander = ({expanded}) => expanded ?
+  <span className="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> :
+  <span className="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>;
+
 class Venue extends React.Component {
   constructor(props) {
     super(props);
-    //this.state = {count: props.initialCount};
+    this.state = {};
 
     // Bind instance methods that need the "this" context
     this.handleChange = this.handleChange.bind(this);
@@ -196,8 +201,8 @@ class Venue extends React.Component {
     if(!this.hasGuests()) return '';
     const s = this.getFriendlyScore();
     if(s >= maxScore) return "perfect";
-    if( s > 90) return "good";
-    if( s > 75) return "ok";
+    if( s >= 90) return "good";
+    if( s >= 80) return "ok";
     return "bad";
   }
 
@@ -223,12 +228,12 @@ class Venue extends React.Component {
     const ibStyle = {display: 'inline-block'};
     const scoreType = this.getScoreType();
     const scoreStyle = styles[scoreType];
-    const scoring = this.props.score ?
-      (<div className={cnames(styles.scoring, "Scoring", scoreStyle)} style={ibStyle}>
+    const scoring = this.props.hasScore ?
+      (<div className={cnames(styles.scoring, "Score", scoreStyle)} style={ibStyle}>
         <div className={cnames(styles.title, "title")} style={ibStyle}>Scoring</div>
         <div className={cnames(styles.value, "scoring")} style={ibStyle}>{this.getFriendlyScore()}</div>
       </div>):
-      ('-');
+      ('');
 
     const optimizationIndicator = (
       <div className={cnames(styles.busy)}>
@@ -245,8 +250,16 @@ class Venue extends React.Component {
               <h2 style={{display: 'block'}}>
                 Venue
                 {scoring}
-                {}
                 {this.props.optimizing ? optimizationIndicator : ''}
+                <button
+                  className={cnames('btn', 'hidden')}
+                  onClick={() => this.setState({expanded: !this.state.expanded})}
+                  style={clearTableStyle}
+                  title={optimizeTip}
+                  disabled={noGuests}
+                  >
+                  {this.state.expanded ? 'Less': 'More'} <Expander expanded={this.state.expanded}/>
+                </button>
                 <button
                   className={cnames('btn btn-default ')}
                   onClick={() => this.props.optimizeGuests(this.props.guests)}
@@ -256,6 +269,15 @@ class Venue extends React.Component {
                   >
                   Optimize
                 </button>
+                <div className="pull-right" style={{marginLeft: '1em', paddingBottom:'.2em'}}>
+                  <DifficultyChooser
+                    difficulty={this.props.difficulty}
+                    setDifficulty={this.props.setDifficulty}
+                    onClick={() => this.props.populate()}
+                    >
+                    {(this.hasGuests() ? 'Discard and ' : '') + 'Create Guests'}
+                  </DifficultyChooser>
+                </div>
                 <button
                   className={cnames('btn btn-default', 'hidden')}
                   onClick={() => this.props.scoreTables()}
@@ -264,7 +286,7 @@ class Venue extends React.Component {
                   Score
                 </button>
                 <button
-                  className={cnames('btn btn-default ')}
+                  className={cnames('btn btn-default', 'hidden')}
                   onClick={() => this.props.populate()}
                   style={clearTableStyle}
                   title={populateTip}
@@ -275,6 +297,10 @@ class Venue extends React.Component {
               </h2>
             </div>
           </div>
+          <div className={cnames('row', (this.state.expanded ? 'options': 'hidden'))} style={{fontSize: '80%'}}>
+            other things...
+          </div>
+
         </div>
         <div className={cnames(styles.venueGrid, 'container-fluid')}>
           {vRows}
@@ -338,7 +364,7 @@ const optimize = (guests, relay) => {
     relay.start();
 
     const tableSize = seatsPerTable;
-    const maxTemperature = 2000;
+    const maxTemperature = 3000;
     const temps = temperatures(maxTemperature);
     let list = guests;
 
@@ -355,14 +381,17 @@ const mapStateToProps = (state = Map(), props = {}) => {
   return {
     guests: state.get('venueGuests', List()).toJS(),
     score: state.get('venueScore'),
+    hasScore: state.get('hasVenueScore'),
     optimizing: state.get('optimizing'),
+    difficulty: state.get('difficulty'),
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   populate: () => {dispatch(populateVenue(guestCount)); dispatch(scoreVenue(seatsPerTable));},
   optimizeGuests: (guests) => optimize(guests, opimizationDispatchRelay(dispatch)),
-  scoreTables: () => dispatch(scoreVenue(seatsPerTable))
+  scoreTables: () => dispatch(scoreVenue(seatsPerTable)),
+  setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
 });
 
 const ConnectedVenue = connect(

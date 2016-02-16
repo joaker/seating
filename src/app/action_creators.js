@@ -84,6 +84,13 @@ export const endOptimization = () => ({
 })
 
 
+export const setMaxDifficulty = (difficulty) => ({
+    meta: { remote: false },
+    type: 'SET_MAX_DIFFICULTY',
+    difficulty
+})
+
+
 /*
 export function next(){
   return {

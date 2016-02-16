@@ -11,11 +11,11 @@ const relate = (count) => {
 };
 
 class GuestFactory {
-  constructor(guestCount, hateProb = defaultHateCount, likeProb = defaultLikeCount){
+  constructor(guestCount, maxHatred = defaultHateCount, maxLiking = defaultLikeCount){
     // const hateCount = defaultHateCount, likeCount = defaultLikeCount;
     this.guestCount = guestCount;
-    this.grumpyFactor = hateProb;
-    this.friendlyFactor = likeProb;
+    this.grumpyFactor = maxHatred;
+    this.friendlyFactor = maxLiking;
     // this.hates = relate(hateCount);
     // this.likes = relate(likeCount);
   }

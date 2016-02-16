@@ -11,9 +11,10 @@
     margin-bottom:1em;
 }
 
-.table label{
+.table > div > label{
   white-space:nowrap;
   margin-bottom: 0;
+  color: #777;
 }
 
 .seat{

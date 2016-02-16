@@ -67,11 +67,14 @@ export const setVenueGuests = (state, guests = []) => {
 }
 
 export const populateVenue = (state, guestCount) => {
-  const factory = new GuestFactory(guestCount);
+  const maxHates = state.get('difficulty');
+  const maxLikes =  state.get('maxLikes');
+  const factory = new GuestFactory(guestCount, maxHates, maxLikes);
   const guests = factory.createAll();
   const randoGuests = shuffle(guests);
 
-  const newState = setVenueGuests(state, randoGuests);
+  const newState = setVenueGuests(state, randoGuests)
+    .set('hasVenueScore', false);
   return newState;
 }
 
@@ -162,7 +165,7 @@ export const scoreVenue = (state, tableSize) => {
     score += scoreTable(guests.slice(i, i+tableSize));
   }
 
-  const newState = state.set('venueScore', score);
+  const newState = state.set('venueScore', score).set('hasVenueScore', true);
 
   return newState;
 }
@@ -176,5 +179,11 @@ export const startOptimization = (state) => {
 
 export const endOptimization = (state) => {
   const newState = state.set('optimizing', false);
+  return newState;
+}
+
+
+export const setMaxDifficulty = (state, difficulty) => {
+  const newState = state.set('difficulty', difficulty);
   return newState;
 }
