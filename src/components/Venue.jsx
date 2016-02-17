@@ -364,7 +364,7 @@ const optimize = (guests, relay) => {
     relay.start();
 
     const tableSize = seatsPerTable;
-    const maxTemperature = 3000;
+    const maxTemperature = 1000 * 10;
     const temps = temperatures(maxTemperature);
     let list = guests;
 
