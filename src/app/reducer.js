@@ -32,7 +32,7 @@ export default function(state = defaultState, action){
     case 'CLEAR_TABLE':
       return reductions.clearTable(state);
     case 'SET_VENUE_GUESTS':
-      return reductions.setVenueGuests(state, action.guests);
+      return reductions.setVenueGuests(state, action.guests, action.ratio);
     case 'POPULATE_VENUE':
       return reductions.populateVenue(state, action.guestCount);
     case 'QUENCH_VENUE':
@@ -45,6 +45,10 @@ export default function(state = defaultState, action){
       return reductions.endOptimization(state);
     case 'SET_MAX_DIFFICULTY':
       return reductions.setMaxDifficulty(state, action.difficulty);
+    case 'TOGGLE_VENUE_DETAILS':
+      return reductions.toggleVenueDetails(state);
+    case 'SET_TEMPERATURE':
+      return reductions.setTemperature(state, action.temperature);
   }
   return state;
 }

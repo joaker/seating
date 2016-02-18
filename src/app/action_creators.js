@@ -41,10 +41,11 @@ export const clearTable = () => ({
     type: 'CLEAR_TABLE',
 })
 
-export const setVenueGuests = (guests) => ({
+export const setVenueGuests = (guests, ratio = 0) => ({
     meta: { remote: false },
     type: 'SET_VENUE_GUESTS',
-    guests
+    guests,
+    ratio
 })
 
 export const populateVenue = (guestCount) => ({
@@ -90,6 +91,17 @@ export const setMaxDifficulty = (difficulty) => ({
     difficulty
 })
 
+
+export const toggleVenueDetails = () => ({
+    meta: { remote: false },
+    type: 'TOGGLE_VENUE_DETAILS',
+})
+
+export const setTemperature = (temperature) => ({
+    meta: { remote: false },
+    type: 'SET_TEMPERATURE',
+    temperature
+})
 
 /*
 export function next(){

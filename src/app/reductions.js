@@ -57,11 +57,12 @@ export const clearTable = (state) => {
   );
 }
 
-export const setVenueGuests = (state, guests = []) => {
+export const setVenueGuests = (state, guests = [], ratio = 0) => {
   const venueGuests = Immutable.fromJS(guests);
   const newState = state
     .set('venueGuests', venueGuests)
-    .set('guestCount', guests.length);
+    .set('guestCount', guests.length)
+    .set('optimizeProgressRatio', ratio);
 
   return newState;
 }
@@ -185,5 +186,18 @@ export const endOptimization = (state) => {
 
 export const setMaxDifficulty = (state, difficulty) => {
   const newState = state.set('difficulty', difficulty);
+  return newState;
+}
+
+
+export const toggleVenueDetails = (state) => {
+  const nextExpansion = !state.get('venueDetailsExpanded');
+  const newState = state.set('venueDetailsExpanded', nextExpansion);
+  return newState;
+}
+
+
+export const setTemperature = (state, temperature) => {
+  const newState = state.set('temperature', temperature);
   return newState;
 }

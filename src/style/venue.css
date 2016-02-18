@@ -45,6 +45,11 @@
   padding-right: 1px;
 }
 
+.venue h4 {
+  color: #777;
+  text-align:center;
+}
+
 .scoring {
   font-size:72%;
   color:#777;

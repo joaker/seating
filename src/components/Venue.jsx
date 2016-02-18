@@ -1,4 +1,5 @@
 import styles from '../style/venue.css';
+require('rc-slider/assets/index.css');
 
 import cnames from 'classnames/dedupe';
 import {List, Map} from 'immutable';
@@ -6,8 +7,9 @@ import React from 'react';
 import {Link} from 'react-router';
 import { connect } from 'react-redux';
 import {Loader} from 'react-loaders';
+var RCSlider = require('rc-slider');
 
-import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty} from '../app/action_creators';
+import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../app/action_creators';
 import range from '../util/range';
 import anneal from '../app/annealing';
 import * as scorer from '../app/scorer';
@@ -169,6 +171,37 @@ const Expander = ({expanded}) => expanded ?
   <span className="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> :
   <span className="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>;
 
+//const minutesPerDegree = 1000; // 10^3
+const toTemperature = (size) => Math.pow(10, size);
+const toSize = (temperature) => Math.log10(temperature);
+
+const minSize = 3;
+const defaultSize = 4; // 10000
+const maxSize = 6; // 10,000,000
+
+const minTemperature = toTemperature(minSize);
+const defaultTemperature = toTemperature(defaultSize);
+const maxTemperature = toTemperature(defaultSize);
+
+const marks = {};
+
+const interval = 0.5;
+for(let i = minSize; i <= maxSize; i+= interval){
+  const value = i;
+  const message = (value == minSize) ? 'Quick' : (value == maxSize ? 'Thorough' : '');
+  marks[value] = message;
+}
+
+// range(maxSize-minSize+1).map(index => {
+//   const value = minSize + index;
+//   const message = (value == minSize) ? 'Quick' : (value == maxSize ? 'Thorough' : '');
+//   marks[value] = message;
+// });
+
+console.log('marks!')
+console.log('marks!')
+console.log('marks!')
+
 class Venue extends React.Component {
   constructor(props) {
     super(props);
@@ -242,6 +275,18 @@ class Venue extends React.Component {
       </div>
     );
 
+
+    const ratio = this.props.progressRatio || 0;
+    const percent = Math.round(ratio * 100);
+    const progressPercent = percent + '%';
+
+    const progress = (
+      <div className="progress">
+        <div className={cnames('progress-bar', 'progress-bar-info')} role="progressbar" aria-valuenow={ratio} aria-valuemin={0} aria-valuemax={1} style={{minWidth: '2em', width: progressPercent}}>
+          {progressPercent}
+        </div>
+      </div>)
+
     return (
       <div className={cnames(styles.venue, "Venue")}>
         <div className={cnames('headerTable', 'container-fluid')}>
@@ -253,23 +298,23 @@ class Venue extends React.Component {
                 {this.props.optimizing ? optimizationIndicator : ''}
                 <button
                   className={cnames('btn', 'hidden')}
-                  onClick={() => this.setState({expanded: !this.state.expanded})}
+                  onClick={() => this.props.toggleVenueDetails()}
                   style={clearTableStyle}
                   title={optimizeTip}
                   disabled={noGuests}
                   >
-                  {this.state.expanded ? 'Less': 'More'} <Expander expanded={this.state.expanded}/>
+                  {this.state.expanded ? 'Less': 'More'} <Expander expanded={this.props.expanded}/>
                 </button>
                 <button
-                  className={cnames('btn btn-default ')}
-                  onClick={() => this.props.optimizeGuests(this.props.guests)}
+                  className={cnames('btn btn-default', (noGuests ? '' : 'btn-primary'))}
+                  onClick={() => this.props.optimizeGuests(this.props.guests, this.props.temperature, this.props.score)}
                   style={clearTableStyle}
                   title={optimizeTip}
                   disabled={noGuests}
                   >
                   Optimize
                 </button>
-                <div className="pull-right" style={{marginLeft: '1em', paddingBottom:'.2em'}}>
+                <div className="pull-right" style={{marginLeft: '1em', marginTop:'-.08em'}}>
                   <DifficultyChooser
                     difficulty={this.props.difficulty}
                     setDifficulty={this.props.setDifficulty}
@@ -297,8 +342,25 @@ class Venue extends React.Component {
               </h2>
             </div>
           </div>
-          <div className={cnames('row', (this.state.expanded ? 'options': 'hidden'))} style={{fontSize: '80%'}}>
-            other things...
+          <div className={cnames('row', (this.props.expanded || true ? 'options': 'Nothidden'))} style={{fontSize: '80%',visibility: (noGuests? 'collapse' : 'inherit')  }}>
+            <div className={cnames('col-xs-7', styles.temperature)} >
+              <div style={{paddingBottom: '2em'}}>
+                <h4>Progress</h4>
+                {progress}
+              </div>
+            </div>
+            <div className={cnames('col-xs-5', styles.temperature)} >
+              <div style={{padding: '2em', paddingTop: 0, }}>
+                <h4 style={{textAlign:'center'}}>Run Time</h4>
+                  <RCSlider
+                    marks={marks}
+                    min={minSize} max={maxSize}
+                    step={interval} defaultValue={defaultSize}
+                    onAfterChange={(size) => this.props.setTemperature(toTemperature(size))}
+                    className={cnames((noGuests?'hidden':'visibleSlider'))}
+                    />
+              </div>
+            </div>
           </div>
 
         </div>
@@ -310,9 +372,17 @@ class Venue extends React.Component {
   }
 }
 
+const calculateVenueScore = (guests, tableSize) => {
+  let score = 0;
+  for(let i = 0; i < guests.length; i += tableSize){
+    score += scorer.scoreTable(guests.slice(i, i+tableSize));
+  }
+  return score;
+}
+
 const opimizationDispatchRelay = (dispatch) => ({
   start: () => dispatch(startOptimization()),
-  update: (list) => dispatch(setVenueGuests(list)),
+  update: (list, ratio) => dispatch(setVenueGuests(list, ratio)),
   finish: (list) => {
     dispatch(setVenueGuests(list));
     dispatch(endOptimization());
@@ -336,8 +406,8 @@ const nextBatch = (list, t, props) => (
   }), props.delay);
 
 const batch = (list, startT, props) => {
-  if(isFrozen(startT)) {
-    props.relay.finish(list);
+  if(isFrozen(startT) || list.score >= 0) {
+    props.relay.finish(list.guests);
     return;
   }
   const batchEnd = Math.max(startT - props.size, 0);
@@ -345,37 +415,50 @@ const batch = (list, startT, props) => {
     list = props.stepper(list, t);
   }
 
+  // TODO: Take this out
+  //const score = calculateVenueScore(list.guests, props.tableSize);
+
+  const ratio = (props.maxTemperature - batchEnd) / props.maxTemperature;
+
   // Post the updated lists
-  props.relay.update(list);
+  props.relay.update(list.guests, ratio);
 
   nextBatch(list, batchEnd, props);
 
 }
 
-const batchProps = (batchSize, relay, stepper, delay = defaultBatchDelay) => ({
-  size: batchSize,
+const batchProps = (batchSize, relay, stepper, delay = defaultBatchDelay, tableSize = 9,temperature = defaultTemperature) => ({
+  size: 50,//batchSize,
   relay, stepper,
   stepper: stepper,
   delay: delay,
+  tableSize: tableSize,
+  maxTemperature: temperature,
 });
 
-const optimize = (guests, relay) => {
+const optimize = (guests, relay, temperature = defaultTemperature) => {
 
     relay.start();
 
     const tableSize = seatsPerTable;
-    const maxTemperature = 1000 * 10;
-    const temps = temperatures(maxTemperature);
+    const maxTemperature = temperature;//1000 * 10; // 1000
+    //const temps = temperatures(maxTemperature);
     let list = guests;
 
+    // This might be better as a static constant.  500 works well
     const batchSize = maxTemperature/20;
 
     const stepper = step(tableSize, maxTemperature);
 
-    const props = batchProps(batchSize, relay, stepper);
+    const props = batchProps(batchSize, relay, stepper, tableSize);
     batch(list, maxTemperature, props);
 
 }
+
+const makeScoredList = (guests, score) => ({
+  guests: guests,
+  score: score,
+});
 
 const mapStateToProps = (state = Map(), props = {}) => {
   return {
@@ -383,15 +466,20 @@ const mapStateToProps = (state = Map(), props = {}) => {
     score: state.get('venueScore'),
     hasScore: state.get('hasVenueScore'),
     optimizing: state.get('optimizing'),
+    progressRatio: state.get('optimizeProgressRatio'),
     difficulty: state.get('difficulty'),
+    expanded: state.get('venueDetailsExpanded'),
+    temperature: state.get('temperature'),
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   populate: () => {dispatch(populateVenue(guestCount)); dispatch(scoreVenue(seatsPerTable));},
-  optimizeGuests: (guests) => optimize(guests, opimizationDispatchRelay(dispatch)),
+  optimizeGuests: (guests, temperature, score) => optimize(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature),
   scoreTables: () => dispatch(scoreVenue(seatsPerTable)),
   setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
+  toggleVenueDetails: () => dispatch(toggleVenueDetails()),
+  setTemperature: (temperature) => dispatch(setTemperature(temperature)),
 });
 
 const ConnectedVenue = connect(
