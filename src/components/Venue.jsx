@@ -427,15 +427,6 @@ const batch = (list, startT, props) => {
 
 }
 
-const batchProps = (batchSize, relay, stepper, delay = defaultBatchDelay, tableSize = 9,temperature = defaultTemperature) => ({
-  size: 50,//batchSize,
-  relay, stepper,
-  stepper: stepper,
-  delay: delay,
-  tableSize: tableSize,
-  maxTemperature: temperature,
-});
-
 const optimize = (guests, relay, temperature = defaultTemperature) => {
 
     relay.start();
@@ -450,8 +441,16 @@ const optimize = (guests, relay, temperature = defaultTemperature) => {
 
     const stepper = step(tableSize, maxTemperature);
 
-    const props = batchProps(batchSize, relay, stepper, tableSize);
-    batch(list, maxTemperature, props);
+    const batchProps = {
+      size: 50,//batchSize,
+      relay, stepper,
+      stepper: stepper,
+      delay: defaultBatchDelay,
+      tableSize: tableSize,
+      maxTemperature: temperature,
+    };
+
+    batch(list, maxTemperature, batchProps);
 
 }
 
