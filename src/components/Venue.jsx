@@ -18,6 +18,7 @@ import DifficultyChooser from './pure/DifficultyChooser';
 import StartHint from './pure/StartHint';
 import VenueLayout from './pure/VenueLayout';
 import Expander from './pure/Expander';
+import Progress from './pure/Progress';
 
 
 const layoutDimensions = {rowCount: params.rowCount, columnCount: params.tablesPerRow};
@@ -126,18 +127,6 @@ class Venue extends React.Component {
       </div>
     );
 
-
-    const ratio = this.props.progressRatio || 0;
-    const percent = Math.round(ratio * 100);
-    const progressPercent = percent + '%';
-
-    const progress = (
-      <div className="progress">
-        <div className={cnames('progress-bar', 'progress-bar-info')} role="progressbar" aria-valuenow={ratio} aria-valuemin={0} aria-valuemax={1} style={{minWidth: '2em', width: progressPercent}}>
-          {progressPercent}
-        </div>
-      </div>)
-
     return (
       <div className={cnames(styles.venue, "Venue")}>
         <div className={cnames('headerTable', 'container-fluid')}>
@@ -197,7 +186,7 @@ class Venue extends React.Component {
             <div className={cnames('col-xs-7', styles.temperature)} >
               <div style={{paddingBottom: '2em'}}>
                 <h4>Progress</h4>
-                {progress}
+                <Progress ratio={this.props.progressRatio}/>
               </div>
             </div>
             <div className={cnames('col-xs-5', styles.temperature)} >
