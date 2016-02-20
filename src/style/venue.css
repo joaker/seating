@@ -36,6 +36,18 @@
   background-color: #D00;
 }
 
+.seat:not(.empty):hover,
+.seat.happy:hover,
+.seat.angry:hover
+{
+  background-color:#77A;
+}
+
+.seat.focused{
+  background-color:#77A;
+}
+
+
 .seatRow{
   line-height: 0;
 }

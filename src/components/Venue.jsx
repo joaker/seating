@@ -11,167 +11,19 @@ var RCSlider = require('rc-slider');
 
 import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../app/action_creators';
 import range from '../util/range';
+import * as params from '../data/venue.js';
 import anneal from '../app/annealing';
 import * as scorer from '../app/scorer';
 import DifficultyChooser from './pure/DifficultyChooser';
-
-const maxColumns = 12;
-const offsetColumns = 2;
-const contentColumns = 10;
-
-const tablesPerRow = 10;
-const guestsPerTable = 16;
-const tableCount = 100;
-const rowCount = tableCount / tablesPerRow + ((tableCount % tablesPerRow) ? 1 : 0);
-
-const tableColumnCount = 3;
-const tableRowCount = 3;
-const seatsPerTable = tableColumnCount * tableRowCount;
-const guestCount = seatsPerTable * tableCount;
+import StartHint from './pure/StartHint';
+import VenueLayout from './pure/VenueLayout';
+import Expander from './pure/Expander';
 
 
-const rows = range(rowCount).map(rowIndex => {
-  const rowStart = rowIndex * tablesPerRow;
-  const rowEnd = rowStart + tablesPerRow;
-  const row = range(rowEnd, rowStart);
-  return row;
-});
-
-const UnconnectedSeat = ({seat, angry, happy, moodScore, empty}) => {
-  const moodClass = angry ? styles.angry : (happy ? styles.happy : (empty? styles.empty : 'neutral'));
-  return (
-    <div className={cnames("GuestSeat", styles.seat, moodClass)}></div>
-  );
-}
-
-const mapStateSeat = (state = Map(), ownProps) => {
-
-  const score = state.get('venueScore');
-  const start = ownProps.tableStart;
-  const end = ownProps.tableEnd;
-  const table = state.get('venueGuests', List()).slice(start, end).toJS();
-  const seat = ownProps.seat;
-
-  const guest = table[seat];
-  const ids = scorer.toIDs(table);
-  const guestAnger = scorer.scoreGuest(guest, ids) * -1;
-
-  const moodScore = 0 - guestAnger;
-
-  const angry = guestAnger;
-  const happy = 0;
-
-  return {
-    ownProps,
-    angry: angry,
-    happy: (!angry && happy > 0),
-    moodScore: moodScore,
-    score: score,
-    empty: !guest,
-  };
-}
-
-const mapDispatchSeat = (dispatch) => ({
-});
-
-const Seat = connect(
-  mapStateSeat,
-  mapDispatchSeat
-)(UnconnectedSeat);
-//export default Seat;
-
-const Grid = ({height, width, table}) => {
-
-  const margin = 0;
-  const marginPercent = 2 + '%';
-  const allMargin = margin * 4;
-
-  const size = (100.0 - (width*allMargin)) / width;
-  const sizePercent = size + '%';
-  const seatStyle = {
-    display: 'inline-block',
-    textAlign: 'center',
-    width: sizePercent,
-    height: '1em',
-    backgroundColor: 'transparent',
-    border: '1px solid white',
-    // marginLeft: marginPercent,
-    // marginBottom: margin-Percent,
-    // margin: marginPercent,
-  };
-
-  const tableStart = height * width * table;
-  const tableEnd = tableStart + (height*width); // Exclusive
-  const rows = range(height).map(row => {
-    const rowStart = row * width;
-    const seats = range(width).map(col => {
-      const seatNumber = rowStart + col;
-      return (
-        <div key={col} className={styles.seatWrapper} style={seatStyle}>
-          <Seat seat={seatNumber} tableStart={tableStart} tableEnd={tableEnd}/>
-        </div>);
-    });
-    return(
-      <div key={row} className={styles.tableRow}>
-        {seats}
-      </div>
-    );
-  });
-  return (
-    <div className={cnames(styles.seatRow)} style={{textAlign: 'center'}}>
-      {rows}
-    </div>
-  );
-}
-
-const StartHint = ({children}) => (
-  <div className="startHint text-success" style={{display:'inline-block', float: 'right',}}>
-    <label style={{display:'inline-block', marginRight: '.5em', marginTop:'-1em'}}>{children}</label>
-    <span style={{fontSize:'80%'}} className="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-  </div>
-);
-
-const VTable = ({table}) => {
-  return (
-    <div className={styles.table}>
-      <div><label>Table {table}</label></div>
-      <Grid height={tableRowCount} width={tableColumnCount} table={table}></Grid>
-    </div>
-  );
-};
-
-const VenueCell = ({children, table, isBuffer}) => {
-  return (
-    isBuffer ? <div className={cnames('venueCell', styles.cell, 'col-xs-1', styles.buffer)}></div> :
-    <div className={cnames('venueCell', styles.cell, 'col-xs-1')}>
-      <VTable table={table}>{children}</VTable>
-    </div>);
-}
-
-const VenueRow = ({row}) => {
-  const tables = row.map(table => (<VenueCell key={table} table={table}>Table #{table}</VenueCell>));
-  return (
-    <div className={cnames('venueRow', 'row')}>
-      <VenueCell key={"buffer"} isBuffer={true}></VenueCell>
-      {tables}
-    </div>
-  );
-}
+const layoutDimensions = {rowCount: params.rowCount, columnCount: params.tablesPerRow};
 
 const maxScore = 100;
 
-// const Loader = ({type = 'ball-grid-beat'}) => (
-//   <div className="loader">
-//     <div className={cnames('loader-inner', type)}>
-//       <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-//     </div>
-//   </div>);
-
-const Expander = ({expanded}) => expanded ?
-  <span className="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> :
-  <span className="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>;
-
-//const minutesPerDegree = 1000; // 10^3
 const toTemperature = (size) => Math.pow(10, size);
 const toSize = (temperature) => Math.log10(temperature);
 
@@ -256,7 +108,6 @@ class Venue extends React.Component {
       marginLeft: '.5em',
       float: 'right',
     };
-    const vRows = rows.map( (row, index) => (<VenueRow key={index} row={row} />));
 
     const ibStyle = {display: 'inline-block'};
     const scoreType = this.getScoreType();
@@ -364,9 +215,7 @@ class Venue extends React.Component {
           </div>
 
         </div>
-        <div className={cnames(styles.venueGrid, 'container-fluid')}>
-          {vRows}
-        </div>
+        <VenueLayout {...layoutDimensions} />
       </div>
     );
   }
@@ -386,7 +235,7 @@ const opimizationDispatchRelay = (dispatch) => ({
   finish: (list) => {
     dispatch(setVenueGuests(list));
     dispatch(endOptimization());
-    dispatch(scoreVenue(seatsPerTable));
+    dispatch(scoreVenue(params.seatsPerTable));
   },
 });
 
@@ -431,7 +280,7 @@ const optimize = (guests, relay, temperature = defaultTemperature) => {
 
     relay.start();
 
-    const tableSize = seatsPerTable;
+    const tableSize = params.seatsPerTable;
     const maxTemperature = temperature;//1000 * 10; // 1000
     //const temps = temperatures(maxTemperature);
     let list = guests;
@@ -473,9 +322,9 @@ const mapStateToProps = (state = Map(), props = {}) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  populate: () => {dispatch(populateVenue(guestCount)); dispatch(scoreVenue(seatsPerTable));},
+  populate: () => {dispatch(populateVenue(params.guestCount)); dispatch(scoreVenue(params.seatsPerTable));},
   optimizeGuests: (guests, temperature, score) => optimize(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature),
-  scoreTables: () => dispatch(scoreVenue(seatsPerTable)),
+  scoreTables: () => dispatch(scoreVenue(params.seatsPerTable)),
   setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
   toggleVenueDetails: () => dispatch(toggleVenueDetails()),
   setTemperature: (temperature) => dispatch(setTemperature(temperature)),
