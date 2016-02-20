@@ -17,6 +17,7 @@ import * as scorer from '../app/scorer';
 import DifficultyChooser from './pure/DifficultyChooser';
 import StartHint from './pure/StartHint';
 import VenueLayout from './pure/VenueLayout';
+import Layout from './pure/VenueTableCollection';
 import Expander from './pure/Expander';
 import Progress from './pure/Progress';
 import optimizer from '../app/optimization/optimizer';
@@ -117,6 +118,15 @@ class Venue extends React.Component {
       </div>
     );
 
+
+    const customTableSize = 25;
+    const spt = customTableSize || params.seatsPerTable;
+
+    const tryNew = true;
+    const layout = tryNew ?
+      (<Layout guestCount={params.guestCount} seatsPerTable={spt}/>):
+      (<VenueLayout {...layoutDimensions} />);
+
     return (
       <div className={cnames(styles.venue, "Venue")}>
         <div className={cnames('headerTable', 'container-fluid')}>
@@ -194,7 +204,7 @@ class Venue extends React.Component {
           </div>
 
         </div>
-        <VenueLayout {...layoutDimensions} />
+        {layout}
       </div>
     );
   }

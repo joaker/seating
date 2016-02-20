@@ -107,3 +107,62 @@
   color: green;
   font-size: 90%;
 }
+
+
+.tableCollection{
+  font-size:70%;
+}
+
+.tableArea label{
+  white-space:nowrap;
+  margin-bottom: 0;
+  color: #777;
+  text-align:center;
+  padding:auto;
+  display:inline-block;
+}
+.edge-3 .tableArea .tableName,
+.edge-3 .tableArea .tableName{
+  text-align:left;
+}
+.edge-3 .tableArea label{
+  max-width:2em;
+}
+.edge-3 .tableArea label{
+  max-width:1em;
+}
+
+.tableArea{
+  display:inline-block;
+  margin:.5em .5em;
+  text-align:center;
+}
+.seatMatrix{
+  text-align:left;
+}
+
+.matrixRow{
+  line-height:0;
+}
+
+.seatArea{
+  display:inline-block;
+  width:1em;
+  height:1em;
+  margin: 2px;
+
+  overflow:hidden;
+  border: .5em solid transparent;
+}
+
+.seatArea.neutral{
+  background-color:#556;
+}
+
+.seatArea.angry{
+  background-color:#E66;
+}
+
+.seatArea.emptySeat{
+  border: .25em dashed #777;
+}

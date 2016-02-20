@@ -17,6 +17,14 @@ export const toIDs = (guests) => {
   return guests.map(g => g.id);
 };
 
+export const getGuestScores = (guests) => {
+  const ids = toIDs(guests);
+  const scores = {};
+  guests.forEach(guest => {
+    scores[guest.id] = scoreGuest(guest, ids);
+  });
+  return scores;
+}
 
 export const scoreGuest = (guest, neighborIDs, selectRelate = selectHate, weighting = 1) => {
   const relates = selectRelate(guest);
