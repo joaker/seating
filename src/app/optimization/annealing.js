@@ -1,4 +1,4 @@
-import {scoreTable, sameTable} from './scorer';
+import {scoreTable, sameTable} from '../scorer';
 
 const scoreImproved = (change) => change > 0;
 const accept = true;

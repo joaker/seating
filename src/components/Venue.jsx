@@ -12,36 +12,26 @@ var RCSlider = require('rc-slider');
 import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../app/action_creators';
 import range from '../util/range';
 import * as params from '../data/venue.js';
-import anneal from '../app/annealing';
+import anneal from '../app/optimization/annealing';
 import * as scorer from '../app/scorer';
 import DifficultyChooser from './pure/DifficultyChooser';
 import StartHint from './pure/StartHint';
 import VenueLayout from './pure/VenueLayout';
 import Expander from './pure/Expander';
 import Progress from './pure/Progress';
+import optimizer from '../app/optimization/optimizer';
 
 
 const layoutDimensions = {rowCount: params.rowCount, columnCount: params.tablesPerRow};
 
-const maxScore = 100;
 
-const toTemperature = (size) => Math.pow(10, size);
-const toSize = (temperature) => Math.log10(temperature);
-
-const minSize = 3;
-const defaultSize = 4; // 10000
-const maxSize = 6; // 10,000,000
-
-const minTemperature = toTemperature(minSize);
-const defaultTemperature = toTemperature(defaultSize);
-const maxTemperature = toTemperature(defaultSize);
 
 const marks = {};
 
-const interval = 0.5;
-for(let i = minSize; i <= maxSize; i+= interval){
+
+for(let i = params.minSize; i <= params.maxSize; i+= params.interval){
   const value = i;
-  const message = (value == minSize) ? 'Quick' : (value == maxSize ? 'Thorough' : '');
+  const message = (value == params.minSize) ? 'Quick' : (value == params.maxSize ? 'Thorough' : '');
   marks[value] = message;
 }
 
@@ -79,14 +69,14 @@ class Venue extends React.Component {
 
 
   getFriendlyScore(){
-    const friendly = maxScore + this.getRawScore();
+    const friendly = params.maxScore + this.getRawScore();
     return friendly;
   }
 
   getScoreType() {
     if(!this.hasGuests()) return '';
     const s = this.getFriendlyScore();
-    if(s >= maxScore) return "perfect";
+    if(s >= params.maxScore) return "perfect";
     if( s >= 90) return "good";
     if( s >= 80) return "ok";
     return "bad";
@@ -194,8 +184,8 @@ class Venue extends React.Component {
                 <h4 style={{textAlign:'center'}}>Run Time</h4>
                   <RCSlider
                     marks={marks}
-                    min={minSize} max={maxSize}
-                    step={interval} defaultValue={defaultSize}
+                    min={params.minSize} max={params.maxSize}
+                    step={params.interval} defaultValue={params.defaultSize}
                     onAfterChange={(size) => this.props.setTemperature(toTemperature(size))}
                     className={cnames((noGuests?'hidden':'visibleSlider'))}
                     />
@@ -217,7 +207,6 @@ const calculateVenueScore = (guests, tableSize) => {
   }
   return score;
 }
-
 const opimizationDispatchRelay = (dispatch) => ({
   start: () => dispatch(startOptimization()),
   update: (list, ratio) => dispatch(setVenueGuests(list, ratio)),
@@ -227,70 +216,6 @@ const opimizationDispatchRelay = (dispatch) => ({
     dispatch(scoreVenue(params.seatsPerTable));
   },
 });
-
-const temperatures = (max) => range(max).reverse();
-
-
-const step = (tableSize = 9, maxTemperature = 200) => (list, currentTemperature) => {
-  return anneal(list, tableSize, currentTemperature, maxTemperature);
-}
-
-const isFrozen = (t) => t < 1;
-const defaultBatchDelay = 200;
-
-const nextBatch = (list, t, props) => (
-  setTimeout(() => {
-    batch(list, t, props)
-  }), props.delay);
-
-const batch = (list, startT, props) => {
-  if(isFrozen(startT) || list.score >= 0) {
-    props.relay.finish(list.guests);
-    return;
-  }
-  const batchEnd = Math.max(startT - props.size, 0);
-  for(let t = startT; t > batchEnd; t--){
-    list = props.stepper(list, t);
-  }
-
-  // TODO: Take this out
-  //const score = calculateVenueScore(list.guests, props.tableSize);
-
-  const ratio = (props.maxTemperature - batchEnd) / props.maxTemperature;
-
-  // Post the updated lists
-  props.relay.update(list.guests, ratio);
-
-  nextBatch(list, batchEnd, props);
-
-}
-
-const optimize = (guests, relay, temperature = defaultTemperature) => {
-
-    relay.start();
-
-    const tableSize = params.seatsPerTable;
-    const maxTemperature = temperature;//1000 * 10; // 1000
-    //const temps = temperatures(maxTemperature);
-    let list = guests;
-
-    // This might be better as a static constant.  500 works well
-    const batchSize = maxTemperature/20;
-
-    const stepper = step(tableSize, maxTemperature);
-
-    const batchProps = {
-      size: 50,//batchSize,
-      relay, stepper,
-      stepper: stepper,
-      delay: defaultBatchDelay,
-      tableSize: tableSize,
-      maxTemperature: temperature,
-    };
-
-    batch(list, maxTemperature, batchProps);
-
-}
 
 const makeScoredList = (guests, score) => ({
   guests: guests,
@@ -312,7 +237,7 @@ const mapStateToProps = (state = Map(), props = {}) => {
 
 const mapDispatchToProps = (dispatch) => ({
   populate: () => {dispatch(populateVenue(params.guestCount)); dispatch(scoreVenue(params.seatsPerTable));},
-  optimizeGuests: (guests, temperature, score) => optimize(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature),
+  optimizeGuests: (guests, temperature = params.defaultTemperature, score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature),
   scoreTables: () => dispatch(scoreVenue(params.seatsPerTable)),
   setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
   toggleVenueDetails: () => dispatch(toggleVenueDetails()),
