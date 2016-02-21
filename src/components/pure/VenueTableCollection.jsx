@@ -2,6 +2,8 @@ import styles from '../../style/venue.css';
 
 import { connect } from 'react-redux';
 import {List, Map} from 'immutable';
+import {focusGuest} from '../../app/action_creators';
+
 
 import * as params from '../../data/venue.js';
 import * as scorer from '../../app/scorer';
@@ -18,15 +20,7 @@ class Seat extends React.Component {
     super(props);
     this.state = {};
 
-    // Bind instance methods that need the "this" context
-    this.toggleFocus = this.toggleFocus.bind(this);
-  }
-
-  toggleFocus(){
-    const lastFocus = this.state.focus;
-    const nextFocus = !lastFocus;
-
-    this.setState({focused: nextFocus});
+    // do any bindings to "this" that are needed in the constructor
   }
 
   render(){
@@ -45,10 +39,15 @@ class Seat extends React.Component {
     const showGuest = true;
     const content = showGuest ? guest.id : seatNumber;
 
-    const focused = this.state.focus;
-    const focusClass = focused ? styles.focused : styles.unfocused;
+    const hasFocus = data.focusState ? (styles.hasFocus || 'hasFocus') : 'unfocused';
 
-    return (<div onClick={() => this.toggleFocus()} className={cnames(styles.seatArea, scoreClass, focusClass)}>{''}</div>);
+
+
+    return (<div
+      data-guest-id={guest.id}
+      onClick={() => this.props.focusGuest(guest)}
+      className={cnames(styles.seatArea, scoreClass, hasFocus, data.focusState)}
+      >{''}</div>);
   }
 }
 
@@ -77,7 +76,19 @@ const UnconnectedSeatMatrix = (props) => {
   return (<div className={cnames(styles.seatMatrix)} >{rows}</div>);
 }
 
+const getFocusState = (guest, focusedGuest) => {
+  if(!focusedGuest || focusedGuest.id == null || focusedGuest.id == undefined) return '';
+
+  if(guest.id == focusedGuest.id) return (styles.hasSelectFocus || 'hasSelectFocus');
+  if(focusedGuest.hates && focusedGuest.hates.includes(guest.id)) return (styles.hasHateFocus || 'hasHateFocus');
+  if(focusedGuest.likes && focusedGuest.likes.includes(guest.id)) return (styles.hasLikeFocus || 'hasLikeFocus');
+
+  return '';
+}
+
 const mapStateForMatrix = (state = Map(), {start, end, }) => {
+
+  const focusedGuest = state.get('focusedGuest', Map()).toJS();
 
   const tableSeats = state.get('venueGuests', List()).slice(start, end).toJS();
   const guestIDs = scorer.toIDs(tableSeats);
@@ -87,10 +98,12 @@ const mapStateForMatrix = (state = Map(), {start, end, }) => {
   tableSeats.forEach((guest, tableIndex) => {
     const seatIndex = start + tableIndex;
     const score = scorer.scoreGuest(guest, guestIDs);
+    const focusState = getFocusState(guest, focusedGuest);
     scores.push(score);
     seatData[seatIndex] = {
       guest,
-      score
+      score,
+      focusState,
     };
   });
 
@@ -103,6 +116,7 @@ const mapStateForMatrix = (state = Map(), {start, end, }) => {
 }
 
 const mapDispatchForMatrix = (dispatch) => ({
+  focusGuest: (guest) => dispatch(focusGuest(guest)),
 });
 
 const SeatMatrix = connect(

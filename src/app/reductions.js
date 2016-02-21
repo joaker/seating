@@ -202,3 +202,15 @@ export const setTemperature = (state, temperature) => {
   const newState = state.set('temperature', temperature);
   return newState;
 }
+
+export const focusGuest = (state, guest) => {
+  const current = state.get('focusedGuest');
+  if(!guest || (current && (current.id == guest.id))){
+    const unfocusedState = state.delete('focusedGuest');
+    return unfocusedState;
+  }
+
+  const immutableGuest = Immutable.fromJS(guest);
+  const newState = state.set('focusedGuest', immutableGuest);
+  return newState;
+}

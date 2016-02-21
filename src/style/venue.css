@@ -146,10 +146,12 @@
 }
 
 .seatArea{
+  font-size:75%;
+  line-height:0;
   display:inline-block;
   width:1em;
   height:1em;
-  margin: 2px;
+  margin: .50em;
 
   overflow:hidden;
   border: .5em solid transparent;
@@ -165,4 +167,16 @@
 
 .seatArea.emptySeat{
   border: .25em dashed #777;
+}
+
+.hasFocus{
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+  padding: 3px 0px 3px 3px;
+  border: 1px solid rgba(81, 203, 238, 1);
+}
+
+.hasHateFocus{
+  box-shadow: 0 0 5px rgba(238, 81, 203, 1);
+  padding: 3px 0px 3px 3px;
+  border: 1px solid rgba(238, 100, 81, 1);
 }

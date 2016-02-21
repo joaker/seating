@@ -51,6 +51,8 @@ export default function(state = defaultState, action){
       return reductions.toggleVenueDetails(state);
     case 'SET_TEMPERATURE':
       return reductions.setTemperature(state, action.temperature);
+    case 'FOCUS_GUEST':
+      return reductions.focusGuest(state, action.guest);
   }
   return state;
 }

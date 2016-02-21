@@ -103,6 +103,12 @@ export const setTemperature = (temperature) => ({
     temperature
 })
 
+export const focusGuest = (guest) => ({
+    meta: { remote: false },
+    type: 'FOCUS_GUEST',
+    guest
+})
+
 /*
 export function next(){
   return {
