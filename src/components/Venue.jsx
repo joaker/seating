@@ -119,8 +119,7 @@ class Venue extends React.Component {
     );
 
 
-    const customTableSize = 25;
-    const spt = customTableSize || params.seatsPerTable;
+    const spt = this.props.seatsPerTable;
 
     const tryNew = true;
     const layout = tryNew ?
@@ -196,7 +195,7 @@ class Venue extends React.Component {
                     marks={marks}
                     min={params.minSize} max={params.maxSize}
                     step={params.interval} defaultValue={params.defaultSize}
-                    onAfterChange={(size) => this.props.setTemperature(toTemperature(size))}
+                    onAfterChange={(size) => this.props.setTemperature(params.toTemperature(size))}
                     className={cnames((noGuests?'hidden':'visibleSlider'))}
                     />
               </div>
@@ -221,9 +220,9 @@ const opimizationDispatchRelay = (dispatch) => ({
   start: () => dispatch(startOptimization()),
   update: (list, ratio) => dispatch(setVenueGuests(list, ratio)),
   finish: (list) => {
-    dispatch(setVenueGuests(list));
+    dispatch(setVenueGuests(list, 1));
     dispatch(endOptimization());
-    dispatch(scoreVenue(params.seatsPerTable));
+    dispatch(scoreVenue());
   },
 });
 
@@ -232,7 +231,7 @@ const makeScoredList = (guests, score) => ({
   score: score,
 });
 
-const mapStateToProps = (state = Map(), props = {}) => {
+const mapStateToProps = (state = Map()) => {
   return {
     guests: state.get('venueGuests', List()).toJS(),
     score: state.get('venueScore'),
@@ -242,13 +241,14 @@ const mapStateToProps = (state = Map(), props = {}) => {
     difficulty: state.get('difficulty'),
     expanded: state.get('venueDetailsExpanded'),
     temperature: state.get('temperature'),
+    seatsPerTable: state.get('seatsPerTable'),
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  populate: () => {dispatch(populateVenue(params.guestCount)); dispatch(scoreVenue(params.seatsPerTable));},
+  populate: () => {dispatch(populateVenue(params.guestCount)); dispatch(scoreVenue());},
   optimizeGuests: (guests, temperature = params.defaultTemperature, score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature),
-  scoreTables: () => dispatch(scoreVenue(params.seatsPerTable)),
+  scoreTables: () => dispatch(scoreVenue()),
   setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
   toggleVenueDetails: () => dispatch(toggleVenueDetails()),
   setTemperature: (temperature) => dispatch(setTemperature(temperature)),

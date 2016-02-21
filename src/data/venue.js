@@ -9,7 +9,7 @@ export const rowCount = tableCount / tablesPerRow + ((tableCount % tablesPerRow)
 
 export const tableColumnCount = 3;
 export const tableRowCount = 3;
-export const seatsPerTable = tableColumnCount * tableRowCount;
+export const seatsPerTable = 25;//tableColumnCount * tableRowCount;
 export const tableSize = seatsPerTable;
 export const guestCount = seatsPerTable * tableCount;
 

@@ -8,9 +8,9 @@ const opimizationDispatchRelay = (dispatch) => ({
   start: () => dispatch(startOptimization()),
   update: (list, ratio) => dispatch(setVenueGuests(list, ratio)),
   finish: (list) => {
-    dispatch(setVenueGuests(list));
+    dispatch(setVenueGuests(list, 1));
     dispatch(endOptimization());
-    dispatch(scoreVenue(params.seatsPerTable));
+    dispatch(scoreVenue());
   },
 });
 
@@ -45,9 +45,10 @@ const batch = (list, startT, props) => {
 
 }
 
-const makeProps = (relay, stepper, batchConfig = config) => ({
+const makeProps = (relay, stepper, maxTemperature, batchConfig = config) => ({
   relay,
   stepper,
+  maxTemperature,
   config: batchConfig,
   count:0,
 });
@@ -58,7 +59,7 @@ const optimizationRun = (scoredList, relay, maxTemperature = params.defaultTempe
     relay.start();
 
     const stepper = step(tableSize, maxTemperature);
-    const props = makeProps(relay, stepper);
+    const props = makeProps(relay, stepper, maxTemperature);
 
     batch(scoredList, maxTemperature, props);
 

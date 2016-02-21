@@ -95,7 +95,7 @@ const mapStateForMatrix = (state = Map(), {start, end, }) => {
   });
 
   const tableScore = scores.join(',');
-  console.log('score for table ' + (start/9) + ': <' + tableScore + '>');
+  //console.log('score for table ' + (start/9) + ': <' + tableScore + '>');
 
   return {
     seatData,
@@ -124,7 +124,7 @@ const TableArea = (props) => {
 };
 
 const VenueTableCollection = (props) => {
-  const {guestCount, seatsPerTable = 15} = props;
+  const {guestCount, seatsPerTable = 25} = props;
   const edge = getEdgeSize(seatsPerTable);
   const tableCount = Math.ceil(guestCount / seatsPerTable);
   const tables = range(tableCount).map((number ) => {

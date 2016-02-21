@@ -156,8 +156,9 @@ export const quenchVenue = (state, tableSize, temperature = 120, maxTemperature 
 
 }
 
-export const scoreVenue = (state, tableSize) => {
+export const scoreVenue = (state) => {
   const guests = state.get('venueGuests').toJS();
+  const tableSize = state.get('seatsPerTable');
 
   if(!guests.length) return state;
 

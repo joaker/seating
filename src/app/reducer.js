@@ -1,12 +1,14 @@
 import {fromJS, List, Map} from 'immutable';
 import {normal} from '../components/pure/DifficultyChooser';
 import * as reductions from './reductions.js';
+import * as params from '../data/venue.js';
 
 export const defaultState = fromJS({
   guests: [],
   seats: {},
   venueGuests: [],
   difficulty: normal,
+  seatsPerTable: params.seatsPerTable,
 });
 
 export default function(state = defaultState, action){
@@ -38,7 +40,7 @@ export default function(state = defaultState, action){
     case 'QUENCH_VENUE':
       return reductions.quenchVenue(state, action.tableSize, action.temperature, action.maxTemperature);
     case 'SCORE_VENUE':
-      return reductions.scoreVenue(state, action.tableSize);
+      return reductions.scoreVenue(state);
     case 'START_VENUE_OPTIMIZATION':
       return reductions.startOptimization(state);
     case 'END_VENUE_OPTIMIZATION':
