@@ -13,7 +13,7 @@ import cnames from 'classnames/dedupe';
 import range from '../../util/range';
 import VenueGrid from './VenueGrid';
 
-const EmptySeat = () => (<div className={cnames(styles.seatArea, styles.emptySeat)}/>);
+const EmptySeat = () => (<div className={cnames(styles.seatAreaWrapper)}><div className={cnames(styles.seatArea, styles.emptySeat)}/></div>);
 // const Seat = (props = {}) => {
 class Seat extends React.Component {
   constructor(props) {
@@ -43,11 +43,16 @@ class Seat extends React.Component {
 
 
 
-    return (<div
-      data-guest-id={guest.id}
-      onClick={() => this.props.focusGuest(guest)}
-      className={cnames(styles.seatArea, scoreClass, hasFocus, data.focusState)}
-      >{''}</div>);
+    return (
+      <div className={cnames(styles.seatAreaWrapper)}>
+        <div
+          data-guest-id={guest.id}
+          onClick={() => this.props.focusGuest(guest)}
+          className={cnames(styles.seatArea, scoreClass, hasFocus, data.focusState)}
+          >{''}
+        </div>
+      </div>
+    );
   }
 }
 
