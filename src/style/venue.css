@@ -178,6 +178,12 @@
   border: .25em dashed #777;
 }
 
+.seatArea:not(.emptySeat):not(.hasFocus):hover{
+  box-shadow: 0 0 1em rgba(203, 203, 203, 1);
+  /*padding: 3px 0px 3px 3px;*/
+  border: .1em solid rgba(203, 203, 203, 1);
+  background-color: rgba(203,203,203,1);
+}
 .hasFocus{
   box-shadow: 0 0 1em rgba(81, 203, 238, 1);
   /*padding: 3px 0px 3px 3px;*/
