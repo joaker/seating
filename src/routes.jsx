@@ -12,17 +12,17 @@ import Venue from './components/Venue';
 
 const routes = (
     <Route path="/" component={App} title="Home">
-      <IndexRoute to="/" component={Main} title="Main"/>
+      <IndexRoute to="/" component={Main}/>
       <Route path="Guests" title="Guests">
-        <IndexRoute to="/Guests" component={Guests} title="Guest List"/>
+        <IndexRoute to="/Guests" component={Guests}/>
         <Route path=":id" component={Guest} title="Guest"></Route>
       </Route>
       <Route path="Table" title="Table">
-        <IndexRoute to="/Table" title="Arrange" component={Table}></IndexRoute>
+        <IndexRoute to="/Table" component={Table}></IndexRoute>
         <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
       </Route>
       <Route path="Venue" title="Venue">
-        <IndexRoute to="/Venue" title="Venue" component={Venue}></IndexRoute>
+        <IndexRoute to="/Venue" component={Venue}></IndexRoute>
         // <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
       </Route>
     </Route>

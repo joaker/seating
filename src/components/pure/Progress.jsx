@@ -5,7 +5,7 @@ const Progress = ({ratio = 0, children, started}) => {
   const percent = Math.round(ratio * 100);
   const progressPercent = percent + '%';
 
-  console.log('ratio is: ' + ratio +';')
+  //console.log('ratio is: ' + ratio +';')
 
   const progressType = ratio == 1 ?
     'progress-bar-success' : ( ratio ? 'progress-bar-info' : '');
