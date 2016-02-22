@@ -35,7 +35,7 @@ const Breadcrumbs = (props) => {
     pieces.push(piece);
 
     const fullPath = pieces.join('/');
-    const resolved = {route: r, fullPath};
+    const resolved = {item: r, fullPath};
     resolvedRoutes.push(resolved);
 
     return pieces;
@@ -47,16 +47,10 @@ const Breadcrumbs = (props) => {
   console.log('creating breadcrumbs');
   return (
     <ul className={styles["breadcrumbs-list"]}>
-      {titledRoutes.map((item, index) => {
+      {resolvedRoutes.map(({item, fullPath}, index) => {
         const rawPath = item.path;
         const path = resolveParam(rawPath, params);
-
         const to = item.to;
-
-        //const dynamicPath = (path == ':id' && (index+1) == routeCount && hashpath);
-        const next = path ||
-          to ||
-          '';
         const l = location + '';
 
         return (
@@ -64,7 +58,7 @@ const Breadcrumbs = (props) => {
           {
           <Link
             activeClassName={styles["breadcrumb-active"]}
-            to={next}>
+            to={fullPath}>
             <LTitle params={params} item={item} />
           </Link>
           }
