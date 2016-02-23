@@ -4,14 +4,24 @@ export const contentColumns = 10;
 
 export const tablesPerRow = 10;
 export const guestsPerTable = 16;
-export const tableCount = 100;
+//export const tableCount = 100;
 export const rowCount = tableCount / tablesPerRow + ((tableCount % tablesPerRow) ? 1 : 0);
 
 export const tableColumnCount = 3;
 export const tableRowCount = 3;
+
+export const tableCount = 36;
+
 export const seatsPerTable = 25;//tableColumnCount * tableRowCount;
 export const tableSize = seatsPerTable;
 export const guestCount = seatsPerTable * tableCount;
+
+export const minGuestCount = 20;
+export const maxGuestCount = 5*1000;
+
+export const minSeatsPerTable = 4;
+export const maxSeatsPerTable = 100;
+export const seatsPerTableValues = [2, 3, 4, 6, 8, 9, 10, 12, 16, 25, 50, 100];
 
 export const layoutDimensions = {rowCount, columnCount: tablesPerRow};
 
@@ -29,3 +39,11 @@ export const interval = 0.5;
 export const minTemperature = toTemperature(minSize);
 export const defaultTemperature = toTemperature(defaultSize);
 export const maxTemperature = toTemperature(defaultSize);
+
+export const fromDifficultyRating = (rating) => (rating * 2);
+export const toDifficultyRating = (value) => (value / 2);
+export const difficultyRatings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const difficulty = 4;
+export const easy = 2;
+export const normal = 4;
+export const hard = 6;

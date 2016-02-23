@@ -104,12 +104,13 @@ class Venue extends React.Component {
     const ibStyle = {display: 'inline-block'};
     const scoreType = this.getScoreType();
     const scoreStyle = styles[scoreType];
-    const scoring = this.props.hasScore ?
-      (<div className={cnames(styles.scoring, "Score", scoreStyle)} style={ibStyle}>
-        <div className={cnames(styles.title, "title")} style={ibStyle}>Scoring</div>
-        <div className={cnames(styles.value, "scoring")} style={ibStyle}>{this.getFriendlyScore()}</div>
-      </div>):
-      ('');
+    const scoring = '' ;
+    //  this.props.hasScore ?
+    //   (<div className={cnames(styles.scoring, "Score", scoreStyle)} style={ibStyle}>
+    //     <div className={cnames(styles.title, "title")} style={ibStyle}>Scoring</div>
+    //     <div className={cnames(styles.value, "scoring")} style={ibStyle}>{this.getFriendlyScore()}</div>
+    //   </div>):
+    //   ('');
 
     const optimizationIndicator = (
       <div className={cnames(styles.busy)}>
@@ -123,7 +124,7 @@ class Venue extends React.Component {
 
     const tryNew = true;
     const layout = tryNew ?
-      (<Layout guestCount={params.guestCount} seatsPerTable={spt}/>):
+      (<Layout guestCount={this.props.guestCount} seatsPerTable={this.props.seatsPerTable}/>):
       (<VenueLayout {...layoutDimensions} />);
 
     return (
@@ -133,75 +134,10 @@ class Venue extends React.Component {
             <div className={cnames('col-xs-12')}>
               <h2 style={{display: 'block'}}>
                 Venue
-                {scoring}
-                {this.props.optimizing ? optimizationIndicator : ''}
-                <button
-                  className={cnames('btn', 'hidden')}
-                  onClick={() => this.props.toggleVenueDetails()}
-                  style={clearTableStyle}
-                  title={optimizeTip}
-                  disabled={noGuests}
-                  >
-                  {this.state.expanded ? 'Less': 'More'} <Expander expanded={this.props.expanded}/>
-                </button>
-                <button
-                  className={cnames('btn btn-default', (noGuests ? '' : 'btn-primary'))}
-                  onClick={() => this.props.optimizeGuests(this.props.guests, this.props.temperature, this.props.score)}
-                  style={clearTableStyle}
-                  title={optimizeTip}
-                  disabled={noGuests}
-                  >
-                  Optimize
-                </button>
-                <div className="pull-right" style={{marginLeft: '1em', marginTop:'-.08em'}}>
-                  <DifficultyChooser
-                    difficulty={this.props.difficulty}
-                    setDifficulty={this.props.setDifficulty}
-                    onClick={() => this.props.populate()}
-                    >
-                    {(this.hasGuests() ? 'Discard and ' : '') + 'Create Guests'}
-                  </DifficultyChooser>
-                </div>
-                <button
-                  className={cnames('btn btn-default', 'hidden')}
-                  onClick={() => this.props.scoreTables()}
-                  style={clearTableStyle}
-                  >
-                  Score
-                </button>
-                <button
-                  className={cnames('btn btn-default', 'hidden')}
-                  onClick={() => this.props.populate()}
-                  style={clearTableStyle}
-                  title={populateTip}
-                  >
-                  {(this.hasGuests() ? 'Discard and ' : '') + 'Create Guests'}
-                </button>
-                {this.hasGuests() ? '' : <StartHint>start here</StartHint>}
+                <Progress ratio={this.props.progressRatio}/>
               </h2>
             </div>
           </div>
-          <div className={cnames('row', (this.props.expanded || true ? 'options': 'Nothidden'))} style={{fontSize: '80%',visibility: (noGuests? 'collapse' : 'inherit')  }}>
-            <div className={cnames('col-xs-7', styles.temperature)} >
-              <div style={{paddingBottom: '2em'}}>
-                <h4>Progress</h4>
-                <Progress ratio={this.props.progressRatio}/>
-              </div>
-            </div>
-            <div className={cnames('col-xs-5', styles.temperature)} >
-              <div style={{padding: '2em', paddingTop: 0, }}>
-                <h4 style={{textAlign:'center'}}>Run Time</h4>
-                  <RCSlider
-                    marks={marks}
-                    min={params.minSize} max={params.maxSize}
-                    step={params.interval} defaultValue={params.defaultSize}
-                    onAfterChange={(size) => this.props.setTemperature(params.toTemperature(size))}
-                    className={cnames((noGuests?'hidden':'visibleSlider'))}
-                    />
-              </div>
-            </div>
-          </div>
-
         </div>
         {layout}
       </div>
@@ -234,6 +170,8 @@ const makeScoredList = (guests, score) => ({
 const mapStateToProps = (state = Map()) => {
   return {
     guests: state.get('venueGuests', List()).toJS(),
+    guestCount: state.get('guestCount'),
+    seatsPerTable: state.get('seatsPerTable'),
     score: state.get('venueScore'),
     hasScore: state.get('hasVenueScore'),
     optimizing: state.get('optimizing'),
@@ -246,7 +184,7 @@ const mapStateToProps = (state = Map()) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  populate: () => {dispatch(populateVenue(params.guestCount)); dispatch(scoreVenue());},
+  populate: () => {dispatch(populateVenue()); dispatch(scoreVenue());},
   optimizeGuests: (guests, temperature = params.defaultTemperature, score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature),
   scoreTables: () => dispatch(scoreVenue()),
   setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),

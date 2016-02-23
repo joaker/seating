@@ -73,7 +73,7 @@ const Breadcrumbs = (props) => {
 const App = (props, context) => (
   <div className="AppComponent row" >
     <div className="hidden-xs col-sm-3 col-md-2">
-      <Nav/>
+      <Nav>{props.menu}</Nav>
     </div>
     <div className="col-xs-12 col-sm-9 col-md-10">
       <main>

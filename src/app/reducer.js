@@ -9,6 +9,7 @@ export const defaultState = fromJS({
   venueGuests: [],
   difficulty: normal,
   seatsPerTable: params.seatsPerTable,
+  guestCount: params.guestCount,
 });
 
 export default function(state = defaultState, action){
@@ -36,7 +37,7 @@ export default function(state = defaultState, action){
     case 'SET_VENUE_GUESTS':
       return reductions.setVenueGuests(state, action.guests, action.ratio);
     case 'POPULATE_VENUE':
-      return reductions.populateVenue(state, action.guestCount);
+      return reductions.populateVenue(state);
     case 'QUENCH_VENUE':
       return reductions.quenchVenue(state, action.tableSize, action.temperature, action.maxTemperature);
     case 'SCORE_VENUE':
@@ -53,6 +54,10 @@ export default function(state = defaultState, action){
       return reductions.setTemperature(state, action.temperature);
     case 'FOCUS_GUEST':
       return reductions.focusGuest(state, action.guest);
+    case 'SET_DRAFT_PROPERTY':
+      return reductions.setDraftProperty(state, action.property, action.value);
+    case 'COMMIT_DRAFT':
+      return reductions.commitDraft(state);
   }
   return state;
 }

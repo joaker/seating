@@ -2,6 +2,7 @@ import Immutable, {List, Map} from 'immutable';
 import range from '../util/range';
 import shuffle from '../util/shuffle';
 import GuestFactory from './GuestFactory';
+import * as params from '../data/venue.js';
 
 export const setState = (state, newState) => state.merge(newState);
 
@@ -67,7 +68,8 @@ export const setVenueGuests = (state, guests = [], ratio = 0) => {
   return newState;
 }
 
-export const populateVenue = (state, guestCount) => {
+export const populateVenue = (state) => {
+  const guestCount = state.get('guestCount');
   const maxHates = state.get('difficulty');
   const maxLikes =  state.get('maxLikes');
   const factory = new GuestFactory(guestCount, maxHates, maxLikes);
@@ -212,5 +214,20 @@ export const focusGuest = (state, guest) => {
 
   const immutableGuest = Immutable.fromJS(guest);
   const newState = state.set('focusedGuest', immutableGuest);
+  return newState;
+}
+
+
+export const setDraftProperty = (state, property, value) => {
+  const draft = state.get('draftConfig', Map());
+  const newDraft = draft.set(property, value);
+  const newState = state.set('draftConfig', newDraft);
+  return newState;
+}
+
+
+export const commitDraft = (state) => {
+  const draft = state.get('draftConfig', Map());
+  const newState = state.merge(draft).delete('draftConfig');
   return newState;
 }

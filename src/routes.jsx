@@ -9,6 +9,9 @@ import Guest from './components/Guest';
 import Table from './components/Table';
 import SeatGuest from './components/SeatGuest';
 import Venue from './components/Venue';
+import GenerateGuests from './components/GenerateGuests';
+import Children from './components/pure/Children';
+import VenueMenu from './components/menus/VenueMenu';
 
 const routes = (
     <Route path="/" component={App} title="Home">
@@ -21,9 +24,9 @@ const routes = (
         <IndexRoute to="/Table" component={Table}></IndexRoute>
         <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
       </Route>
-      <Route path="Venue" title="Venue">
-        <IndexRoute to="/Venue" component={Venue}></IndexRoute>
-        // <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
+      <Route path="Venue" title="Venue" >       
+        <IndexRoute to="/Venue" components={{children:Venue, menu:VenueMenu}}></IndexRoute>
+        <Route path="GenerateGuests" title="Generate Guests" component={GenerateGuests}></Route>
       </Route>
     </Route>
 );

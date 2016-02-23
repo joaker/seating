@@ -30,9 +30,13 @@ ul {
   padding-left: 0;
   padding-right:0;
 }
+:global #app  .nav {
+  padding-bottom: .5em;
+}
 
 :global #app  .nav > li > a{
-  padding: .5em .25em;
+  padding: .25em .125em;
+  /*display: inline-block;*/
 }
 
 :global .text-very-muted {

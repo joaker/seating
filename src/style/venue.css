@@ -199,3 +199,11 @@
   box-shadow: 0 0 1em rgba(81, 238, 81, 1);
   border-color: .1em solid rgba(81, 238, 81, 1);
 }
+
+.venueMenuItems{
+
+}
+
+.venueMenuItems > li {
+  margin-bottom:.25em;
+}

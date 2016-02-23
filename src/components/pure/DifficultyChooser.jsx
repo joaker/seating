@@ -40,7 +40,7 @@ const DifficultyChoice = ({difficulty, setDifficulty}) => {
   );
 }
 
-const DifficultyChooser = ({difficulty = normal, setDifficulty, onClick, children}) => {
+const DifficultyChooser = ({difficulty = normal, setDifficulty, onClick, children, className}) => {
 
   const difficultyName = getDifficultyName(difficulty);
   const actionClass = classNames.Action[difficultyName];
@@ -48,7 +48,7 @@ const DifficultyChooser = ({difficulty = normal, setDifficulty, onClick, childre
   const actionContent = children || difficultyName;
 
   return (
-    <div className={cnames("btn-group")}>
+    <div className={cnames("btn-group", className)}>
       <button type="button" className={cnames('btn', actionClass)} onClick={onClick}>{actionContent}</button>
       <button type="button" className={cnames("btn dropdown-toggle", actionClass)} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span className="caret"></span>

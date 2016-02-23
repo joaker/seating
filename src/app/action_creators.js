@@ -109,6 +109,18 @@ export const focusGuest = (guest) => ({
     guest
 })
 
+export const setDraftProperty = (property, value) => ({
+    meta: { remote: false },
+    type: 'SET_DRAFT_PROPERTY',
+    property,
+    value,
+})
+
+export const commitDraft = () => ({
+    meta: { remote: false },
+    type: 'COMMIT_DRAFT',
+})
+
 /*
 export function next(){
   return {
