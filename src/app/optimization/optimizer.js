@@ -53,7 +53,7 @@ const makeProps = (relay, stepper, maxTemperature, batchConfig = config) => ({
   count:0,
 });
 
-const optimizationRun = (scoredList, relay, maxTemperature = params.defaultTemperature, tableSize = params.tableSize) => {
+const optimizationRun = (scoredList, relay, maxTemperature, tableSize) => {
 
     // Signal the start of a new optimization run
     relay.start();

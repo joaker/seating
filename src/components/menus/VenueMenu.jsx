@@ -116,7 +116,7 @@ const UnconnectedVenueMenu = (props) => {
         <li>
           <button
             className={cnames('btn btn-block btn-default', (noGuests ? '' : 'btn-primary'))}
-            onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score)}
+            onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score, props.seatsPerTable)}
             title={optimizeTip}
             disabled={noGuests}
             >
@@ -157,8 +157,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    populate: () => {dispatch(populateVenue(params.guestCount)); dispatch(scoreVenue());},
-    optimizeGuests: (guests, temperature = params.defaultTemperature, score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature),
+    populate: () => {dispatch(populateVenue()); dispatch(scoreVenue());},
+    optimizeGuests: (guests, temperature, score, tableSize) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, tableSize),
     scoreTables: () => dispatch(scoreVenue()),
     setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
     toggleVenueDetails: () => dispatch(toggleVenueDetails()),
