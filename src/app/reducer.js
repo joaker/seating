@@ -10,6 +10,7 @@ export const defaultState = fromJS({
   difficulty: normal,
   seatsPerTable: params.seatsPerTable,
   guestCount: params.guestCount,
+  temperature: params.defaultTemperature,
 });
 
 export default function(state = defaultState, action){

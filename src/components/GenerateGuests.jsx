@@ -39,8 +39,13 @@ const Difficulty = (props) => {
   return (<select {...props} className={cnames(styles.difficultyRating, 'form-control')}>{options}</select>)
 }
 
-const getValue = event => event.target.value;
-const handlerFactory = (act) => (name, converter = getValue) => (event) => act(name, converter(event));
+const noConversion = (v) => v;
+const getValue = e => {
+  const value = e.target.value;
+  const intValue = parseInt(value);
+  return intValue;
+};
+const handlerFactory = (act) => (name, converter = noConversion) => (event) => act(name, converter(getValue(event)));
 
 const makeNextAction = (router) => () => router.push('/Venue');
 
@@ -84,7 +89,7 @@ const UnconnectedGenerateGuests = (props, {router}) => {
           </Row>
           <Row>
             <ValueColumn>
-              <Difficulty  {...props} onChange={changer('difficulty', e => params.fromDifficultyRating(e.target.value))} value={params.toDifficultyRating(difficulty)}/>
+              <Difficulty  {...props} onChange={changer('difficulty', v => params.fromDifficultyRating(v))} value={params.toDifficultyRating(difficulty)}/>
             </ValueColumn>
             <LabelColumn>Difficulty</LabelColumn>
           </Row>
