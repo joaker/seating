@@ -17,7 +17,7 @@ export const configB = {
 }
 
 export const configC = {
-  size: 50,
+  size: 100,
   rate: 4,
   delay: 20,
   updateDelay: 100,
