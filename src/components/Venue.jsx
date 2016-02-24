@@ -46,10 +46,12 @@ console.log('marks!')
 console.log('marks!')
 console.log('marks!')
 
-class Venue extends React.Component {
-  constructor(props) {
+class UnconnectedVenue extends React.Component {
+  constructor(props, ctx) {
     super(props);
     this.state = {};
+
+    this.router = ctx.router;
 
     // Bind instance methods that need the "this" context
     this.handleChange = this.handleChange.bind(this);
@@ -57,6 +59,17 @@ class Venue extends React.Component {
     this.hasGuests = this.hasGuests.bind(this);
     this.getFriendlyScore = this.getFriendlyScore.bind(this);
     this.getScoreType = this.getScoreType.bind(this);
+  }
+
+  componentWillMount(){
+
+    const guests = this.props.guests;
+    const numberOfGuests = guests.length;
+
+    if(numberOfGuests) return;
+
+    this.router.push('/Venue/GenerateGuests');
+
   }
 
   handleChange(event){
@@ -145,6 +158,10 @@ class Venue extends React.Component {
   }
 }
 
+UnconnectedVenue.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
+
 const calculateVenueScore = (guests, tableSize) => {
   let score = 0;
   for(let i = 0; i < guests.length; i += tableSize){
@@ -192,8 +209,8 @@ const mapDispatchToProps = (dispatch) => ({
   setTemperature: (temperature) => dispatch(setTemperature(temperature)),
 });
 
-const ConnectedVenue = connect(
+const Venue = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Venue)
-export default ConnectedVenue;
+)(UnconnectedVenue)
+export default Venue;

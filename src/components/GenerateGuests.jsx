@@ -71,15 +71,15 @@ const UnconnectedGenerateGuests = (props, {router}) => {
         <div className={'container-fluid', styles.config}>
           <Row>
             <ValueColumn>
-              <SeatsPerTable {...props} onChange={changer('seatsPerTable')} value={seatsPerTable}/>
+              <input  {...props} onChange={changer('guestCount')} type="number" min={params.minGuestCount} max={params.maxGuestCount} className="form-control" value={guestCount}/>
             </ValueColumn>
-            <LabelColumn>Seats Per Table</LabelColumn>
+            <LabelColumn>Guest Count</LabelColumn>
           </Row>
           <Row>
             <ValueColumn>
-              <input  {...props} onChange={changer('guestCount')} type="number" min={params.minGuestCount} max={params.maxGuestCount} className="form-control" value={guestCount}/>
+              <SeatsPerTable {...props} onChange={changer('seatsPerTable')} value={seatsPerTable}/>
             </ValueColumn>
-            <LabelColumn>Venue Capacity</LabelColumn>
+            <LabelColumn>Seats Per Table</LabelColumn>
           </Row>
           <Row>
             <ValueColumn>
