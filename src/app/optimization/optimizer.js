@@ -21,10 +21,10 @@ const step = (tableSize, maxTemperature) => (list, currentTemperature) => {
 
 const isFrozen = (t) => t < 1;
 
-const queueNextBatch = (list, t, props) => (
+const queueNextBatch = (list, t, props, delay) => (
   setTimeout(() => {
     batch(list, t, props)
-  }), props.config.delay);
+  }), delay);
 
 const batch = (list, startT, props) => {
   if(isFrozen(startT) || list.score >= 0) {
@@ -36,12 +36,21 @@ const batch = (list, startT, props) => {
     list = props.stepper(list, t);
   }
 
-  const ratio = (props.maxTemperature - batchEnd) / props.maxTemperature;
 
-  // Post the updated lists
-  props.relay.update(list.guests, ratio);
+  props.count += 1;
 
-  queueNextBatch(list, batchEnd, props);
+  const rate = props.config.rate;
+  const throttled = (props.count % rate);
+  if(!throttled){
+    const ratio = (props.maxTemperature - batchEnd) / props.maxTemperature;
+
+    // Post the updated lists
+    props.relay.update(list.guests, ratio);
+  }
+
+  const nextDelay = throttled ? props.delay : props.updateDelay;
+
+  queueNextBatch(list, batchEnd, props, nextDelay);
 
 }
 
