@@ -24,31 +24,32 @@ class Seat extends React.Component {
   }
 
   render(){
-    const {seatNumber, seatData = {}} = this.props;
-    const data = seatData[seatNumber];
-    if(!data) return (<EmptySeat/>);
-    const {guest, score} = seatData[seatNumber];
+    const {seatNumber, guestID, score, focusState, hasGuest, focusGuest} = this.props;
+    // const {seatNumber, seatData = {}} = this.props;
+    // const data = seatData[seatNumber];
+    // if(!data) return (<EmptySeat/>);
+    // const {guest, score} = seatData[seatNumber];
 
 
 
-    const emptySeat = !guest;// || !guest.id;
+    const emptySeat = !hasGuest;// || !guest.id;
     if(emptySeat) return (<EmptySeat/>);
 
     const scoreClass = score ? styles.angry : styles.neutral;
 
     const showGuest = true;
-    const content = showGuest ? guest.id : seatNumber;
+    const content = showGuest ? guestID : seatNumber;
 
-    const hasFocus = data.focusState ? (styles.hasFocus || 'hasFocus') : 'unfocused';
+    const hasFocus = focusState ? (styles.hasFocus || 'hasFocus') : 'unfocused';
 
 
 
     return (
       <div className={cnames(styles.seatAreaWrapper)}>
         <div
-          data-guest-id={guest.id}
-          onClick={() => this.props.focusGuest(guest)}
-          className={cnames(styles.seatArea, scoreClass, hasFocus, data.focusState)}
+          data-guest-id={guestID}
+          onClick={() => this.props.focusGuest(guestID)}
+          className={cnames(styles.seatArea, scoreClass, hasFocus, focusState)}
           >{''}
         </div>
       </div>
@@ -67,13 +68,19 @@ const getRowRange = (rowWidth, rowIndex = 0, startOffset = 0, max = Number.MAX_V
 
 const UnconnectedSeatMatrix = (props) => {
   const {number, seatsPerTable, guestCount, start, end, edge} = props;
-
+  const {seatData = {}, focusGuest} = props;
   const rows = range(edge).map(rowIndex => {
     return (
       <div key={'row' + rowIndex} className={cnames('matrixRow', styles.matrixRow)}>
-        {getRowRange(edge, rowIndex, start, end).map(seatNumber => (
-          <Seat {...props} key={seatNumber} seatNumber={seatNumber} />
-        ))}
+        {getRowRange(edge, rowIndex, start, end).map(seatNumber => {
+          const data = seatData[seatNumber] || {};
+          const {guest, score, focusState} = data;
+          const guestID = guest && guest.id;
+          const info = { seatNumber, guestID, score, focusState, focusGuest };
+          return (
+            <Seat  key={seatNumber} {...info} hasGuest={!!guest}/>
+          );
+        })}
       </div>
     );
   });

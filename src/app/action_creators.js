@@ -103,10 +103,10 @@ export const setTemperature = (temperature) => ({
     temperature
 })
 
-export const focusGuest = (guest) => ({
+export const focusGuest = (guestID) => ({
     meta: { remote: false },
     type: 'FOCUS_GUEST',
-    guest
+    guestID
 })
 
 export const setDraftProperty = (property, value) => ({

@@ -54,7 +54,7 @@ export default function(state = defaultState, action){
     case 'SET_TEMPERATURE':
       return reductions.setTemperature(state, action.temperature);
     case 'FOCUS_GUEST':
-      return reductions.focusGuest(state, action.guest);
+      return reductions.focusGuest(state, action.guestID);
     case 'SET_DRAFT_PROPERTY':
       return reductions.setDraftProperty(state, action.property, action.value);
     case 'COMMIT_DRAFT':

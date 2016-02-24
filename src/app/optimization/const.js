@@ -4,7 +4,7 @@ import params from '../../data/venue'
 
 export const configA = {
   size: 50,
-  rate: 2,
+  rate: 1,
   delay: 50,
   updateDelay: 100,
 }
