@@ -2,9 +2,10 @@ import styles from '../../style/venue.css';
 
 import { connect } from 'react-redux';
 import {List, Map} from 'immutable';
+import sequal from 'shallowequal';
+
+
 import {focusGuest} from '../../app/action_creators';
-
-
 import * as params from '../../data/venue.js';
 import * as scorer from '../../app/scorer';
 import React from 'react';
@@ -15,23 +16,32 @@ import VenueGrid from './VenueGrid';
 
 const EmptySeat = () => (<div className={cnames(styles.seatAreaWrapper)}><div className={cnames(styles.seatArea, styles.emptySeat)}/></div>);
 // const Seat = (props = {}) => {
-class Seat extends React.Component {
-  constructor(props) {
+//const Seat = ({seatNumber, guestID, score, focusState, hasGuest, focusGuest}) => {
+class Seat extends React.Component{
+  constructor(props){
     super(props);
-    this.state = {};
-
-    // do any bindings to "this" that are needed in the constructor
   }
 
-  render(){
-    const {seatNumber, guestID, score, focusState, hasGuest, focusGuest} = this.props;
+  shouldComponentUpdate(nextProps, nextState){
+
+    const next = Object.assign({}, nextProps)
+    const thisun = Object.assign({}, this.props);
+
+    delete next.focusGuest;
+    delete thisun.focusGuest;
+
+    var skipUpdate = sequal(next, thisun);
+
+    return !skipUpdate;
+
+  }
     // const {seatNumber, seatData = {}} = this.props;
     // const data = seatData[seatNumber];
     // if(!data) return (<EmptySeat/>);
     // const {guest, score} = seatData[seatNumber];
 
-
-
+  render(){
+    const {seatNumber, guestID, score, focusState, hasGuest, focusGuest} = this.props;
     const emptySeat = !hasGuest;// || !guest.id;
     if(emptySeat) return (<EmptySeat/>);
 
@@ -48,7 +58,7 @@ class Seat extends React.Component {
       <div className={cnames(styles.seatAreaWrapper)}>
         <div
           data-guest-id={guestID}
-          onClick={() => this.props.focusGuest(guestID)}
+          onClick={() => focusGuest(guestID)}
           className={cnames(styles.seatArea, scoreClass, hasFocus, focusState)}
           >{''}
         </div>
@@ -131,9 +141,19 @@ const mapDispatchForMatrix = (dispatch) => ({
   focusGuest: (guest) => dispatch(focusGuest(guest)),
 });
 
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  const nextProps = Object.assign({}, stateProps, dispatchProps, ownProps);
+
+  const keys = Object.keys(nextProps);
+
+  return nextProps;
+}
+
 const SeatMatrix = connect(
   mapStateForMatrix,
-  mapDispatchForMatrix
+  mapDispatchForMatrix,
+  mergeProps,
+  {pure: true}
 )(UnconnectedSeatMatrix);
 
 const TableArea = (props) => {

@@ -65,6 +65,7 @@
     "react-router": "^2.0.0-rc6",
     "redux": "^3.1.2",
     "serve-static": "^1.10.2",
+    "shallowequal": "^0.2.2",
     "socket.io": "^1.4.5",
     "socket.io-client": "^1.4.5",
     "style-loader": "^0.13.0",

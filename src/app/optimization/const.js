@@ -18,9 +18,9 @@ export const configB = {
 
 export const configC = {
   size: 50,
-  rate: 8,
+  rate: 4,
   delay: 20,
-  updateDelay: 200,
+  updateDelay: 100,
 }
 
 // This works OK, but it interupts socketio operations
