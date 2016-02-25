@@ -203,7 +203,7 @@ const mapStateToProps = (state = Map()) => {
 
 const mapDispatchToProps = (dispatch) => ({
   populate: () => {dispatch(populateVenue()); dispatch(scoreVenue());},
-  optimizeGuests: (guests,temperature = params.defaultTemperature, mode='hate', score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, mode),
+  optimizeGuests: (guests,temperature = params.defaultTemperature, mode=params.defaultMode, score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, mode),
   scoreTables: () => dispatch(scoreVenue()),
   setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
   toggleVenueDetails: () => dispatch(toggleVenueDetails()),

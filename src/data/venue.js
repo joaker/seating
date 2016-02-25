@@ -47,3 +47,5 @@ export const difficulty = 4;
 export const easy = 2;
 export const normal = 4;
 export const hard = 6;
+
+export const defaultMode = 'like'; // default optimization mode

@@ -1,3 +1,5 @@
+import * as params from '../data/venue.js';
+
 
 export const sameTable = (guest1Index, guest2Index, tableSize) => {
   const start1 = guest1Index - (guest1Index % tableSize);
@@ -17,7 +19,7 @@ export const toIDs = (guests) => {
   return guests.map(g => g.id);
 };
 
-export const getGuestScores = (guests, mode = 'hate') => {
+export const getGuestScores = (guests, mode = params.defaultMode) => {
   const ids = toIDs(guests);
   const scores = {};
   guests.forEach(guest => {
@@ -36,7 +38,7 @@ const modeWeights = {
   like: 1,
 }
 
-export const scoreGuest = (guest, neighborIDs, mode = 'hate') => {
+export const scoreGuest = (guest, neighborIDs, mode = params.defaultMode) => {
   const chooser = modeChooser[mode] || selectHate;
   const relates = chooser(guest);
   const score = neighborIDs.filter( gid => relates.includes(gid)).length;

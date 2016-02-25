@@ -123,7 +123,7 @@ const getFocusState = (guest, focusedGuest) => {
 const mapStateForMatrix = (state = Map(), {start, end, }) => {
 
   const focusedGuest = state.get('focusedGuest', Map()).toJS();
-  const mode = state.get('optimizationMode', 'hate');
+  const mode = state.get('optimizationMode', params.defaultMode);
 
   const tableSeats = state.get('venueGuests', List()).slice(start, end).toJS();
   const guestIDs = scorer.toIDs(tableSeats);

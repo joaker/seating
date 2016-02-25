@@ -75,7 +75,7 @@ const populateTip = hasGuests ? 'Clear and make new guests with new seat assignm
 
 const UnconnectedVenueMenu = (props) => {
 
-  const {mode = 'hate'} = props;
+  const {mode = params.defaultMode} = props;
   const hasGuests = props.guests && props.guests.length;
   const noGuests = !hasGuests;
 
@@ -162,7 +162,7 @@ const mapStateToProps = (state) => {
     expanded: state.get('venueDetailsExpanded'),
     temperature: state.get('temperature'),
     seatsPerTable: state.get('seatsPerTable'),
-    mode: state.get('optimizationMode', 'hate'),
+    mode: state.get('optimizationMode', params.defaultMode),
   };
 };
 
