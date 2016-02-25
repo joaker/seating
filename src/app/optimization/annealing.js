@@ -44,7 +44,7 @@ const getTable = (guestIndex, tableSize, guests) => {
   };
 };
 
-export const step = (guestList = {}, tableSize, temperature = 120, maxTemperature = 120) => {
+export const step = (guestList = {}, tableSize, temperature, maxTemperature, mode) => {
 
   const guests = guestList.guests;
 
@@ -63,8 +63,8 @@ export const step = (guestList = {}, tableSize, temperature = 120, maxTemperatur
   const table2 = getTable(guest2Index, tableSize, guests);
 
   // If the tables are the same, don't bother
-  const t1Score = scoreTable(table1.guests);
-  const t2Score = scoreTable(table2.guests);
+  const t1Score = scoreTable(table1.guests, mode);
+  const t2Score = scoreTable(table2.guests, mode);
 
   const initialScore = t1Score + t2Score;
 
@@ -89,8 +89,8 @@ export const step = (guestList = {}, tableSize, temperature = 120, maxTemperatur
   table1.guests.splice(guest1TableIndex, 1, secondGuest);
   table2.guests.splice(guest2TableIndex, 1, firstGuest);
 
-  const t1NextScore = scoreTable(table1.guests);
-  const t2NextScore = scoreTable(table2.guests);
+  const t1NextScore = scoreTable(table1.guests, mode);
+  const t2NextScore = scoreTable(table2.guests, mode);
 
   const nextScore = t1NextScore + t2NextScore;
 

@@ -3,6 +3,7 @@ import range from '../util/range';
 import shuffle from '../util/shuffle';
 import GuestFactory from './GuestFactory';
 import * as params from '../data/venue.js';
+import {scoreTable} from './scorer';
 
 export const setState = (state, newState) => state.merge(newState);
 
@@ -82,21 +83,21 @@ export const populateVenue = (state) => {
 }
 
 const likeWeight = 0;
-const scoreTable = (table) => {
-  const guestIDs = table.map(g => {
-    return g.id
-  });
-  const hateScore = table.map(g => {
-    const hates = guestIDs.filter(gid => g.hates.includes(gid)).length;
-    return hates;
-  }).reduce((total, i) => (total + i), 0)
-  const likeScore = table.map(g => {
-    const likes = guestIDs.filter(gid => g.likes.includes(gid)).length * likeWeight;
-    return likes;
-  }).reduce((total, i) => (total + i), 0)
-
-  return likeScore - hateScore;
-}
+// const scoreTable = (table) => {
+//   const guestIDs = table.map(g => {
+//     return g.id
+//   });
+//   const hateScore = table.map(g => {
+//     const hates = guestIDs.filter(gid => g.hates.includes(gid)).length;
+//     return hates;
+//   }).reduce((total, i) => (total + i), 0)
+//   const likeScore = table.map(g => {
+//     const likes = guestIDs.filter(gid => g.likes.includes(gid)).length * likeWeight;
+//     return likes;
+//   }).reduce((total, i) => (total + i), 0)
+//
+//   return likeScore - hateScore;
+// }
 
 export const quenchVenue = (state, tableSize, temperature = 120, maxTemperature = 120) => {
   const guests = state.get('venueGuests', List()).toJS();
@@ -161,12 +162,13 @@ export const quenchVenue = (state, tableSize, temperature = 120, maxTemperature 
 export const scoreVenue = (state) => {
   const guests = state.get('venueGuests').toJS();
   const tableSize = state.get('seatsPerTable');
+  const mode = state.get('optimizationMode', 'hate');
 
   if(!guests.length) return state;
 
   let score = 0;
   for(let i = 0; i < guests.length; i += tableSize){
-    score += scoreTable(guests.slice(i, i+tableSize));
+    score += scoreTable(guests.slice(i, i+tableSize), mode);
   }
 
   const newState = state.set('venueScore', score).set('hasVenueScore', true);
@@ -233,5 +235,10 @@ export const setDraftProperty = (state, property, value) => {
 export const commitDraft = (state) => {
   const draft = state.get('draftConfig', Map());
   const newState = state.merge(draft).delete('draftConfig');
+  return newState;
+}
+
+export const setMode = (state, mode) => {
+  const newState = state.set('optimizationMode', mode);
   return newState;
 }

@@ -197,12 +197,13 @@ const mapStateToProps = (state = Map()) => {
     expanded: state.get('venueDetailsExpanded'),
     temperature: state.get('temperature'),
     seatsPerTable: state.get('seatsPerTable'),
+    mode: state.get('optimizationMode'),
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   populate: () => {dispatch(populateVenue()); dispatch(scoreVenue());},
-  optimizeGuests: (guests, temperature = params.defaultTemperature, score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature),
+  optimizeGuests: (guests,temperature = params.defaultTemperature, mode='hate', score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, mode),
   scoreTables: () => dispatch(scoreVenue()),
   setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
   toggleVenueDetails: () => dispatch(toggleVenueDetails()),

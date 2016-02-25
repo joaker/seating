@@ -59,6 +59,8 @@ export default function(state = defaultState, action){
       return reductions.setDraftProperty(state, action.property, action.value);
     case 'COMMIT_DRAFT':
       return reductions.commitDraft(state);
+    case 'SET_OPTIMIZATION_MODE':
+      return reductions.setMode(state, action.mode);
   }
   return state;
 }

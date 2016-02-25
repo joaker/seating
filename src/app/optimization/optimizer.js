@@ -15,8 +15,8 @@ const opimizationDispatchRelay = (dispatch) => ({
 });
 
 
-const step = (tableSize, maxTemperature) => (list, currentTemperature) => {
-  return anneal(list, tableSize, currentTemperature, maxTemperature);
+const step = (tableSize, maxTemperature, mode) => (list, currentTemperature) => {
+  return anneal(list, tableSize, currentTemperature, maxTemperature, mode);
 }
 
 const isFrozen = (t) => t < 1;
@@ -27,7 +27,7 @@ const queueNextBatch = (list, t, props, delay) => (
   }), delay);
 
 const batch = (list, startT, props) => {
-  if(isFrozen(startT) || list.score >= 0) {
+  if(isFrozen(startT)){// || list.score >= 0) {
     props.relay.finish(list.guests);
     return;
   }
@@ -62,12 +62,12 @@ const makeProps = (relay, stepper, maxTemperature, batchConfig = config) => ({
   count:0,
 });
 
-const optimizationRun = (scoredList, relay, maxTemperature, tableSize) => {
+const optimizationRun = (scoredList, relay, maxTemperature, tableSize, mode = 'hate') => {
 
     // Signal the start of a new optimization run
     relay.start();
 
-    const stepper = step(tableSize, maxTemperature);
+    const stepper = step(tableSize, maxTemperature, mode);
     const props = makeProps(relay, stepper, maxTemperature);
 
     batch(scoredList, maxTemperature, props);

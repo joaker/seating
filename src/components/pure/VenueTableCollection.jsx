@@ -14,6 +14,10 @@ import cnames from 'classnames/dedupe';
 import range from '../../util/range';
 import VenueGrid from './VenueGrid';
 
+
+const angryStyle = styles.angry || 'angryGuest';
+const happyStyle = styles.happy || 'happyGuest';
+
 const EmptySeat = () => (<div className={cnames(styles.seatAreaWrapper)}><div className={cnames(styles.seatArea, styles.emptySeat)}/></div>);
 // const Seat = (props = {}) => {
 //const Seat = ({seatNumber, guestID, score, focusState, hasGuest, focusGuest}) => {
@@ -41,16 +45,24 @@ class Seat extends React.Component{
     // const {guest, score} = seatData[seatNumber];
 
   render(){
-    const {seatNumber, guestID, score, focusState, hasGuest, focusGuest} = this.props;
+    const {seatNumber, guestID, score = {}, focusState, hasGuest, focusGuest} = this.props;
     const emptySeat = !hasGuest;// || !guest.id;
     if(emptySeat) return (<EmptySeat/>);
 
-    const scoreClass = score ? styles.angry : styles.neutral;
+    const { hate: hateScore, like: likeScore } = score;
+
+    const scoreClass = (hateScore && angryStyle) ||
+      (likeScore && happyStyle) ||
+      styles.neutral;
+
+
+    //const scoreClass = score ? styles.angry : styles.neutral;
 
     const showGuest = true;
     const content = showGuest ? guestID : seatNumber;
 
     const hasFocus = focusState ? (styles.hasFocus || 'hasFocus') : 'unfocused';
+
 
 
 
@@ -111,6 +123,7 @@ const getFocusState = (guest, focusedGuest) => {
 const mapStateForMatrix = (state = Map(), {start, end, }) => {
 
   const focusedGuest = state.get('focusedGuest', Map()).toJS();
+  const mode = state.get('optimizationMode', 'hate');
 
   const tableSeats = state.get('venueGuests', List()).slice(start, end).toJS();
   const guestIDs = scorer.toIDs(tableSeats);
@@ -119,7 +132,7 @@ const mapStateForMatrix = (state = Map(), {start, end, }) => {
   const scores = [];
   tableSeats.forEach((guest, tableIndex) => {
     const seatIndex = start + tableIndex;
-    const score = scorer.scoreGuest(guest, guestIDs);
+    const score = { [mode]: scorer.scoreGuest(guest, guestIDs, mode)};
     const focusState = getFocusState(guest, focusedGuest);
     scores.push(score);
     seatData[seatIndex] = {

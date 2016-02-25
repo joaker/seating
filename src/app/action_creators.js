@@ -121,6 +121,12 @@ export const commitDraft = () => ({
     type: 'COMMIT_DRAFT',
 })
 
+export const setMode = (mode) => ({
+    meta: { remote: false },
+    type: 'SET_OPTIMIZATION_MODE',
+    mode,
+})
+
 /*
 export function next(){
   return {

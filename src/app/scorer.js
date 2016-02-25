@@ -17,40 +17,76 @@ export const toIDs = (guests) => {
   return guests.map(g => g.id);
 };
 
-export const getGuestScores = (guests) => {
+export const getGuestScores = (guests, mode = 'hate') => {
   const ids = toIDs(guests);
   const scores = {};
   guests.forEach(guest => {
-    scores[guest.id] = scoreGuest(guest, ids);
+    scores[guest.id] = scoreGuest(guest, ids, mode);
   });
   return scores;
 }
 
-export const scoreGuest = (guest, neighborIDs, selectRelate = selectHate, weighting = 1) => {
-  const relates = selectRelate(guest);
+const modeChooser = {
+  hate: selectHate,
+  like: selectLike,
+}
+
+const modeWeights = {
+  hate: -1,
+  like: 1,
+}
+
+export const scoreGuest = (guest, neighborIDs, mode = 'hate') => {
+  const chooser = modeChooser[mode] || selectHate;
+  const relates = chooser(guest);
   const score = neighborIDs.filter( gid => relates.includes(gid)).length;
   return score;
 }
 
-const countMatches = (guests, ids, selectRelate = selectHate, weighting = 1) => {
+// export const scoreGuest = (guest, neighborIDs, selectRelate = selectHate, weighting = 1) => {
+//   const relates = selectRelate(guest);
+//   const score = neighborIDs.filter( gid => relates.includes(gid)).length;
+//   return score;
+// }
+
+const countMatches = (guests, ids, mode) => {
+
+  const selectRelate = modeChooser[mode];
   // Don't have guest IDs?  Then populate them
   if(!ids) ids = toIDs(guests);
 
+
   // match
   const matchCounts = guests.map(g => {
-    const guestScore = scoreGuest(g, ids, selectRelate, weighting);
+    const guestScore = scoreGuest(g, ids, mode);
     return guestScore;
   });
 
   const totalMatches = matchCounts.reduce((total, i) => (total+i), 0);
+
   return totalMatches;
 }
 
-export const scoreTable = (table) => {
+const makeCounter = (table) => {
   const guestIDs = toIDs(table);
+  const counter = (mode, weight = 1) => countMatches(table, guestIDs, mode);
+  return counter;
+}
+export const scoreTable = (table, mode) => {
+  // Create a function to count matches in this table
+  const counter = makeCounter(table);
+  // const hateScore = counter(mode, weight);
+  // const likeScore = counter(mode, weight);
 
-  const hateScore = countMatches(table, guestIDs, selectHate, hateWeight, guestIDs);
-  const likeScore = 0; //countMatches(table, selectLike, likeWeight, guestIDs);
+  // return likeScore - hateScore;
 
-  return likeScore - hateScore;
+  // if an array of modes was passed, you could reduce on it
+  const score = counter(mode);
+
+  const weight = modeWeights[mode];
+  const weightedScore = score * weight;
+
+  return weightedScore;
+
+
 }

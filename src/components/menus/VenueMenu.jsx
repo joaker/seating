@@ -10,7 +10,7 @@ var RCSlider = require('rc-slider');
 
 
 import * as params from '../../data/venue.js';
-import {populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
+import {setMode, populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
 import DifficultyChooser from '../pure/DifficultyChooser';
 import optimizer from '../../app/optimization/optimizer';
 
@@ -75,6 +75,7 @@ const populateTip = hasGuests ? 'Clear and make new guests with new seat assignm
 
 const UnconnectedVenueMenu = (props) => {
 
+  const {mode = 'hate'} = props;
   const hasGuests = props.guests && props.guests.length;
   const noGuests = !hasGuests;
 
@@ -116,12 +117,22 @@ const UnconnectedVenueMenu = (props) => {
         <li>
           <button
             className={cnames('btn btn-block btn-default', (noGuests ? '' : 'btn-primary'))}
-            onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score, props.seatsPerTable)}
+            onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score, props.seatsPerTable, props.mode)}
             title={optimizeTip}
             disabled={noGuests}
             >
             Optimize
           </button>
+        </li>
+        <li>
+          <h4 style={{color: '#777'}}><label>Mode</label></h4>
+          <select value={mode} onChange={(e) => {
+              console.log('mode is changing...')
+              props.setMode(e.target.value)
+            }} className={'form-control block'} >
+            <option value='hate'>Avoid conflict</option>
+            <option value='like'>Group likes</option>
+          </select>
         </li>
         <li>
           <div style={{padding: 0, paddingBottom: '1em', }}>
@@ -151,6 +162,7 @@ const mapStateToProps = (state) => {
     expanded: state.get('venueDetailsExpanded'),
     temperature: state.get('temperature'),
     seatsPerTable: state.get('seatsPerTable'),
+    mode: state.get('optimizationMode', 'hate'),
   };
 };
 
@@ -158,11 +170,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     populate: () => {dispatch(populateVenue()); dispatch(scoreVenue());},
-    optimizeGuests: (guests, temperature, score, tableSize) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, tableSize),
+    optimizeGuests: (guests, temperature, score, tableSize, mode) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, tableSize, mode),
     scoreTables: () => dispatch(scoreVenue()),
     setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
     toggleVenueDetails: () => dispatch(toggleVenueDetails()),
     setTemperature: (temperature) => dispatch(setTemperature(temperature)),
+    setMode: (mode) => {dispatch(setMode(mode)); dispatch(scoreVenue())},
   };
 }
 
