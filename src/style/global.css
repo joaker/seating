@@ -2,6 +2,7 @@ body {
   font-size: 2em;
   color: #000;
   font-family: "Helvetica Neue", Arial;
+  //font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 200;
 }
 
@@ -30,13 +31,18 @@ ul {
   padding-left: 0;
   padding-right:0;
 }
-:global #app  .nav {
+:global #app .nav {
   padding-bottom: .5em;
 }
 
-:global #app  .nav > li > a{
+:global #app .nav > li > a{
   padding: .25em .125em;
   /*display: inline-block;*/
+
+}
+
+:global #app a:hover{
+  color: #0E2E4A;
 }
 
 :global .text-very-muted {

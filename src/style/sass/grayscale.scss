@@ -47,11 +47,26 @@ h3,
 h4,
 h5,
 h6 {
-    margin: 0 0 35px;
     text-transform: uppercase;
     font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
+}
+
+
+.landing{
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+      margin: 0 0 35px;
+      text-transform: uppercase;
+      font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
+      font-weight: 700;
+      letter-spacing: 1px;
+  }
 }
 
 p {
@@ -66,16 +81,22 @@ p {
 }
 
 a {
-    color: $primary;
     -webkit-transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
+}
+
+.landing {
+  a {
+    color: $primary;
     &:hover,
     &:focus {
         text-decoration: none;
-        color: darken($primary,20%);
+        color: red;//darken($primary,20%);
     }
+  }
 }
+
 .landing{
 :global{
 .light {
