@@ -1,4 +1,4 @@
-import styles from '../style/venue.css';
+import styles from '../style/venue.scss';
 require('rc-slider/assets/index.css');
 
 import cnames from 'classnames/dedupe';

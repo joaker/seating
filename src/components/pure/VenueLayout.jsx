@@ -1,4 +1,4 @@
-import styles from '../../style/venue.css';
+import styles from '../../style/venue.scss';
 
 import * as params from '../../data/venue.js';
 

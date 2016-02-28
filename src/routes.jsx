@@ -3,6 +3,7 @@ import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 
 //Routable Components
 import App from './components/App';
+import Landing from './components/Landing';
 import Main from './components/Main';
 import Guests from './components/Guests';
 import Guest from './components/Guest';
@@ -16,6 +17,8 @@ import VenueMenu from './components/menus/VenueMenu';
 const routes = (
     <Route path="/" component={App} title="Home">
       <IndexRoute to="/" component={Main}/>
+      <Route path="Landing" title="Seatable" components={{fullscreen:Landing}}>
+      </Route>
       <Route path="Guests" title="Guests">
         <IndexRoute to="/Guests" component={Guests}/>
         <Route path=":id" component={Guest} title="Guest"></Route>
@@ -24,7 +27,7 @@ const routes = (
         <IndexRoute to="/Table" component={Table}></IndexRoute>
         <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
       </Route>
-      <Route path="Venue" title="Venue" >       
+      <Route path="Venue" title="Venue" >
         <IndexRoute to="/Venue" components={{children:Venue, menu:VenueMenu}}></IndexRoute>
         <Route path="GenerateGuests" title="Generate Guests" component={GenerateGuests}></Route>
       </Route>

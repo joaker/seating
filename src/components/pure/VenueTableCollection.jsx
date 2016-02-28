@@ -1,4 +1,4 @@
-import styles from '../../style/venue.css';
+import styles from '../../style/venue.scss';
 
 import { connect } from 'react-redux';
 import {List, Map} from 'immutable';

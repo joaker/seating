@@ -2,8 +2,8 @@ import React from 'react';
 import cnames from 'classnames/dedupe';
 
 export const easy = 2;
-export const normal = 4;
-export const hard = 6;
+export const normal = 8;
+export const hard = 12;
 
 const isHard = (diff) => diff >= hard;
 const isNormal = (diff) => diff < hard && diff > easy;

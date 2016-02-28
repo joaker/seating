@@ -1,6 +1,15 @@
+$muted: #777;
+$very-muted: #AAA;
+
 .generateLabel {
-  color:#777;
+  color:$muted;
   /*text-align:right;*/
+}
+
+.generateDetail {
+  color:$very-muted;
+  font-size: 80%;
+  font-weight:normal;
 }
 
 .config {

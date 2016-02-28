@@ -1,4 +1,4 @@
-import styles from '../style/generateGuests.css';
+import styles from '../style/generateGuests.scss';
 require('rc-slider/assets/index.css');
 
 import cnames from 'classnames/dedupe';
@@ -24,6 +24,7 @@ import optimizer from '../app/optimization/optimizer';
 
 const Row = ({children}) => (<div className={cnames('row', styles.row)}>{children}</div>);
 const LabelColumn = ({children}) => (<div className={cnames(styles.generateLabel, 'col-md-6')}><label>{children}</label></div>)
+const LabelDetail = ({children}) => (<div className={cnames(styles.generateDetail)}>{children}</div>)
 const ValueColumn = ({children}) => (<div className={cnames(styles.generateValue, 'col-md-6')}>{children}</div>)
 const FullColumn = ({children}) => (<div className={'col-md-12'}>{children}</div>)
 
@@ -91,7 +92,12 @@ const UnconnectedGenerateGuests = (props, {router}) => {
             <ValueColumn>
               <Difficulty  {...props} onChange={changer('difficulty', v => params.fromDifficultyRating(v))} value={params.toDifficultyRating(difficulty)}/>
             </ValueColumn>
-            <LabelColumn>Difficulty</LabelColumn>
+            <LabelColumn>
+              Social Radius
+              <LabelDetail>
+                Average number of opinions of held by guests
+              </LabelDetail>
+            </LabelColumn>
           </Row>
           <Row>
             <ValueColumn>

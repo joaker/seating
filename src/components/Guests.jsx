@@ -1,4 +1,5 @@
-import styles from '../style/guests.css';
+// import styles from '../style/guests.css';
+import styles from '../style/sass/guests.scss';
 import cnames from 'classnames/dedupe';
 
 import React from 'react';
@@ -48,15 +49,6 @@ class Guests extends React.Component {
             </GroupButton>
           </InputGroup>
         )
-        // (
-        // <input type="text" ref="potentialGuest" onChange={this.potentialGuestChanged} />
-        // <button
-        //   onClick={(() => this.props.addGuest(this.state.newGuest)).bind(this)}
-        //   disabled={this.addDisabled()}
-        //   >
-        //   Add Guest
-        // </button>)
-        //
         }
       </div>
     );

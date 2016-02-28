@@ -5,48 +5,49 @@
 }
 
 .table{
-    font-size:70%;
-    text-align:center;
-    margin:2px;
-    margin-bottom:1em;
-}
+  font-size:70%;
+  text-align:center;
+  margin:2px;
+  margin-bottom:1em;
 
-.table > div > label{
-  white-space:nowrap;
-  margin-bottom: 0;
-  color: #777;
+  > div > label{
+    white-space:nowrap;
+    margin-bottom: 0;
+    color: #777;
+  }
 }
 
 .seat{
   width: 100%;
   height:100%;
   background-color: #333;
-}
 
-.seat.empty{
-  background-color: transparent;
-  border: 2px solid black;
-}
 
-.seat.happy{
-  background-color: green;
-}
+  .empty{
+    background-color: transparent;
+    border: 2px solid black;
+  }
 
-.seat.angry{
-  background-color: #D00;
-}
+  &.happy{
+    background-color: green;
+  }
 
-.seat:not(.empty):hover,
-.seat.happy:hover,
-.seat.angry:hover
-{
-  background-color:#77A;
-}
+  &.angry{
+    background-color: #D00;
+  }
 
-.seat.focused{
-  background-color:#77A;
-}
+  &:not(.empty):hover,
+  &.happy:hover,
+  &.angry:hover
+  {
+    background-color:#77A;
+  }
 
+  &.focused{
+    background-color:#77A;
+  }
+
+}
 
 .seatRow{
   line-height: 0;
@@ -66,38 +67,40 @@
   font-size:72%;
   color:#777;
   margin-left:2em;
-}
 
-.scoring .title{
-  font-weight:bold;
-}
 
-.scoring .value{
-  margin-left:.5em;
-  font-weight:600;
-  background-color: white;
-  padding:.1em;
-  border: .1em solid #777;
-}
+  .title{
+    font-weight:bold;
+  }
 
-.scoring.perfect .value, .scoring.bad .value{
-  font-weight:800;
-}
+  .value{
+    margin-left:.5em;
+    font-weight:600;
+    background-color: white;
+    padding:.1em;
+    border: .1em solid #777;
+  }
 
-.scoring.perfect .value{
-  color: green;
-}
+  &.perfect .value,
+  &.bad .value{
+    font-weight:800;
+  }
 
-.scoring.good .value{
-  color: blue;
-}
+  &.perfect .value{
+    color: green;
+  }
 
-.scoring.ok .value{
-  color: #CC0;
-}
+  &.good .value{
+    color: blue;
+  }
 
-.scoring.bad .value{
-  color:red;
+  &.ok .value{
+    color: #CC0;
+  }
+
+  &.bad .value{
+    color:red;
+  }
 }
 
 .busy {
@@ -111,6 +114,7 @@
 
 .tableCollection{
   font-size:60%;
+  text-align:center;
 }
 
 .tableArea label{
@@ -164,48 +168,50 @@
   overflow:hidden;
   border: .25em solid transparent;
   cursor: pointer;
+
+  &.neutral{
+    background-color:#778;
+  }
+
+  &.angry{
+    background-color:#E66;
+  }
+
+  &.happy{
+    background-color:#3B3;
+  }
+
+  &.emptySeat{
+    border: .25em dashed #777;
+  }
+
 }
 
-.seatArea.neutral{
-  background-color:#778;
-}
-
-.seatArea.angry{
-  background-color:#E66;
-}
-
-.seatArea.happy{
-  background-color:#3B3;
-}
-
-.seatArea.emptySeat{
-  border: .25em dashed #777;
+@mixin focus-halo($r, $g, $b){
+  box-shadow: 0 0 1.2em .25em rgba($r, $g, $b, 1);
+  border: .1em solid rgba($r, $g, $b, .5);
 }
 
 .seatArea:not(.emptySeat):not(.hasFocus):hover{
   box-shadow: 0 0 1em rgba(203, 203, 203, 1);
-  /*padding: 3px 0px 3px 3px;*/
   border: .1em solid rgba(203, 203, 203, 1);
   background-color: rgba(203,203,203,1);
 }
+
 .hasFocus{
-  box-shadow: 0 0 1em rgba(81, 203, 238, 1);
-  /*padding: 3px 0px 3px 3px;*/
-  border: .1em solid rgba(81, 203, 238, 1);
+  @include focus-halo(81, 203, 238);
 }
 
 .hasHateFocus{
-  box-shadow: 0 0 1em rgba(238, 81, 81, 1);
-  border: .1em solid rgba(238, 81, 81, 1);
+  @include focus-halo(238, 81, 81);
 }
 
 .hasLikeFocus{
-  box-shadow: 0 0 1em rgba(81, 238, 81, 1);
-  border-color: .1em solid rgba(81, 238, 81, 1);
+  @include focus-halo(81, 238, 81);
 }
 
 .venueMenuItems{
-
+  padding: 0 .25em;
 }
 
 .venueMenuItems > li {

@@ -1,0 +1,40 @@
+
+.guestlink {
+  cursor: pointer;
+  width:100%;
+  display:inline-block;
+}
+
+.emptyguest {
+  font-style: italic;
+}
+
+.guest {
+  cursor: pointer;
+
+  &:hover {
+    cursor: pointer;
+    background-color:#777;
+  }
+
+  /* WARNING: overriding important is bad.  TODO: Fix this*/
+  > a {
+
+    color: #000;
+    text-decoration: none !important;
+  }
+
+  &:not(:hover) a{
+    color:#333;
+  }
+
+}
+
+
+.textLike {
+  color: hsl(120, 75%, 75%);
+}
+
+.textDislike {
+  color: hsl(0, 75%, 75%);
+}

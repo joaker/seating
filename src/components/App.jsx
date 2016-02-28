@@ -70,7 +70,7 @@ const Breadcrumbs = (props) => {
     );
 }
 
-const App = (props, context) => (
+const AppLayout = (props, context) => (
   <div className="AppComponent row" >
     <div className="hidden-xs col-sm-3 col-md-2">
       <Nav>{props.menu}</Nav>
@@ -90,6 +90,15 @@ const App = (props, context) => (
     </div>
   </div>
 );
+AppLayout.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
+
+const App = (props, context) => {
+  const {fullscreen} = props;
+  if(fullscreen) return (<div>{fullscreen}</div>);
+  return (<AppLayout {...props}>{props.children}</AppLayout>);
+};
 
 App.contextTypes = {
   router: React.PropTypes.object.isRequired

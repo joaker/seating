@@ -41,11 +41,19 @@ export const defaultTemperature = toTemperature(defaultSize);
 export const maxTemperature = toTemperature(defaultSize);
 
 export const fromDifficultyRating = (rating) => (rating * 2);
-export const toDifficultyRating = (value) => (value / 2);
+export const toDifficultyRating = (value) => {
+  const rating = (value / 2);
+  console.log('I am converting a difficulty rating, value: ' + value);
+  console.log('I am converting a difficulty rating, rating: ' + rating);
+  console.log('I am converting a difficulty rating');
+
+  return rating;
+
+}
 export const difficultyRatings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-export const difficulty = 4;
+export const difficulty = 8;
 export const easy = 2;
-export const normal = 4;
-export const hard = 6;
+export const normal = 8;
+export const hard = 12;
 
 export const defaultMode = 'like'; // default optimization mode
