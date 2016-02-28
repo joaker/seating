@@ -8,6 +8,21 @@ aside {
   position: absolute;
   left: 310px;
 }*/
+$very-muted: #AAA;
+.brandName{
+  display: 'inline-block';
+  margin: .25em .25em 0 0;
+  font-size: 150%;
+
+  color: $very-muted;
+  text-shadow: 0 0 .075em;
+
+  &:hover{
+    text-shadow: 0 0 .025em;
+    //darken($very-muted, 10%)
+    color: darken($very-muted,20%);
+  }
+}
 
 ul.breadcrumbs-list {
   margin: 0;

@@ -1,4 +1,4 @@
-import styles from '../style/app.css';
+import styles from '../style/app.scss';
 
 import React from 'react';
 import {Link} from 'react-router';
@@ -82,7 +82,7 @@ const AppLayout = (props, context) => (
         <Breadcrumbs {...props} {...context}/>
         </div>
         <div className="col-xs-4" style={{textAlign: 'right'}}>
-          <h2 style={{display: 'inline-block', marginTop: '.25em', marginBottom: 0, color:'#AAA'}}><strong>Seatable</strong></h2>
+          <h2 className={styles.brandName} style={{}}><strong>Seatable</strong></h2>
         </div>
         </div>
         {props.children}
