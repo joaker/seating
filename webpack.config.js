@@ -23,22 +23,33 @@ module.exports = {
   ],
   // Define resource loaders
   module: {
-    loaders: [{
-      test: /\.jsx?$/, // Apply this loader to all JSX files
-      exclude: /node_modules/, // Don't bother with node modules, though
-      loader: 'react-hot!babel', // Hot loading react content and transpile with babel.  Not appropriate for prod
-      cacheable: true
-    },
-//    {
-//      // Load any required json files
-//      test: /\.json?$/,
-//      loader: 'json'
-//    },
-    {
-      test: /\.css$/,
-      // What is this black magic?
-      loader: 'style!css?modules&localIdentName=[name]---[local]---[hash:base64:5]',
-    }],
+    loaders: [
+      {
+        test: /\.jsx?$/, // Apply this loader to all JSX files
+        exclude: /node_modules/, // Don't bother with node modules, though
+        loader: 'react-hot!babel', // Hot loading react content and transpile with babel.  Not appropriate for prod
+        cacheable: true
+      },
+      {
+        test: /\.css$/,
+        // What is this black magic?
+        loader: 'style!css?modules&localIdentName=[name]---[local]---[hash:base64:5]',
+      },
+      {
+        test: /\.scss$/,
+        //loader: 'style!css!sass'  // NOTE: this works for bundling, but not for css-module use
+        loaders: [
+            'style',
+            'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+            'resolve-url',
+            'sass'
+        ],
+      },
+      {
+        test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
+        loader: 'file?name=app/generated/[name].[ext]'
+      },
+    ]
   },
   // Bundle these files only
   resolve: {
