@@ -41,7 +41,7 @@ ul {
 
 }
 
-:global #app a:hover{
+:global #app a:not(.btn):hover{
   color: #0E2E4A;
 }
 
