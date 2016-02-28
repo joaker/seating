@@ -8,7 +8,7 @@
     "debug": "babel-node index-debug.js",
     "pack": "webpack",
     "webpack": "babel-snode server/server.js",
-    "postinstall": "webpack -p --config ./webpack.config.js",
+    "postinstall": "webpack --config ./webpack.config.js",
     "test": "test"
   },
   "repository": {
@@ -32,7 +32,7 @@
     ]
   },
   "devDependencies": {
-    "loaders.css": "^0.1.2",
+    "loaders.css": "^0.1.2"
   },
   "dependencies": {
     "node-sass": "^3.4.2",
