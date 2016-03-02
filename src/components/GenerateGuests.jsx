@@ -16,8 +16,7 @@ import anneal from '../app/optimization/annealing';
 import * as scorer from '../app/scorer';
 import DifficultyChooser from './pure/DifficultyChooser';
 import StartHint from './pure/StartHint';
-import VenueLayout from './pure/VenueLayout';
-import Layout from './pure/VenueTableCollection';
+
 import Expander from './pure/Expander';
 import Progress from './pure/Progress';
 import optimizer from '../app/optimization/optimizer';

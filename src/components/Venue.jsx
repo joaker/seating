@@ -16,7 +16,7 @@ import anneal from '../app/optimization/annealing';
 import * as scorer from '../app/scorer';
 import DifficultyChooser from './pure/DifficultyChooser';
 import StartHint from './pure/StartHint';
-import VenueLayout from './pure/VenueLayout';
+
 import Layout from './pure/VenueTableCollection';
 import Expander from './pure/Expander';
 import Progress from './pure/Progress';
@@ -135,11 +135,6 @@ class UnconnectedVenue extends React.Component {
 
     const spt = this.props.seatsPerTable;
 
-    const tryNew = true;
-    const layout = tryNew ?
-      (<Layout guestCount={this.props.guestCount} seatsPerTable={this.props.seatsPerTable}/>):
-      (<VenueLayout {...layoutDimensions} />);
-
     return (
       <div className={cnames(styles.venue, "Venue")}>
         <div className={cnames('headerTable', 'container-fluid')}>
@@ -152,7 +147,7 @@ class UnconnectedVenue extends React.Component {
             </div>
           </div>
         </div>
-        {layout}
+        <Layout guestCount={this.props.guestCount} seatsPerTable={this.props.seatsPerTable}/>
       </div>
     );
   }

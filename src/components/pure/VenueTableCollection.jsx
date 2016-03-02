@@ -12,7 +12,6 @@ import React from 'react';
 import cnames from 'classnames/dedupe';
 
 import range from '../../util/range';
-import VenueGrid from './VenueGrid';
 
 
 const angryStyle = styles.angry || 'angryGuest';
