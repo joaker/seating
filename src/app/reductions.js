@@ -72,7 +72,7 @@ export const setVenueGuests = (state, guests = [], ratio = 0) => {
 export const populateVenue = (state) => {
   const guestCount = state.get('guestCount');
   const maxHates = state.get('difficulty');
-  const maxLikes =  state.get('maxLikes');
+  const maxLikes =  maxHates; //state.get('maxLikes');
   const factory = new GuestFactory(guestCount, maxHates, maxLikes);
   const guests = factory.createAll();
   const randoGuests = shuffle(guests);
