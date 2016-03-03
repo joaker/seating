@@ -4,7 +4,7 @@ import Server from 'socket.io';
 
 import {setState, setGuests, setRelationships} from '../src/app/action_creators';
 import {action_message} from '../src/app/messages';
-import reducer from '../src/app/reducer';
+import {serverReducer as reducer} from '../src/app/reducer';
 import port from '../src/app/port';
 
 import initialGuests from '../src/data/guests';

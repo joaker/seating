@@ -3,7 +3,12 @@ import {normal} from '../components/pure/DifficultyChooser';
 import * as reductions from './reductions.js';
 import * as params from '../data/venue.js';
 
-export const defaultState = fromJS({
+export const defaultServerState = fromJS({
+  guests: [],
+  seats: {},
+});
+
+export const defaultLocalState = fromJS({
   guests: [],
   seats: {},
   venueGuests: [],
@@ -13,7 +18,7 @@ export const defaultState = fromJS({
   temperature: params.defaultTemperature,
 });
 
-export default function(state = defaultState, action){
+export const reducerFactory = (initialState = defaultLocalState) => (state = initialState, action) => {
   let act = action;
   console.log('action');
   switch(action.type){
@@ -39,8 +44,6 @@ export default function(state = defaultState, action){
       return reductions.setVenueGuests(state, action.guests, action.ratio);
     case 'POPULATE_VENUE':
       return reductions.populateVenue(state);
-    case 'QUENCH_VENUE':
-      return reductions.quenchVenue(state, action.tableSize, action.temperature, action.maxTemperature);
     case 'SCORE_VENUE':
       return reductions.scoreVenue(state);
     case 'START_VENUE_OPTIMIZATION':
@@ -64,3 +67,9 @@ export default function(state = defaultState, action){
   }
   return state;
 }
+
+export const serverReducer = reducerFactory(defaultServerState);
+export const localReducer = reducerFactory(defaultLocalState);
+
+
+export default localReducer;

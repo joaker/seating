@@ -10,7 +10,7 @@ var RCSlider = require('rc-slider');
 
 
 import * as params from '../../data/venue.js';
-import {setMode, populateVenue, quenchVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
+import {setMode, populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
 import DifficultyChooser from '../pure/DifficultyChooser';
 import optimizer from '../../app/optimization/optimizer';
 

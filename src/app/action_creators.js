@@ -55,15 +55,6 @@ export const populateVenue = (guestCount) => ({
 })
 
 
-export const quenchVenue = (tableSize, temperature = 120, maxTemperature = 120) => ({
-    meta: { remote: false },
-    type: 'QUENCH_VENUE',
-    tableSize,
-    temperature,
-    maxTemperature
-})
-
-
 
 export const scoreVenue = (tableSize) => ({
     meta: { remote: false },

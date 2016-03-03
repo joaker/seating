@@ -82,83 +82,6 @@ export const populateVenue = (state) => {
   return newState;
 }
 
-const likeWeight = 0;
-// const scoreTable = (table) => {
-//   const guestIDs = table.map(g => {
-//     return g.id
-//   });
-//   const hateScore = table.map(g => {
-//     const hates = guestIDs.filter(gid => g.hates.includes(gid)).length;
-//     return hates;
-//   }).reduce((total, i) => (total + i), 0)
-//   const likeScore = table.map(g => {
-//     const likes = guestIDs.filter(gid => g.likes.includes(gid)).length * likeWeight;
-//     return likes;
-//   }).reduce((total, i) => (total + i), 0)
-//
-//   return likeScore - hateScore;
-// }
-
-export const quenchVenue = (state, tableSize, temperature = 120, maxTemperature = 120) => {
-  const guests = state.get('venueGuests', List()).toJS();
-
-  if(!guests.length) return state;
-
-  const guestCount = state.get('guestCount');
-
-  const guest1Index = Math.round(Math.random()*guestCount);
-  const guest2Index = Math.round(Math.random()*guestCount);
-
-  const table1Start = guest1Index - Math.floor(guest1Index%tableSize);
-  const table1End = table1Start + tableSize;
-
-  const table2Start = guest2Index - Math.floor(guest2Index%tableSize);
-  const table2End = table2Start + tableSize;
-
-  // If the tables are the same, don't bother
-  if(table1Start == table2Start) return state;
-
-  const table1 = guests.slice(table1Start, table1End);
-  const table2 = guests.slice(table1Start, table1End);
-
-  const table1Score = scoreTable(table1);
-  const table2Score = scoreTable(table2);
-
-  const initialScore = table1Score + table2Score;
-
-  const guest1TableIndex = guest1Index - (table1Start);
-  const guest2TableIndex = guest2Index - (table2Start);
-
-  const table1Swapped = table1.map(g => g);
-  const table2Swapped = table2.map(g => g);
-
-  table1Swapped.splice(guest1TableIndex, 1, guests[guest2Index]);
-  table2Swapped.splice(guest2TableIndex, 1, guests[guest1Index]);
-
-  const table1SwappedScore = scoreTable(table1Swapped);
-  const table2SwappedScore = scoreTable(table2Swapped);
-
-  const swappedScore = table1SwappedScore + table2SwappedScore;
-
-  const diff = swappedScore - initialScore;
-  const percentOfTemp = temperature / maxTemperature;
-  const swap = (diff > 0) || (Math.random() < percentOfTemp);
-
-  if(!swap) return state;
-
-  const g1 = state.getIn(['venueGuests', guest1Index]);
-  const g2 = state.getIn(['venueGuests', guest2Index]);
-  const newState = state.setIn(
-    ['venueGuests', guest1Index],
-    g2
-  ).setIn(
-    ['venueGuests', guest2Index],
-    g1
-  );
-  return newState;
-
-}
-
 export const scoreVenue = (state) => {
   const guests = state.get('venueGuests').toJS();
   const tableSize = state.get('seatsPerTable');
@@ -231,10 +154,32 @@ export const setDraftProperty = (state, property, value) => {
   return newState;
 }
 
+const defaultConfig = {
+  guestCount: params.guestCount,
+  seatsPerTable: params.seatsPerTable,
+  difficulty: params.difficulty,
+};
 
 export const commitDraft = (state) => {
   const draft = state.get('draftConfig', Map());
-  const newState = state.merge(draft).delete('draftConfig');
+
+  const stateWithDraft = state.merge(draft).delete('draftConfig');
+
+  const guestCount = stateWithDraft.get('guestCount') || defaultConfig.guestCount;
+  const seatsPerTable = stateWithDraft.get('seatsPerTable') || defaultConfig.seatsPerTable;
+
+  // figure out how many tables are needed to accomodate everyone
+  const tableCount = Math.ceil(guestCount / seatsPerTable);
+
+  // how many seats are available?  There may be more than there are guests
+  const seatCount = tableCount * seatsPerTable;
+
+  const tableProps = Immutable.fromJS({
+    tableCount: tableCount,
+    seatCount: seatCount,
+  });
+
+  const newState = stateWithDraft.merge(tableProps);
   return newState;
 }
 
