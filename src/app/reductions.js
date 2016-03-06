@@ -102,12 +102,20 @@ export const scoreVenue = (state) => {
 
 
 export const startOptimization = (state) => {
-  const newState = state.set('optimizing', true);
+  const newState = state.set('optimizing', new Date());
   return newState;
 }
 
 export const endOptimization = (state) => {
-  const newState = state.set('optimizing', false);
+
+  const now = new Date();
+  const lastOptimization = state.get('optimizing', now);
+
+  const ms = now - lastOptimization;
+  const s = ms / 1000;
+  const roundS = Math.round(s*100)/100;
+
+  const newState = state.set('optimizing', false).set('lastRunTime', roundS);
   return newState;
 }
 

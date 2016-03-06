@@ -141,7 +141,7 @@ class UnconnectedVenue extends React.Component {
           <div className={cnames('row')}>
             <div className={cnames('col-xs-12')}>
               <h2 style={{display: 'block'}}>
-                Venue
+                Venue {this.props.lastRunTime ? (<div style={{display:'inline-block'}}><h4 className="text-muted text-veryMuted" style={{display: 'inline-block'}}>Last Run: {this.props.lastRunTime}</h4></div>) : ''}
                 <Progress ratio={this.props.progressRatio}/>
               </h2>
             </div>
@@ -183,6 +183,7 @@ const mapStateToProps = (state = Map()) => {
   return {
     guests: state.get('venueGuests', List()).toJS(),
     guestCount: state.get('guestCount'),
+    lastRunTime: state.get('lastRunTime'),
     seatsPerTable: state.get('seatsPerTable'),
     score: state.get('venueScore'),
     hasScore: state.get('hasVenueScore'),
