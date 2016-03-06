@@ -1,39 +1,39 @@
-import { setVenueGuests, scoreVenue, startOptimization, endOptimization } from '../../app/action_creators';
+import { setScoredTables, setVenueGuests, scoreVenue, startOptimization, endOptimization } from '../../app/action_creators';
 
-import anneal from './annealing';
+import anneal from './iannealing';
 import * as params from '../../data/venue.js';
 import {config} from './const.js';
 
 // const opimizationDispatchRelay = (dispatch) => ({
 //   start: () => dispatch(startOptimization()),
-//   update: (list, ratio) => dispatch(setVenueGuests(list, ratio)),
-//   finish: (list) => {
-//     dispatch(setVenueGuests(list, 1));
+//   update: (tables, score, ratio) => dispatch(setScoredTables(tables, score, ratio)),
+//   finish: (tables, score) => {
+//     dispatch(setScoredTables(tables, score, 1));
 //     dispatch(endOptimization());
 //     dispatch(scoreVenue());
 //   },
 // });
 
 
-const step = (tableSize, maxTemperature, mode) => (list, currentTemperature) => {
-  return anneal(list, tableSize, currentTemperature, maxTemperature, mode);
+const step = (maxTemperature, mode) => (list, currentTemperature) => {
+  return anneal(list, currentTemperature, maxTemperature, mode);
 }
 
 const isFrozen = (t) => t < 1;
 
-const queueNextBatch = (list, t, props, delay) => (
+const queueNextBatch = (scoredTables, t, props, delay) => (
   setTimeout(() => {
-    batch(list, t, props)
+    batch(scoredTables, t, props)
   }), delay);
 
-const batch = (list, startT, props) => {
+const batch = (scoredTables, startT, props) => {
   if(isFrozen(startT)){// || list.score >= 0) {
-    props.relay.finish(list.guests);
+    props.relay.finish(scoredTables.tables, scoredTables.score);
     return;
   }
   const batchEnd = Math.max(startT - props.config.size, 0);
   for(let t = startT; t > batchEnd; t--){
-    list = props.stepper(list, t);
+    scoredTables = props.stepper(scoredTables, t);
   }
 
 
@@ -45,12 +45,12 @@ const batch = (list, startT, props) => {
     const ratio = (props.maxTemperature - batchEnd) / props.maxTemperature;
 
     // Post the updated lists
-    props.relay.update(list.guests, ratio);
+    props.relay.update(scoredTables.tables, scoredTables.score, ratio);
   }
 
   const nextDelay = throttled ? props.delay : props.updateDelay;
 
-  queueNextBatch(list, batchEnd, props, nextDelay);
+  queueNextBatch(scoredTables, batchEnd, props, nextDelay);
 
 }
 
@@ -62,15 +62,17 @@ const makeProps = (relay, stepper, maxTemperature, batchConfig = config) => ({
   count:0,
 });
 
-const optimizationRun = (scoredList, relay, maxTemperature, tableSize, mode = params.defaultMode) => {
+const optimizationRun = (immutableScoredTables, relay, maxTemperature, mode = params.defaultMode) => {
 
     // Signal the start of a new optimization run
     relay.start();
 
-    const stepper = step(tableSize, maxTemperature, mode);
+    const stepper = step(maxTemperature, mode);
     const props = makeProps(relay, stepper, maxTemperature);
 
-    batch(scoredList, maxTemperature, props);
+    const scoredTables = immutableScoredTables;
+
+    batch(scoredTables, maxTemperature, props);
 
 }
 

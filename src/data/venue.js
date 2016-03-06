@@ -16,7 +16,7 @@ export const seatsPerTable = 25;//tableColumnCount * tableRowCount;
 export const tableSize = seatsPerTable;
 export const guestCount = seatsPerTable * tableCount;
 
-export const minGuestCount = 20;
+export const minGuestCount = 1;
 export const maxGuestCount = 5*1000;
 
 export const minSeatsPerTable = 4;

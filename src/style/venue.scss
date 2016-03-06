@@ -212,6 +212,11 @@
 
 .venueMenuItems{
   padding: 0 .25em;
+
+  .scoreLine{
+    max-width:5em;
+    width:5em;
+  }
 }
 
 .venueMenuItems > li {

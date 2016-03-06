@@ -17,4 +17,21 @@ const shuffle = (array) => {
   return array;
 }
 
+export const shuffleImmutable = (iarray) => {
+  let currentIndex = iarray.size, tempSource, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    iarray = iarray.set(currentIndex, iarray.get(randomIndex)).set(randomIndex, iarray.get(currentIndex));
+  }
+
+  return iarray;
+}
+
 export default shuffle;

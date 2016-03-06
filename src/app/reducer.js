@@ -42,6 +42,8 @@ export const reducerFactory = (initialState = defaultLocalState) => (state = ini
       return reductions.clearTable(state);
     case 'SET_VENUE_GUESTS':
       return reductions.setVenueGuests(state, action.guests, action.ratio);
+    case 'SET_SCORED_TABLES':
+      return reductions.setScoredTables(state, action.tables, action.score, action.ratio);
     case 'POPULATE_VENUE':
       return reductions.populateVenue(state);
     case 'SCORE_VENUE':

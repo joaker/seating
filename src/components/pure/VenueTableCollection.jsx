@@ -13,6 +13,9 @@ import cnames from 'classnames/dedupe';
 
 import range from '../../util/range';
 
+const EmptyList = List();
+const EmptyMap = Map();
+
 
 const angryStyle = styles.angry || 'angryGuest';
 const happyStyle = styles.happy || 'happyGuest';
@@ -44,11 +47,18 @@ class Seat extends React.Component{
     // const {guest, score} = seatData[seatNumber];
 
   render(){
-    const {seatNumber, guestID, score = {}, focusState, hasGuest, focusGuest} = this.props;
+    const {seatNumber, hasGuest, seatState, focusedGuest, guestList, focusGuest} = this.props;
+
+    //const info = {seatState, hasGuest, focusedGuest, mode, table};
     const emptySeat = !hasGuest;// || !guest.id;
     if(emptySeat) return (<EmptySeat/>);
 
-    const { hate: hateScore, like: likeScore } = score;
+    const guestID = seatState.getIn(['guest', 'id']);
+
+    const focusState = getSeatFocus(seatState, focusedGuest);
+    const seatScores = (seatState.get('score')).toJS() || {};
+
+    const { hate: hateScore, like: likeScore } = seatScores;
 
     const scoreClass = (hateScore && angryStyle) ||
       (likeScore && happyStyle) ||
@@ -78,6 +88,21 @@ class Seat extends React.Component{
   }
 }
 
+const EmptyRelation = List();
+const getSeatFocus = (seat, focusedGuest) => {
+  if(!seat || !seat.hasIn(['guest', 'id'])) return '';
+  if(!focusedGuest || !focusedGuest.has('id')) return '';
+
+
+  const seatGuestID = seat.getIn(['guest', 'id']);
+  if(focusedGuest.get('id') == seatGuestID) return (styles.hasSelectFocus || 'hasSelectFocus');
+  if(focusedGuest.get('hates', EmptyRelation).includes(seatGuestID)) return (styles.hasHateFocus || 'hasHateFocus');
+  if(focusedGuest.get('likes', EmptyRelation).includes(seatGuestID)) return (styles.hasLikeFocus || 'hasLikeFocus');
+
+  return '';
+}
+
+
 const getEdgeSize = (seatCount) => Math.ceil(Math.sqrt(seatCount));
 
 const getRowRange = (rowWidth, rowIndex = 0, startOffset = 0, max = Number.MAX_VALUE) =>{
@@ -88,18 +113,24 @@ const getRowRange = (rowWidth, rowIndex = 0, startOffset = 0, max = Number.MAX_V
 }
 
 const UnconnectedSeatMatrix = (props) => {
-  const {number, seatsPerTable, guestCount, start, end, edge} = props;
+  const { focusedGuest, mode, table, guestList} = props;
+  const { number, seatsPerTable, guestCount, start, end, edge} = props;
   const {seatData = {}, focusGuest} = props;
+
+  let seatCounter = 0;
   const rows = range(edge).map(rowIndex => {
     return (
       <div key={'row' + rowIndex} className={cnames('matrixRow', styles.matrixRow)}>
-        {getRowRange(edge, rowIndex, start, end).map(seatNumber => {
-          const data = seatData[seatNumber] || {};
-          const {guest, score, focusState} = data;
-          const guestID = guest && guest.id;
-          const info = { seatNumber, guestID, score, focusState, focusGuest };
+        {getRowRange(edge, rowIndex, start).map(seatNumber => {
+          // const data = seatData[seatNumber] || {};
+          // const {guest, score, focusState} = data;
+          // const guestID = guest && guest.id;
+          // const info = { seatNumber, guestID, score, focusState, focusGuest };
+          const seatState = table.get(seatCounter++);
+          const hasGuest = seatState && seatState.get('guest');
+          const info = {seatState, hasGuest, focusedGuest, mode, guestList, focusGuest};
           return (
-            <Seat  key={seatNumber} {...info} hasGuest={!!guest}/>
+            <Seat  key={seatNumber} {...info} />
           );
         })}
       </div>
@@ -119,33 +150,23 @@ const getFocusState = (guest, focusedGuest) => {
   return '';
 }
 
-const mapStateForMatrix = (state = Map(), {start, end, }) => {
+const mapStateForMatrix = (state = Map(), {start, end, number}) => {
 
-  const focusedGuest = state.get('focusedGuest', Map()).toJS();
+  const table = state.get('venueTables', EmptyList).get(number, EmptyList);
+  const guestList = state.get('venueGuestList');
+
+  const focusedGuest = state.get('focusedGuest', EmptyMap);//.toJS();
   const mode = state.get('optimizationMode', params.defaultMode);
 
-  const tableSeats = state.get('venueGuests', List()).slice(start, end).toJS();
-  const guestIDs = scorer.toIDs(tableSeats);
 
-  const seatData = {};
-  const scores = [];
-  tableSeats.forEach((guest, tableIndex) => {
-    const seatIndex = start + tableIndex;
-    const score = { [mode]: scorer.scoreGuest(guest, guestIDs, mode)};
-    const focusState = getFocusState(guest, focusedGuest);
-    scores.push(score);
-    seatData[seatIndex] = {
-      guest,
-      score,
-      focusState,
-    };
-  });
-
-  const tableScore = scores.join(',');
-  //console.log('score for table ' + (start/9) + ': <' + tableScore + '>');
+  const focusedGuestID = focusedGuest.get('id');
+  console.log(focusedGuestID);
 
   return {
-    seatData,
+    table,
+    focusedGuest,
+    mode,
+    guestList,
   };
 }
 
@@ -153,19 +174,19 @@ const mapDispatchForMatrix = (dispatch) => ({
   focusGuest: (guest) => dispatch(focusGuest(guest)),
 });
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const nextProps = Object.assign({}, stateProps, dispatchProps, ownProps);
-
-  const keys = Object.keys(nextProps);
-
-  return nextProps;
-}
+// const mergeProps = (stateProps, dispatchProps, ownProps) => {
+//   const nextProps = Object.assign({}, stateProps, dispatchProps, ownProps);
+//
+//   const keys = Object.keys(nextProps);
+//
+//   return nextProps;
+// }
 
 const SeatMatrix = connect(
   mapStateForMatrix,
-  mapDispatchForMatrix,
-  mergeProps,
-  {pure: true}
+  mapDispatchForMatrix
+  // mergeProps,
+  // {pure: true}
 )(UnconnectedSeatMatrix);
 
 const TableArea = (props) => {
@@ -182,9 +203,8 @@ const TableArea = (props) => {
 };
 
 const VenueTableCollection = (props) => {
-  const {guestCount, seatsPerTable = 25} = props;
+  const {tableCount = 0, guestCount, seatsPerTable = 25} = props;
   const edge = getEdgeSize(seatsPerTable);
-  const tableCount = Math.ceil(guestCount / seatsPerTable);
   const tables = range(tableCount).map((number ) => {
     const others = {key: number, tableCount, number, edge, };
     return (

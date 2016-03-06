@@ -10,9 +10,9 @@ var RCSlider = require('rc-slider');
 
 
 import * as params from '../../data/venue.js';
-import {setMode, populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
+import {setScoredTables, setMode, populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
 import DifficultyChooser from '../pure/DifficultyChooser';
-import optimizer from '../../app/optimization/optimizer';
+import optimizer from '../../app/optimization/ioptimizer';
 
 
 const marks = {};
@@ -30,19 +30,19 @@ const calculateVenueScore = (guests, tableSize) => {
   }
   return score;
 }
-const opimizationDispatchRelay = (dispatch) => ({
+const makeRelay = (dispatch) => ({
   start: () => dispatch(startOptimization()),
-  update: (list, ratio) => dispatch(setVenueGuests(list, ratio)),
-  finish: (list) => {
-    dispatch(setVenueGuests(list, 1));
+  update: (tables, score, ratio) => dispatch(setScoredTables(tables, score, ratio)),
+  finish: (tables, score) => {
+    dispatch(setScoredTables(tables, score, 1));
     dispatch(endOptimization());
     dispatch(scoreVenue());
   },
 });
 
-const makeScoredList = (guests, score) => ({
-  guests: guests,
-  score: score,
+const makeScoredList = (tables, score) => ({
+  tables,
+  score,
 });
 
 
@@ -58,7 +58,7 @@ const getFriendlyScore = (props) => {
 }
 
 const getScoreType = (props) => {
-  if(!hasGuests(props)) return '';
+  if(!props.tables || !props.tables.size) return '';
   const s = getFriendlyScore(props);
   if(s >= params.maxScore) return "perfect";
   if( s >= 90) return "good";
@@ -66,17 +66,17 @@ const getScoreType = (props) => {
   return "bad";
 }
 
-const hasGuests = (props) => {
-  return props.guests && props.guests.length;
-}
+// const hasGuests = (props) => {
+//   return props.guests && props.guests.length;
+// }
 
-const optimizeTip = hasGuests ? 'Search for a better arrangement' : 'Populate the venue to allow searching';
-const populateTip = hasGuests ? 'Clear and make new guests with new seat assignments' : 'Randomly fill the venue with new guests';
+// const optimizeTip = hasGuests ? 'Search for a better arrangement' : 'Populate the venue to allow searching';
+// const populateTip = hasGuests ? 'Clear and make new guests with new seat assignments' : 'Randomly fill the venue with new guests';
 
 const UnconnectedVenueMenu = (props) => {
 
   const {mode = params.defaultMode} = props;
-  const hasGuests = props.guests && props.guests.length;
+  const hasGuests = props.tables && props.tables.size;
   const noGuests = !hasGuests;
 
   const scoreBlockStyle = {
@@ -110,15 +110,15 @@ const UnconnectedVenueMenu = (props) => {
   return (
     <div>
       <ul className={styles.venueMenuItems}>
-        <li><h2 style={{margin:0}}>{scoring}</h2></li>
+        <li><h2 className={styles.scoreLine} style={{margin:0}}>{scoring}</h2></li>
         <li>
           <Link to='/Venue/GenerateGuests' className="btn btn-block btn-info">Create Venue</Link>
         </li>
         <li>
           <button
             className={cnames('btn btn-block btn-default', (noGuests ? '' : 'btn-primary'))}
-            onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score, props.seatsPerTable, props.mode)}
-            title={optimizeTip}
+            onClick={() => props.optimizeGuests(props.tables, props.temperature, props.score, props.mode)}
+            title={'optimizeTip'}
             disabled={noGuests}
             >
             Optimize
@@ -153,7 +153,8 @@ const UnconnectedVenueMenu = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    guests: state.get('venueGuests', List()).toJS(),
+    // guests: state.get('venueGuests', List()).toJS(),
+    tables: state.get('venueTables'),
     score: state.get('venueScore'),
     hasScore: state.get('hasVenueScore'),
     optimizing: state.get('optimizing'),
@@ -170,7 +171,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     populate: () => {dispatch(populateVenue()); dispatch(scoreVenue());},
-    optimizeGuests: (guests, temperature, score, tableSize, mode) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, tableSize, mode),
+    optimizeGuests: (tables, temperature, score, mode) => optimizer.run(makeScoredList(tables, score), makeRelay(dispatch), temperature, mode),
     scoreTables: () => dispatch(scoreVenue()),
     setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
     toggleVenueDetails: () => dispatch(toggleVenueDetails()),

@@ -45,6 +45,47 @@ export const scoreGuest = (guest, neighborIDs, mode = params.defaultMode) => {
   return score;
 }
 
+const modeRelationshipNames = {
+  hate: 'hates',
+  like: 'likes',
+};
+export const getSeatScore = (guest, neighborIDs, mode = params.defaultMode) => {
+  if(!guest) return 0;
+  const relationshipName = modeRelationshipNames[mode] || mode;
+  const relates = guest.get(relationshipName);
+  const score = neighborIDs.filter( gid => relates.includes(gid)).length;
+  const weight = modeWeights[mode];
+  const weightedScore = score * weight;
+
+  return weightedScore;
+}
+
+
+export const getSeatScoreMutable = (guest, neighborIDs, mode = params.defaultMode) => {
+  if(!guest) return 0;
+  const relationshipName = modeRelationshipNames[mode] || mode;
+  const relates = guest[relationshipName];
+  const score = neighborIDs.filter( gid => relates.includes(gid)).length;
+  const weight = modeWeights[mode];
+  const weightedScore = score * weight;
+
+  return weightedScore;
+}
+
+export const getTableScore = (table, mode = params.defaultMode) => {
+  const tableScore = table.reduce((score, seat) => (score + seat.getIn(['score', mode], 0)), 0);
+  return tableScore;
+}
+
+export const getTableScoreMutable = (table, mode = params.defaultMode) => {
+  const tableScore = table.reduce((score, seat) => {
+    const seatScore = seat.score || {};
+    const partial = seatScore[mode] || 0;
+    const nextScore = score + partial;
+  }, 0);
+  return tableScore;
+}
+
 // export const scoreGuest = (guest, neighborIDs, selectRelate = selectHate, weighting = 1) => {
 //   const relates = selectRelate(guest);
 //   const score = neighborIDs.filter( gid => relates.includes(gid)).length;
@@ -74,6 +115,7 @@ const makeCounter = (table) => {
   const counter = (mode, weight = 1) => countMatches(table, guestIDs, mode);
   return counter;
 }
+
 export const scoreTable = (table, mode) => {
   // Create a function to count matches in this table
   const counter = makeCounter(table);
@@ -90,5 +132,30 @@ export const scoreTable = (table, mode) => {
 
   return weightedScore;
 
+
+}
+
+export const scoreSeatMutable = (seatState, neighborIDs, mode) => {
+  const guest = seatState.guest;
+  if(!guest) return seatState;
+
+  const modeScore ={};
+  modeScore[mode] = getSeatScoreMutable(guest, neighborIDs, mode);
+
+  seatState.score = modeScore;
+
+  return seatState;
+}
+
+export const scoreTableMutable = (table, mode) => {
+
+  const ids = tableState.map(seat => (seat.guest || {}).id);
+  const newTableState = tableState.map((seat, i) => {
+    const newSeat = scoreSeat(seat, ids, mode);
+    return newSeat;
+    // const nextMemo = memo.set(i, newSeat);
+    // return nextMemo;
+  });
+  return newTableState;
 
 }

@@ -63,10 +63,11 @@ class UnconnectedVenue extends React.Component {
 
   componentWillMount(){
 
-    const guests = this.props.guests;
-    const numberOfGuests = guests.length;
-
-    if(numberOfGuests) return;
+    const tableCount = this.props.tableCount;
+    // const guests = this.props.guests;
+    // const numberOfGuests = guests.size;
+    // if(numberOfGuests && tableCount) return;
+    if(tableCount) return;
 
     this.router.push('/Venue/GenerateGuests');
 
@@ -97,12 +98,16 @@ class UnconnectedVenue extends React.Component {
   }
 
   hasGuests() {
-    return this.props.guests && this.props.guests.length;
+    return this.props.guests && this.props.guests.size;
   }
 
   render(){
 
-    const hasGuests = this.props.guests && this.props.guests.length;
+    const guests = this.props.guests;
+    const tableCount = this.props.tableCount;
+    // const tables = this.props.tables;
+
+    const hasGuests = guests && guests.size;
     const noGuests = !hasGuests;
 
     const optimizeTip = hasGuests ? 'Search for a better arrangement' : 'Populate the venue to allow searching';
@@ -135,19 +140,25 @@ class UnconnectedVenue extends React.Component {
 
     const spt = this.props.seatsPerTable;
 
+    const lastRun = this.props.lastRunSeconds && (
+      <label className="text-muted text-very-muted" style={{fontSize: '50%'}}>
+        (last optimization:{this.props.lastRunSeconds} seconds)
+      </label>);
+
     return (
       <div className={cnames(styles.venue, "Venue")}>
         <div className={cnames('headerTable', 'container-fluid')}>
           <div className={cnames('row')}>
             <div className={cnames('col-xs-12')}>
-              <h2 style={{display: 'block'}}>
-                Venue
-                <Progress ratio={this.props.progressRatio}/>
+              <h2 style={{display: 'inline-block'}}>
+                Venue {lastRun}
               </h2>
+              <div style={{paddingRight: '1em'}}><Progress ratio={this.props.progressRatio}/></div>
+
             </div>
           </div>
         </div>
-        <Layout guestCount={this.props.guestCount} seatsPerTable={this.props.seatsPerTable}/>
+        <Layout tableCount={tableCount} guestCount={this.props.guestCount} seatsPerTable={this.props.seatsPerTable}/>
       </div>
     );
   }
@@ -157,56 +168,28 @@ UnconnectedVenue.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-const calculateVenueScore = (guests, tableSize) => {
-  let score = 0;
-  for(let i = 0; i < guests.length; i += tableSize){
-    score += scorer.scoreTable(guests.slice(i, i+tableSize));
-  }
-  return score;
-}
-const opimizationDispatchRelay = (dispatch) => ({
-  start: () => dispatch(startOptimization()),
-  update: (list, ratio) => dispatch(setVenueGuests(list, ratio)),
-  finish: (list) => {
-    dispatch(setVenueGuests(list, 1));
-    dispatch(endOptimization());
-    dispatch(scoreVenue());
-  },
-});
 
-const makeScoredList = (guests, score) => ({
-  guests: guests,
-  score: score,
-});
+const emptyList = List(); // Let's use a static field for empty list, so we pass render-checkss
 
 const mapStateToProps = (state = Map()) => {
   return {
-    guests: state.get('venueGuests', List()).toJS(),
+
+    tableCount: state.get('tableCount', 0),
     guestCount: state.get('guestCount'),
     seatsPerTable: state.get('seatsPerTable'),
-    score: state.get('venueScore'),
-    hasScore: state.get('hasVenueScore'),
-    optimizing: state.get('optimizing'),
-    progressRatio: state.get('optimizeProgressRatio'),
     difficulty: state.get('difficulty'),
-    expanded: state.get('venueDetailsExpanded'),
-    temperature: state.get('temperature'),
-    seatsPerTable: state.get('seatsPerTable'),
+
+    guests: state.get('venueGuestList', emptyList),
+
+    optimizing: state.get('optimizing'),
     mode: state.get('optimizationMode'),
+
+    lastRunSeconds: state.get('lastRunSeconds', false),
+
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  populate: () => {dispatch(populateVenue()); dispatch(scoreVenue());},
-  optimizeGuests: (guests,temperature = params.defaultTemperature, mode=params.defaultMode, score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, mode),
-  scoreTables: () => dispatch(scoreVenue()),
-  setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
-  toggleVenueDetails: () => dispatch(toggleVenueDetails()),
-  setTemperature: (temperature) => dispatch(setTemperature(temperature)),
-});
-
 const Venue = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(UnconnectedVenue)
 export default Venue;

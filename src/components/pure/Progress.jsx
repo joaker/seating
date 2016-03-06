@@ -1,8 +1,9 @@
 import React from 'react';
 import cnames from 'classnames/dedupe';
 import {ProgressBar} from 'react-bootstrap'
+import { connect } from 'react-redux';
 
-const Progress = ({ratio = 0, children, started}) => {
+const UnconnectedProgress = ({ratio = 0, children, started}) => {
   const percent = Math.round(ratio * 100);
 
   const progressPercent = percent + '%';
@@ -42,5 +43,14 @@ const Progress = ({ratio = 0, children, started}) => {
     </div>);
 }
 
+const mapStateToProps = (state = Map()) => {
+  return {
+    ratio: state.get('optimizeProgressRatio'),
+  };
+};
+
+const Progress = connect(
+  mapStateToProps
+)(UnconnectedProgress);
 
 export default Progress;

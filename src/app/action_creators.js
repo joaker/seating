@@ -48,6 +48,14 @@ export const setVenueGuests = (guests, ratio = 0) => ({
     ratio
 })
 
+export const setScoredTables = (tables, score, ratio = 0) => ({
+    meta: { remote: false },
+    type: 'SET_SCORED_TABLES',
+    tables,
+    score,
+    ratio
+})
+
 export const populateVenue = (guestCount) => ({
     meta: { remote: false },
     type: 'POPULATE_VENUE',
