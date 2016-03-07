@@ -2,6 +2,8 @@ import styles from '../style/app.scss';
 
 import React from 'react';
 import {Link} from 'react-router';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import Nav from './Nav';
 
 const separators = {
@@ -104,4 +106,4 @@ App.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-export default App;
+export default DragDropContext(HTML5Backend)(App);

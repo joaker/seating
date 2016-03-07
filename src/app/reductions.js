@@ -278,3 +278,14 @@ export const setMode = (state, mode) => {
   const newState = state.set('optimizationMode', mode);
   return newState;
 }
+
+export const swapGuests = (state, source, target) => {
+  const list = state.get('venueGuestList');
+  const nextList = list.set(source, list.get(target)).set(target, list.get(source));
+
+  const swappedState = state.set('venueGuestList', nextList);
+
+  const nextState = scoreVenue(swappedState);
+  return nextState;
+
+}

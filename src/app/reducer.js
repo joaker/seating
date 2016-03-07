@@ -66,6 +66,8 @@ export const reducerFactory = (initialState = defaultLocalState) => (state = ini
       return reductions.commitDraft(state);
     case 'SET_OPTIMIZATION_MODE':
       return reductions.setMode(state, action.mode);
+    case 'SWAP_GUESTS':
+      return reductions.swapGuests(state, action.source, action.target);
   }
   return state;
 }

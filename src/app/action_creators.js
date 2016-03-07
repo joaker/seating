@@ -126,6 +126,13 @@ export const setMode = (mode) => ({
     mode,
 })
 
+export const swapGuests = (source, target) => ({
+    meta: { remote: false },
+    type: 'SWAP_GUESTS',
+    source,
+    target,
+})
+
 /*
 export function next(){
   return {
