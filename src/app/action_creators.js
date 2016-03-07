@@ -94,10 +94,11 @@ export const setTemperature = (temperature) => ({
     temperature
 })
 
-export const focusGuest = (guestID) => ({
+export const focusGuest = (guestID, force = false) => ({
     meta: { remote: false },
     type: 'FOCUS_GUEST',
-    guestID
+    guestID,
+    force,
 })
 
 export const setDraftProperty = (property, value) => ({
@@ -116,6 +117,13 @@ export const setMode = (mode) => ({
     meta: { remote: false },
     type: 'SET_OPTIMIZATION_MODE',
     mode,
+})
+
+export const swapGuests = (source, target) => ({
+    meta: { remote: false },
+    type: 'SWAP_GUESTS',
+    source,
+    target,
 })
 
 /*

@@ -212,6 +212,15 @@
 
 .venueMenuItems{
   padding: 0 .25em;
+
+  > .venuMenuTitle {
+    width: 100em;
+    overflow-y: visible;
+  }
+
+  .scoring > .value {
+    max-width:2em;
+  }
 }
 
 .venueMenuItems > li {

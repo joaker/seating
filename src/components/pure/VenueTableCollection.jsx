@@ -3,16 +3,18 @@ import styles from '../../style/venue.scss';
 import { connect } from 'react-redux';
 import {List, Map} from 'immutable';
 import sequal from 'shallowequal';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
-
-import {focusGuest} from '../../app/action_creators';
+import {focusGuest, scoreVenue, swapGuests as swapGuestsAction} from '../../app/action_creators';
 import * as params from '../../data/venue.js';
 import * as scorer from '../../app/scorer';
 import React from 'react';
 import cnames from 'classnames/dedupe';
 
 import range from '../../util/range';
-
+import DraggableGuest from './DraggableGuest';
+import DroppableSeat from './DroppableSeat';
 
 const angryStyle = styles.angry || 'angryGuest';
 const happyStyle = styles.happy || 'happyGuest';
@@ -44,7 +46,7 @@ class Seat extends React.Component{
     // const {guest, score} = seatData[seatNumber];
 
   render(){
-    const {seatNumber, guestID, score = {}, focusState, hasGuest, focusGuest} = this.props;
+    const {seatNumber, guestID, score = {}, focusState, hasGuest, focusGuest, swapGuests} = this.props;
     const emptySeat = !hasGuest;// || !guest.id;
     if(emptySeat) return (<EmptySeat/>);
 
@@ -66,14 +68,16 @@ class Seat extends React.Component{
 
 
     return (
-      <div className={cnames(styles.seatAreaWrapper)}>
+      <DroppableSeat swapGuests={swapGuests} seatNumber={seatNumber} guestID={guestID} className={cnames(styles.seatAreaWrapper)}>
+        <DraggableGuest {...this.props} seatNumber={seatNumber} setDragFocus={() => focusGuest(guestID, 'dragging')}>
         <div
           data-guest-id={guestID}
           onClick={() => focusGuest(guestID)}
           className={cnames(styles.seatArea, scoreClass, hasFocus, focusState)}
           >{''}
         </div>
-      </div>
+      </DraggableGuest>
+    </DroppableSeat>
     );
   }
 }
@@ -89,7 +93,7 @@ const getRowRange = (rowWidth, rowIndex = 0, startOffset = 0, max = Number.MAX_V
 
 const UnconnectedSeatMatrix = (props) => {
   const {number, seatsPerTable, guestCount, start, end, edge} = props;
-  const {seatData = {}, focusGuest} = props;
+  const {seatData = {}, focusGuest, swapGuests} = props;
   const rows = range(edge).map(rowIndex => {
     return (
       <div key={'row' + rowIndex} className={cnames('matrixRow', styles.matrixRow)}>
@@ -97,7 +101,7 @@ const UnconnectedSeatMatrix = (props) => {
           const data = seatData[seatNumber] || {};
           const {guest, score, focusState} = data;
           const guestID = guest && guest.id;
-          const info = { seatNumber, guestID, score, focusState, focusGuest };
+          const info = { seatNumber, guestID, score, focusState, focusGuest, swapGuests};
           return (
             <Seat  key={seatNumber} {...info} hasGuest={!!guest}/>
           );
@@ -151,6 +155,10 @@ const mapStateForMatrix = (state = Map(), {start, end, }) => {
 
 const mapDispatchForMatrix = (dispatch) => ({
   focusGuest: (guest) => dispatch(focusGuest(guest)),
+  swapGuests: (source, target) => {
+    dispatch(swapGuestsAction(source, target));
+    dispatch(scoreVenue());
+  },
 });
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {

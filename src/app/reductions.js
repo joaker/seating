@@ -138,10 +138,10 @@ export const setTemperature = (state, temperature) => {
   return newState;
 }
 
-export const focusGuest = (state, guestID) => {
+export const focusGuest = (state, guestID, force = false) => {
   const current = state.get('focusedGuest');
 
-  if((current && (current.id == guestID))){
+  if( !force && (current && (current.get('id') == guestID))){
     const unfocusedState = state.delete('focusedGuest');
     return unfocusedState;
   }
@@ -194,4 +194,18 @@ export const commitDraft = (state) => {
 export const setMode = (state, mode) => {
   const newState = state.set('optimizationMode', mode);
   return newState;
+}
+
+
+
+export const swapGuests = (state, source, target) => {
+  const list = state.get('venueGuests');
+  const nextList = list.set(source, list.get(target)).set(target, list.get(source));
+
+  const swappedState = state.set('venueGuests', nextList);
+
+  // const nextState = scoreVenue(swappedState);
+  const nextState = swappedState;
+  return nextState;
+
 }

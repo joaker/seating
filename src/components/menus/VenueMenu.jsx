@@ -110,7 +110,7 @@ const UnconnectedVenueMenu = (props) => {
   return (
     <div>
       <ul className={styles.venueMenuItems}>
-        <li><h2 style={{margin:0}}>{scoring}</h2></li>
+        <li><h2 className={styles.venuMenuTitle} style={{margin:0}}>{scoring}</h2></li>
         <li>
           <Link to='/Venue/GenerateGuests' className="btn btn-block btn-info">Create Venue</Link>
         </li>
