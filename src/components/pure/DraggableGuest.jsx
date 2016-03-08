@@ -9,7 +9,7 @@ const DraggableTypes = {
 
 const guestSource = {
   beginDrag(props) {
-    props.setDragFocus();
+    //props.setDragFocus();
     return {
       seatNumber: props.seatNumber,
       guestID: props.guestID,

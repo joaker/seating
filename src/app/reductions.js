@@ -69,16 +69,26 @@ export const setVenueGuests = (state, guests = [], ratio = 0) => {
   return newState;
 }
 
+export const setVenueGuestList = (state, guests = []) => {
+  const venueGuestList = Immutable.fromJS(guests);
+  const newState = state.set('venueGuestList', venueGuestList);
+  return newState;
+}
+
 export const populateVenue = (state) => {
   const guestCount = state.get('guestCount');
   const maxHates = state.get('difficulty');
   const maxLikes =  maxHates; //state.get('maxLikes');
   const factory = new GuestFactory(guestCount, maxHates, maxLikes);
   const guests = factory.createAll();
+
+  // note: shuffle mutates the list, so do this first
+  const stateWithList = setVenueGuestList(state, guests);
+
   const randoGuests = shuffle(guests);
 
-  const newState = setVenueGuests(state, randoGuests)
-    .set('hasVenueScore', false);
+
+  const newState = setVenueGuests(stateWithList, randoGuests).set('hasVenueScore', false);
   return newState;
 }
 
@@ -152,6 +162,19 @@ export const focusGuest = (state, guestID, force = false) => {
 
   const newState = state.set('focusedGuest', immutableGuest);
   return newState;
+}
+
+export const clearFocusedGuest = (state) => {
+  const current = state.get('focusedGuest');
+
+  // no focused guest?  Don't bother
+  if(!current){
+    return state;
+  }
+
+  const unfocusedState = state.delete('focusedGuest');
+  return unfocusedState;
+
 }
 
 

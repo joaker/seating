@@ -13,7 +13,36 @@ import * as params from '../../data/venue.js';
 import {setMode, populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
 import DifficultyChooser from '../pure/DifficultyChooser';
 import optimizer from '../../app/optimization/optimizer';
+import names from '../../data/names'
 
+const menuItemStyle={padding: 0, paddingBottom: '1em', };
+
+const EmptyFocusOverview = (<div className="noFocusOverview"/>)
+const NoItemNode = (<div><label style={{color:'#AAA'}}>None</label></div>);
+const FocusOverview = ({focusedGuest}) => {
+  if(!focusedGuest) return EmptyFocusOverview;
+  const focused = focusedGuest.toJS();
+  const hates = focused.hates || [];
+  const likes = focused.likes || [];
+  return (
+    <div className={cnames(styles.focusOverview, 'focusOverview')}>
+      <h4 style={{color: '#777'}}><label>Focused:</label></h4>
+      <div className={cnames(styles.focusName, styles.related)}>{names.get(focused.id)}</div>
+      <label style={{color: '#AAA'}}>Conflicts</label>
+      {
+        hates.length ? (
+          hates.map(i => (<div key={i} className={styles.related}>{names.get(i)}</div>))
+        ) : NoItemNode
+      }
+      <label style={{color: '#AAA'}}>Affinifies</label>
+      {
+        likes.length ? (
+          likes.map(i => (<div key={i} className={styles.related}>{names.get(i)}</div>))
+        ) : NoItemNode
+      }
+    </div>
+  )
+}
 
 const marks = {};
 for(let i = params.minSize; i <= params.maxSize; i+= params.interval){
@@ -75,7 +104,7 @@ const populateTip = hasGuests ? 'Clear and make new guests with new seat assignm
 
 const UnconnectedVenueMenu = (props) => {
 
-  const {mode = params.defaultMode} = props;
+  const {mode = params.defaultMode, focusedGuest} = props;
   const hasGuests = props.guests && props.guests.length;
   const noGuests = !hasGuests;
 
@@ -95,58 +124,53 @@ const UnconnectedVenueMenu = (props) => {
     </div>):
     ('');
 
-  // const collapsed = false ? 'collapse': '';
-  // const indicatorStatus = {
-  //   margin:0,
-  //   visibility: (props.optimizing? '': collapsed)
-  // };
-  // const optimizationIndicator = (
-  //   <div className={cnames(styles.busy)} style={indicatorStatus}>
-  //     Busy
-  //     <Loader type='ball-grid-beat' active={true}/>
-  //   </div>
-  // );
-
   return (
-    <div>
-      <ul className={styles.venueMenuItems}>
-        <li><h2 className={styles.venuMenuTitle} style={{margin:0}}>{scoring}</h2></li>
-        <li>
-          <Link to='/Venue/GenerateGuests' className="btn btn-block btn-info">Create Venue</Link>
-        </li>
-        <li>
-          <button
-            className={cnames('btn btn-block btn-default', (noGuests ? '' : 'btn-primary'))}
-            onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score, props.seatsPerTable, props.mode)}
-            title={optimizeTip}
-            disabled={noGuests}
-            >
-            Optimize
-          </button>
-        </li>
-        <li>
-          <h4 style={{color: '#777'}}><label>Mode</label></h4>
-          <select value={mode} onChange={(e) => {
-              console.log('mode is changing...')
-              props.setMode(e.target.value)
-            }} className={'form-control block'} >
-            <option value='hate'>Avoid conflict</option>
-            <option value='like'>Group likes</option>
-          </select>
-        </li>
-        <li>
-          <div style={{padding: 0, paddingBottom: '1em', }}>
-            <h4 style={{color: '#777'}}><label>Run Time</label></h4>
-            <RCSlider
-              marks={marks}
-              min={params.minSize} max={params.maxSize}
-              step={params.interval} defaultValue={params.defaultSize}
-              onAfterChange={(size) => props.setTemperature(params.toTemperature(size))}
-              className={cnames((noGuests?'hidden':'visibleSlider'))}
-              />
-          </div>
-        </li>
-      </ul>
+    <div className={cnames(styles.venueMenu, 'venuMenu')}>
+      <h2 className={styles.venuMenuTitle} style={{margin:0}}>{scoring}</h2>
+      <div className={styles.venueMenuItemsContainer}>
+        <ul className={styles.venueMenuItems}>
+          <li>
+            <Link to='/Venue/GenerateGuests' className="btn btn-block btn-info">Create Venue</Link>
+          </li>
+          <li>
+            <button
+              className={cnames('btn btn-block btn-default', (noGuests ? '' : 'btn-primary'))}
+              onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score, props.seatsPerTable, props.mode)}
+              title={optimizeTip}
+              disabled={noGuests}
+              >
+              Optimize
+            </button>
+          </li>
+          <li>
+            <h4 style={{color: '#777'}}><label>Mode</label></h4>
+            <select value={mode} onChange={(e) => {
+                console.log('mode is changing...')
+                props.setMode(e.target.value)
+              }} className={'form-control block'} >
+              <option value='hate'>Avoid conflict</option>
+              <option value='like'>Group likes</option>
+            </select>
+          </li>
+          <li>
+            <div style={{padding: 0, paddingBottom: '1em', }}>
+              <h4 style={{color: '#777'}}><label>Run Time</label></h4>
+              <div className={styles.sliderWrapper}>
+                <RCSlider
+                  marks={marks}
+                  min={params.minSize} max={params.maxSize}
+                  step={params.interval} defaultValue={params.defaultSize}
+                  onAfterChange={(size) => props.setTemperature(params.toTemperature(size))}
+                  className={cnames((noGuests?'hidden':'visibleSlider'))}
+                  />
+              </div>
+            </div>
+          </li>
+          <li>
+            <FocusOverview focusedGuest={focusedGuest} />
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
@@ -163,6 +187,7 @@ const mapStateToProps = (state) => {
     temperature: state.get('temperature'),
     seatsPerTable: state.get('seatsPerTable'),
     mode: state.get('optimizationMode', params.defaultMode),
+    focusedGuest: state.get('focusedGuest'),
   };
 };
 

@@ -58,6 +58,8 @@ export const reducerFactory = (initialState = defaultLocalState) => (state = ini
       return reductions.setTemperature(state, action.temperature);
     case 'FOCUS_GUEST':
       return reductions.focusGuest(state, action.guestID, action.force);
+    case 'CLEAR_FOCUSED_GUEST':
+      return reductions.clearFocusedGuest(state);
     case 'SET_DRAFT_PROPERTY':
       return reductions.setDraftProperty(state, action.property, action.value);
     case 'COMMIT_DRAFT':

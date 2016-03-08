@@ -1,0 +1,34 @@
+
+
+
+$angry: #F33;
+$happy: #3F3;
+$normal: #7F7;
+
+$bwidth: 3px;
+
+$inactiveRatio: 0.5;
+
+.droppableSeat{
+  border: $bwidth solid transparent;
+}
+
+@mixin accent($color){
+  &.over{
+    background-color: $color;
+  }
+  border-color: $color;
+}
+
+
+.over{
+  @include accent($normal);
+}
+
+.happy{
+  @include accent($happy);
+}
+
+.angry{
+  @include accent($angry);
+}

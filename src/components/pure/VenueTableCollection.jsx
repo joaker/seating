@@ -6,7 +6,7 @@ import sequal from 'shallowequal';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import {focusGuest, scoreVenue, swapGuests as swapGuestsAction} from '../../app/action_creators';
+import {focusGuest, clearFocusedGuest, scoreVenue, swapGuests as swapGuestsAction} from '../../app/action_creators';
 import * as params from '../../data/venue.js';
 import * as scorer from '../../app/scorer';
 import React from 'react';
@@ -46,7 +46,7 @@ class Seat extends React.Component{
     // const {guest, score} = seatData[seatNumber];
 
   render(){
-    const {seatNumber, guestID, score = {}, focusState, hasGuest, focusGuest, swapGuests} = this.props;
+    const {seatNumber, guestID, score = {}, focusState, hasGuest, focusGuest, clearFocusedGuest, swapGuests} = this.props;
     const emptySeat = !hasGuest;// || !guest.id;
     if(emptySeat) return (<EmptySeat/>);
 
@@ -69,10 +69,15 @@ class Seat extends React.Component{
 
     return (
       <DroppableSeat swapGuests={swapGuests} seatNumber={seatNumber} guestID={guestID} className={cnames(styles.seatAreaWrapper)}>
-        <DraggableGuest {...this.props} seatNumber={seatNumber} setDragFocus={() => focusGuest(guestID, 'dragging')}>
+        <DraggableGuest {...this.props}
+          guestID={guestID}
+          seatNumber={seatNumber}
+          setDragFocus={() => focusGuest(guestID, 'dragging')}
+          clearFocusedGuest={() => clearFocusedGuest(guestID, 'dragging')}
+          >
         <div
           data-guest-id={guestID}
-          onClick={() => focusGuest(guestID)}
+          onMouseDown={() => focusGuest(guestID, 'guestChosen')}
           className={cnames(styles.seatArea, scoreClass, hasFocus, focusState)}
           >{''}
         </div>
@@ -93,7 +98,7 @@ const getRowRange = (rowWidth, rowIndex = 0, startOffset = 0, max = Number.MAX_V
 
 const UnconnectedSeatMatrix = (props) => {
   const {number, seatsPerTable, guestCount, start, end, edge} = props;
-  const {seatData = {}, focusGuest, swapGuests} = props;
+  const {seatData = {}, focusGuest, swapGuests, clearFocusedGuest} = props;
   const rows = range(edge).map(rowIndex => {
     return (
       <div key={'row' + rowIndex} className={cnames('matrixRow', styles.matrixRow)}>
@@ -101,7 +106,7 @@ const UnconnectedSeatMatrix = (props) => {
           const data = seatData[seatNumber] || {};
           const {guest, score, focusState} = data;
           const guestID = guest && guest.id;
-          const info = { seatNumber, guestID, score, focusState, focusGuest, swapGuests};
+          const info = { seatNumber, guestID, score, focusState, focusGuest, swapGuests, clearFocusedGuest};
           return (
             <Seat  key={seatNumber} {...info} hasGuest={!!guest}/>
           );

@@ -101,6 +101,11 @@ export const focusGuest = (guestID, force = false) => ({
     force,
 })
 
+export const clearFocusedGuest = () => ({
+    meta: { remote: false },
+    type: 'CLEAR_FOCUSED_GUEST',
+})
+
 export const setDraftProperty = (property, value) => ({
     meta: { remote: false },
     type: 'SET_DRAFT_PROPERTY',

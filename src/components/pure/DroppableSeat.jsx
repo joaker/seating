@@ -1,4 +1,7 @@
+import styles from '../../style/dragdrop.scss';
+
 import React,{PropTypes} from 'react';
+import { connect } from 'react-redux';
 
 import cnames from 'classnames/dedupe';
 import { DragSource, DropTarget } from 'react-dnd';
@@ -30,7 +33,7 @@ const seatTarget = {
 
 function collectTarget(connect, monitor) {
   const item = monitor.getItem() || {};
-  const {sourceGuestID = -1, seatNumber: sourceSeatNumber = -1 } = item;
+  const {guestID: sourceGuestID = -1, seatNumber: sourceSeatNumber = -1 } = item;
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
@@ -44,15 +47,30 @@ const getTargetOpinion = (guestID) => {
   if(guestID < 0) return '';
 }
 
-class SeatContainer extends React.Component {
-  render() {
-    const { connectDropTarget, isOver, canDrop, className } = this.props;
+class UnconnectedSeatContainer extends React.Component {
+  getDescriptor(guestList, guestID, sourceGuestID){
+    if(!(guestList && guestID >= 0 && sourceGuestID >= 0)) return '';
 
+    const guest = guestList.get(guestID);
+
+    const angry = guest.get('hates').includes(sourceGuestID);
+    if(angry){
+      return styles.angry;
+    }
+    const happy = guest.get('likes').includes(sourceGuestID);
+    if(happy){
+      return styles.happy;
+    }
+
+    return '';
+  }
+
+  render() {
+    const { guestList, guestID = -1, sourceGuestID, connectDropTarget, isOver, canDrop, className } = this.props;
+    const descriptor = this.getDescriptor(guestList, guestID, sourceGuestID);
+    const overClass = isOver ? styles.hover : '';
     return connectDropTarget(
-      <div className={className} style={{
-        opacity: isOver ? 0.5 : 1,
-        backgroundColor: (isOver? (canDrop ? 'blue': 'red'): 'transparent'),
-        cursor: 'move'
+      <div className={cnames(className, styles.droppableSeat, descriptor, overClass)} style={{
       }}>
         {this.props.children}
       </div>
@@ -61,9 +79,11 @@ class SeatContainer extends React.Component {
 }
 
 //name: PropTypes.string.isRequired,
-SeatContainer.propTypes = {
+UnconnectedSeatContainer.propTypes = {
 
+  guestID: PropTypes.number,
   seatNumber: PropTypes.number.isRequired,
+  guestList: PropTypes.object.isRequired,
 
   connectDropTarget: PropTypes.func.isRequired,
   isOver: PropTypes.bool.isRequired,
@@ -72,6 +92,16 @@ SeatContainer.propTypes = {
   sourceGuestID: PropTypes.number.isRequired,
   sourceSeatNumber: PropTypes.number.isRequired,
 };
+
+const mapStateToProps = (state) => {
+  return {
+    guestList: state.get('venueGuestList'),
+  };
+}
+const SeatContainer = connect(
+  mapStateToProps
+)(UnconnectedSeatContainer);
+
 
 const DroppableSeat = DropTarget(DraggableTypes.guest, seatTarget, collectTarget)(SeatContainer);
 

@@ -210,18 +210,62 @@
   @include focus-halo(81, 238, 81);
 }
 
-.venueMenuItems{
+.venueMenu {
   padding: 0 .25em;
+  height:100%;
 
   > .venuMenuTitle {
     width: 100em;
     overflow-y: visible;
   }
+}
+
+$focusedTitle: #51cbee;
+.focusOverview{
+
+    h4, label{
+      margin:.25em 0;
+    }
+
+    .focusName{
+      font-weight:bold;
+      color: $focusedTitle;
+    }
+
+    .related{
+      line-height:1em;
+    }
+}
+
+.venueMenuItemsContainer{
+  // height: 100%;
+  // width: 100%;
+  // overflow: hidden;
+  // position: relative;
+}
+.venueMenuItems{
+  // position: absolute;
+  // top: 0px;
+  // bottom: 0px;
+  // left: 0px;
+  // right: -15px;
+  // overflow-y:scroll;
 
   .scoring > .value {
     max-width:2em;
   }
+
+  $sliderSize: 1em;
+
+  .sliderWrapper  {
+    margin:0 $sliderSize*2 $sliderSize $sliderSize;
+  }
 }
+
+// :global {
+//   .rc-slider-mark-text:last-child{
+//   left:90% !important;
+// }
 
 .venueMenuItems > li {
   margin-bottom:.25em;
