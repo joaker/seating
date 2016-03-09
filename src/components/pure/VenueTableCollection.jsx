@@ -1,4 +1,5 @@
 import styles from '../../style/venue.scss';
+import dndstyles from '../../style/dragdrop.scss';
 
 import { connect } from 'react-redux';
 import {List, Map} from 'immutable';
@@ -46,7 +47,7 @@ class Seat extends React.Component{
     // const {guest, score} = seatData[seatNumber];
 
   render(){
-    const {seatNumber, guestID, score = {}, focusState, hasGuest, focusGuest, clearFocusedGuest, swapGuests} = this.props;
+    const {seatNumber, guestID, score = {}, focusState, focusReaction, hasGuest, focusGuest, clearFocusedGuest, swapGuests} = this.props;
     const emptySeat = !hasGuest;// || !guest.id;
     if(emptySeat) return (<EmptySeat/>);
 
@@ -68,7 +69,11 @@ class Seat extends React.Component{
 
 
     return (
-      <DroppableSeat swapGuests={swapGuests} seatNumber={seatNumber} guestID={guestID} className={cnames(styles.seatAreaWrapper)}>
+      <DroppableSeat
+        swapGuests={swapGuests}
+        seatNumber={seatNumber}
+        guestID={guestID}
+        className={cnames(styles.seatAreaWrapper, focusReaction)}>
         <DraggableGuest {...this.props}
           guestID={guestID}
           seatNumber={seatNumber}
@@ -96,6 +101,46 @@ const getRowRange = (rowWidth, rowIndex = 0, startOffset = 0, max = Number.MAX_V
   return range(rowEnd, rowStart);
 }
 
+const isGuest = (guest) => {
+  var validGuest = !(!guest || guest.id == null || guest.id == undefined);
+  return validGuest;
+}
+const hasRelation = (source, target, type) => {
+  const relates = (source[type] && source[type].includes(target.id));
+  return relates;
+}
+
+const hasHate = (source, target) => hasRelation(source, target, 'hates');
+const hasLike = (source, target) => hasRelation(source, target, 'likes');
+
+// Get a style for the guest's reaction to the focused guest
+const getFocusReaction = (guest, focusedGuest) => {
+  const noReaction = '';
+  if(!isGuest(focusedGuest)) return noReaction;
+
+  if(hasHate(guest, focusedGuest)){
+    return dndstyles.angry;
+  }
+
+  if(hasLike(guest, focusedGuest)){
+    return dndstyles.happy;
+  }
+
+  return noReaction;
+}
+
+// Get a style for the focused guest's reaction to the guest
+const getFocusState = (guest, focusedGuest) => {
+  if(!isGuest(focusedGuest)) return '';
+
+  if(guest.id == focusedGuest.id) return (styles.hasSelectFocus || 'hasSelectFocus');
+  if(hasHate(focusedGuest, guest)) return (styles.hasHateFocus || 'hasHateFocus');
+  if(hasLike(focusedGuest, guest)) return (styles.hasLikeFocus || 'hasLikeFocus');
+  //if(focusedGuest.likes && focusedGuest.likes.includes(guest.id)) return (styles.hasLikeFocus || 'hasLikeFocus');
+
+  return '';
+}
+
 const UnconnectedSeatMatrix = (props) => {
   const {number, seatsPerTable, guestCount, start, end, edge} = props;
   const {seatData = {}, focusGuest, swapGuests, clearFocusedGuest} = props;
@@ -104,9 +149,9 @@ const UnconnectedSeatMatrix = (props) => {
       <div key={'row' + rowIndex} className={cnames('matrixRow', styles.matrixRow)}>
         {getRowRange(edge, rowIndex, start, end).map(seatNumber => {
           const data = seatData[seatNumber] || {};
-          const {guest, score, focusState} = data;
+          const {guest, score, focusState, focusReaction} = data;
           const guestID = guest && guest.id;
-          const info = { seatNumber, guestID, score, focusState, focusGuest, swapGuests, clearFocusedGuest};
+          const info = { seatNumber, guestID, score, focusState, focusReaction, focusGuest, swapGuests, clearFocusedGuest};
           return (
             <Seat  key={seatNumber} {...info} hasGuest={!!guest}/>
           );
@@ -118,15 +163,15 @@ const UnconnectedSeatMatrix = (props) => {
   return (<div className={cnames(styles.seatMatrix)} >{rows}</div>);
 }
 
-const getFocusState = (guest, focusedGuest) => {
-  if(!focusedGuest || focusedGuest.id == null || focusedGuest.id == undefined) return '';
-
-  if(guest.id == focusedGuest.id) return (styles.hasSelectFocus || 'hasSelectFocus');
-  if(focusedGuest.hates && focusedGuest.hates.includes(guest.id)) return (styles.hasHateFocus || 'hasHateFocus');
-  if(focusedGuest.likes && focusedGuest.likes.includes(guest.id)) return (styles.hasLikeFocus || 'hasLikeFocus');
-
-  return '';
-}
+// const getFocusState = (guest, focusedGuest) => {
+//   if(!focusedGuest || focusedGuest.id == null || focusedGuest.id == undefined) return '';
+//
+//   if(guest.id == focusedGuest.id) return (styles.hasSelectFocus || 'hasSelectFocus');
+//   if(focusedGuest.hates && focusedGuest.hates.includes(guest.id)) return (styles.hasHateFocus || 'hasHateFocus');
+//   if(focusedGuest.likes && focusedGuest.likes.includes(guest.id)) return (styles.hasLikeFocus || 'hasLikeFocus');
+//
+//   return '';
+// }
 
 const mapStateForMatrix = (state = Map(), {start, end, }) => {
 
@@ -142,11 +187,13 @@ const mapStateForMatrix = (state = Map(), {start, end, }) => {
     const seatIndex = start + tableIndex;
     const score = { [mode]: scorer.scoreGuest(guest, guestIDs, mode)};
     const focusState = getFocusState(guest, focusedGuest);
+    const focusReaction = getFocusReaction(guest, focusedGuest);
     scores.push(score);
     seatData[seatIndex] = {
       guest,
       score,
       focusState,
+      focusReaction,
     };
   });
 

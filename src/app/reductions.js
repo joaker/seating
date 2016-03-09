@@ -151,10 +151,10 @@ export const setTemperature = (state, temperature) => {
 export const focusGuest = (state, guestID, force = false) => {
   const current = state.get('focusedGuest');
 
-  if( !force && (current && (current.get('id') == guestID))){
-    const unfocusedState = state.delete('focusedGuest');
-    return unfocusedState;
-  }
+  // if( !force && (current && (current.get('id') == guestID))){
+  //   const unfocusedState = state.delete('focusedGuest');
+  //   return unfocusedState;
+  // }
 
   const guests = state.get('venueGuests', List());//, Immutable.fromJS(guest);
 

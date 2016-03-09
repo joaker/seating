@@ -68,7 +68,7 @@ class UnconnectedSeatContainer extends React.Component {
   render() {
     const { guestList, guestID = -1, sourceGuestID, connectDropTarget, isOver, canDrop, className } = this.props;
     const descriptor = this.getDescriptor(guestList, guestID, sourceGuestID);
-    const overClass = isOver ? styles.hover : '';
+    const overClass = isOver ? styles.over : '';
     return connectDropTarget(
       <div className={cnames(className, styles.droppableSeat, descriptor, overClass)} style={{
       }}>
@@ -83,7 +83,7 @@ UnconnectedSeatContainer.propTypes = {
 
   guestID: PropTypes.number,
   seatNumber: PropTypes.number.isRequired,
-  guestList: PropTypes.object.isRequired,
+  //guestList: PropTypes.object.isRequired,
 
   connectDropTarget: PropTypes.func.isRequired,
   isOver: PropTypes.bool.isRequired,
@@ -93,16 +93,19 @@ UnconnectedSeatContainer.propTypes = {
   sourceSeatNumber: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    guestList: state.get('venueGuestList'),
-  };
-}
-const SeatContainer = connect(
-  mapStateToProps
-)(UnconnectedSeatContainer);
+// const mapStateToProps = (state) => {
+//   return {
+//     guestList: state.get('venueGuestList'),
+//   };
+// }
+// const SeatContainer = connect(
+//   mapStateToProps
+// )(UnconnectedSeatContainer);
 
 
-const DroppableSeat = DropTarget(DraggableTypes.guest, seatTarget, collectTarget)(SeatContainer);
+const DroppableSeat = DropTarget(DraggableTypes.guest, seatTarget, collectTarget)(
+  // SeatContainer
+  UnconnectedSeatContainer
+);
 
 export default DroppableSeat;

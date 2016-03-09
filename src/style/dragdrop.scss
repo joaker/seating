@@ -3,7 +3,7 @@
 
 $angry: #F33;
 $happy: #3F3;
-$normal: #7F7;
+$normal: #51cbee;
 
 $bwidth: 3px;
 
@@ -20,9 +20,15 @@ $inactiveRatio: 0.5;
   border-color: $color;
 }
 
+@mixin accenta($color, $a){
+  &.over{
+    background-color: rgba($color, $a);
+  }
+  border-color: rgba($color, $a);
+}
 
 .over{
-  @include accent($normal);
+  @include accenta($normal, 0.5);
 }
 
 .happy{
