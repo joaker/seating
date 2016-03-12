@@ -1,1 +1,1 @@
-portConfig = {"port":8080,"ioPort":8080,"ioClientLocation":"http://localhost:8081"}
+portConfig = {"port":8080,"ioPort":8080}

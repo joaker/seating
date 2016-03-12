@@ -3,7 +3,7 @@ import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 
 //Routable Components
 import App from './components/App';
-import Landing from './components/Landing';
+//import Landing from './components/Landing';
 import Main from './components/Main';
 import Guests from './components/Guests';
 import Guest from './components/Guest';
@@ -17,7 +17,7 @@ import VenueMenu from './components/menus/VenueMenu';
 const routes = (
     <Route path="/" component={App} title="Home">
       <IndexRoute to="/" component={Main}/>
-      <Route path="Landing" title="Seatable" components={{fullscreen:Landing}}>
+      <Route path="Landing" title="Seatable" components={{fullscreen:Main}}>
       </Route>
       <Route path="Guests" title="Guests">
         <IndexRoute to="/Guests" component={Guests}/>
