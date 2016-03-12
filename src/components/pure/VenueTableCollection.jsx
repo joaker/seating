@@ -47,11 +47,11 @@ class Seat extends React.Component{
     // const {guest, score} = seatData[seatNumber];
 
   render(){
-    const {seatNumber, guestID, score = {}, focusState, focusReaction, hasGuest, focusGuest, clearFocusedGuest, swapGuests} = this.props;
+    const {seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, hasGuest, focusGuest, clearFocusedGuest, swapGuests} = this.props;
     const emptySeat = !hasGuest;// || !guest.id;
     if(emptySeat) return (<EmptySeat/>);
 
-    const { hate: hateScore, like: likeScore } = score;
+    //const { hate: hateScore, like: likeScore } = score;
 
     const scoreClass = (hateScore && angryStyle) ||
       (likeScore && happyStyle) ||
@@ -149,9 +149,10 @@ const UnconnectedSeatMatrix = (props) => {
       <div key={'row' + rowIndex} className={cnames('matrixRow', styles.matrixRow)}>
         {getRowRange(edge, rowIndex, start, end).map(seatNumber => {
           const data = seatData[seatNumber] || {};
-          const {guest, score, focusState, focusReaction} = data;
+          const {guest, score = {}, focusState, focusReaction} = data;
+          const {hate: hateScore, like: likeScore} = score;
           const guestID = guest && guest.id;
-          const info = { seatNumber, guestID, score, focusState, focusReaction, focusGuest, swapGuests, clearFocusedGuest};
+          const info = { seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, focusGuest, swapGuests, clearFocusedGuest};
           return (
             <Seat  key={seatNumber} {...info} hasGuest={!!guest}/>
           );
@@ -185,7 +186,8 @@ const mapStateForMatrix = (state = Map(), {start, end, }) => {
   const scores = [];
   tableSeats.forEach((guest, tableIndex) => {
     const seatIndex = start + tableIndex;
-    const score = { [mode]: scorer.scoreGuest(guest, guestIDs, mode)};
+    // TODO: what to do
+    const score = scorer.getGuestScores(guest, guestIDs, mode);
     const focusState = getFocusState(guest, focusedGuest);
     const focusReaction = getFocusReaction(guest, focusedGuest);
     scores.push(score);

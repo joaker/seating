@@ -56,4 +56,5 @@ export const easy = 2;
 export const normal = 8;
 export const hard = 12;
 
-export const defaultMode = 'like'; // default optimization mode
+export const defaultMode = 'best'; // default optimization mode
+export const defaultModePart = 'hate'; // default optimization mode

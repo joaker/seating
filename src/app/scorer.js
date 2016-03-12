@@ -19,27 +19,41 @@ export const toIDs = (guests) => {
   return guests.map(g => g.id);
 };
 
-export const getGuestScores = (guests, mode = params.defaultMode) => {
-  const ids = toIDs(guests);
-  const scores = {};
-  guests.forEach(guest => {
-    scores[guest.id] = scoreGuest(guest, ids, mode);
-  });
-  return scores;
-}
-
-const modeChooser = {
+const modePartChooser = {
   hate: selectHate,
   like: selectLike,
 }
 
-const modeWeights = {
+const modeToParts = {
+  hate: ['hate'],
+  like: ['like'],
+  best: ['hate', 'like'],
+}
+
+const modePartWeights = {
   hate: -1,
   like: 1,
 }
 
-export const scoreGuest = (guest, neighborIDs, mode = params.defaultMode) => {
-  const chooser = modeChooser[mode] || selectHate;
+
+export const getGuestScores = (guest, neighborIDs, mode = params.defaultMode) => {
+  const scores = {};
+
+  const modeParts = modeToParts[mode];
+
+  for(let modePart of modeParts){
+    const modePartWeight = modePartWeights[modePart];
+    const rawPartScore = scoreGuest(guest, neighborIDs, modePart);
+    const weightedPartScore = rawPartScore * modePartWeight;
+    scores[modePart] = weightedPartScore;
+  }
+
+  return scores;
+
+}
+
+export const scoreGuest = (guest, neighborIDs, modePart = params.defaultModePart) => {
+  const chooser = modePartChooser[modePart] || selectHate;
   const relates = chooser(guest);
   const score = neighborIDs.filter( gid => relates.includes(gid)).length;
   return score;
@@ -51,20 +65,20 @@ export const scoreGuest = (guest, neighborIDs, mode = params.defaultMode) => {
 //   return score;
 // }
 
-const countMatches = (guests, ids, mode) => {
+const countMatches = (guests, ids, modePart) => {
 
-  const selectRelate = modeChooser[mode];
+  const selectRelate = modePartChooser[modePart];
   // Don't have guest IDs?  Then populate them
   if(!ids) ids = toIDs(guests);
 
 
   // match
   const matchCounts = guests.map(g => {
-    const guestScore = scoreGuest(g, ids, mode);
+    const guestScore = scoreGuest(g, ids, modePart);
     return guestScore;
   });
 
-  const totalMatches = matchCounts.reduce((total, i) => (total+i), 0);
+  const totalMatches = matchCounts.reduce((total, c) => (total+c), 0);
 
   return totalMatches;
 }
@@ -82,13 +96,24 @@ export const scoreTable = (table, mode) => {
 
   // return likeScore - hateScore;
 
+  const modeParts = modeToParts[mode];
+
+  const partialScores = modeParts.map(mp => counter(mp));
+
   // if an array of modes was passed, you could reduce on it
-  const score = counter(mode);
+  // const score = counter(mode);
+  const score = partialScores.reduce((total, partial, index) => {
+    const modePart = modeParts[index];
+    const partWeight = modePartWeights[modePart];
+    const nextTotal = total + partial * partWeight;
+    return nextTotal;
+  }, 0);
 
-  const weight = modeWeights[mode];
-  const weightedScore = score * weight;
-
-  return weightedScore;
+  return score;
+  // const weight = modeWeights[mode];
+  // const weightedScore = score * weight;
+  //
+  // return weightedScore;
 
 
 }

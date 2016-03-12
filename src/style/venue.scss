@@ -230,6 +230,14 @@ $focusedTitle: #51cbee;
     .focusName{
       font-weight:bold;
       color: $focusedTitle;
+
+      &:hover{
+        color: darken($focusedTitle, 30%);
+      }
+    }
+
+    .focusName .icon {
+      font-size: 80%;
     }
 
     .related{

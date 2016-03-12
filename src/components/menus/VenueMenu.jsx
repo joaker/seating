@@ -10,7 +10,7 @@ var RCSlider = require('rc-slider');
 
 
 import * as params from '../../data/venue.js';
-import {setMode, populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
+import {setMode, populateVenue, clearFocusedGuest, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
 import DifficultyChooser from '../pure/DifficultyChooser';
 import optimizer from '../../app/optimization/optimizer';
 import names from '../../data/names'
@@ -19,15 +19,17 @@ const menuItemStyle={padding: 0, paddingBottom: '1em', };
 
 const EmptyFocusOverview = (<div className="noFocusOverview"/>)
 const NoItemNode = (<div><label style={{color:'#AAA'}}>None</label></div>);
-const FocusOverview = ({focusedGuest}) => {
+const FocusOverview = ({focusedGuest, clearFocus}) => {
   if(!focusedGuest) return EmptyFocusOverview;
   const focused = focusedGuest.toJS();
   const hates = focused.hates || [];
   const likes = focused.likes || [];
   return (
     <div className={cnames(styles.focusOverview, 'focusOverview')}>
-      <h4 style={{color: '#777'}}><label>Focused:</label></h4>
-      <div className={cnames(styles.focusName, styles.related)}>{names.get(focused.id)}</div>
+      <h4 className={cnames(styles.focusName)} onClick={() => clearFocus()}>
+        <label>Focused <span className={cnames(styles.icon, 'glyphicon', 'glyphicon-remove')}></span></label>
+      </h4>
+      <div className={cnames('text-muted', styles.related)}>{names.get(focused.id)}</div>
       <label style={{color: '#AAA'}}>Conflicts</label>
       {
         hates.length ? (
@@ -104,7 +106,7 @@ const populateTip = hasGuests ? 'Clear and make new guests with new seat assignm
 
 const UnconnectedVenueMenu = (props) => {
 
-  const {mode = params.defaultMode, focusedGuest} = props;
+  const {mode = params.defaultMode, focusedGuest, clearFocus} = props;
   const hasGuests = props.guests && props.guests.length;
   const noGuests = !hasGuests;
 
@@ -150,6 +152,7 @@ const UnconnectedVenueMenu = (props) => {
               }} className={'form-control block'} >
               <option value='hate'>Avoid conflict</option>
               <option value='like'>Group likes</option>
+              <option value='best'>Balanced</option>
             </select>
           </li>
           <li>
@@ -167,7 +170,7 @@ const UnconnectedVenueMenu = (props) => {
             </div>
           </li>
           <li>
-            <FocusOverview focusedGuest={focusedGuest} />
+            <FocusOverview focusedGuest={focusedGuest} clearFocus={clearFocus}/>
           </li>
         </ul>
       </div>
@@ -201,6 +204,8 @@ const mapDispatchToProps = (dispatch) => {
     toggleVenueDetails: () => dispatch(toggleVenueDetails()),
     setTemperature: (temperature) => dispatch(setTemperature(temperature)),
     setMode: (mode) => {dispatch(setMode(mode)); dispatch(scoreVenue())},
+    clearFocus: () => dispatch(clearFocusedGuest()),
+
   };
 }
 
