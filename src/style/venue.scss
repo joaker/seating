@@ -124,6 +124,9 @@ $tableBackground: #DDD;
 $tableColor: #777;
 $borderThickness: .3em;
 
+.tableArea .tableName{
+  background-color: $tableBackground;
+}
 .tableArea label{
   white-space:nowrap;
   margin-bottom: 0;
