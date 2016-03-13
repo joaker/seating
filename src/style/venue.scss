@@ -1,3 +1,6 @@
+@import "_variables";
+@import "_mixins";
+
 .venueGrid {
   background-color:#EEE;
   padding: 2em 0;
@@ -169,9 +172,9 @@ $tableColor: #DDD;
   text-align:center;
 }
 
-$neutral: #778;
-$angry: #E66;
-$happy: #3B3;
+// $neutral: #778;
+// $angry: #E66;
+// $happy: #3B3;
 
 .seatArea{
   display:inline-block;
@@ -227,37 +230,46 @@ $happy: #3B3;
 }
 
 
-@mixin focus-halo($r, $g, $b){
-  box-shadow: 0 0 .55em .1em rgba($r, $g, $b, 1);
-  border-color: rgba($r, $g, $b, 1);
+
+// .seatArea:not(.emptySeat):not(.hasFocus):hover,
+// .guest:not(.emptySeat):not(.hasFocus):hover {
+//   box-shadow: 0 0 1em rgba(203, 203, 203, 1);
+//   border-color: rgba(203, 203, 203, 1);
+//   background-color: rgba(203,203,203,1);
+// }
+
+// .seatAreaWrapper:hover{
+//   box-shadow: 0 0 1em rgba(203, 203, 203, 1);
+//   border-color: rgba(203, 203, 203, 1);
+//   background-color: rgba(203,203,203,1);
+// }
+
+$selectOpacity: 1;
+.seatAreaWrapper:hover{
+  box-shadow: inset 0 0 .25em rgba($select, $selectOpacity);
+  border-color: rgba($select, $selectOpacity);
+  background-color: rgba($select, $selectOpacity/10);
+  color: black;
+  // background-image:none;
+  .guest {
+    background: none;
+  }
 }
 
-$innerBlur: .5em;
-$innerWidth: .25em;
-@mixin inner-halo($color){
-   -moz-box-shadow:    inset 0 0 $innerBlur $innerWidth $color;
-   -webkit-box-shadow: inset 0 0 $innerBlur $innerWidth $color;
-   box-shadow:         inset 0 0 $innerBlur $innerWidth $color;
-   border-color: $color;
-}
-
-.seatArea:not(.emptySeat):not(.hasFocus):hover,
-.guest:not(.emptySeat):not(.hasFocus):hover {
-  box-shadow: 0 0 1em rgba(203, 203, 203, 1);
-  border-color: rgba(203, 203, 203, 1);
-  background-color: rgba(203,203,203,1);
-}
 
 .hasFocus{
-  @include focus-halo(81, 203, 238);
+  // @include halo(81, 203, 238);
+  @include burst($select);
 }
 
 .hasHateFocus{
-  @include focus-halo(238, 81, 81);
+  // @include halo(238, 81, 81);
+  @include burst($angry);
 }
 
 .hasLikeFocus{
-  @include focus-halo(81, 238, 81);
+  // @include halo(81, 238, 81);
+  @include burst($happy);
 }
 
 .venueMenu {
@@ -296,18 +308,10 @@ $focusedTitle: #51cbee;
 }
 
 .venueMenuItemsContainer{
-  // height: 100%;
-  // width: 100%;
-  // overflow: hidden;
-  // position: relative;
+
 }
 .venueMenuItems{
-  // position: absolute;
-  // top: 0px;
-  // bottom: 0px;
-  // left: 0px;
-  // right: -15px;
-  // overflow-y:scroll;
+
 
   .scoring > .value {
     max-width:2em;
@@ -319,11 +323,6 @@ $focusedTitle: #51cbee;
     margin:0 $sliderSize*2 $sliderSize $sliderSize;
   }
 }
-
-// :global {
-//   .rc-slider-mark-text:last-child{
-//   left:90% !important;
-// }
 
 .venueMenuItems > li {
   margin-bottom:.25em;

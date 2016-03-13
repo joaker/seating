@@ -1,0 +1,40 @@
+@import "_variables";
+
+@mixin inwardHalo($color){
+   -moz-box-shadow:    inset 0 0 $innerBlur $innerWidth $color;
+   -webkit-box-shadow: inset 0 0 $innerBlur $innerWidth $color;
+   box-shadow:         inset 0 0 $innerBlur $innerWidth $color;
+   border-color: $color;
+}
+
+@mixin accent($color){
+  &.over{
+    background-color: $color;
+  }
+  border-color: rgba($color, 0.5);
+  @include inwardHalo($color);
+}
+
+@mixin accenta($color, $a){
+  @include accent(rgba($color, $a));
+  //border-color: rgba($color, $a);
+}
+
+@mixin halo($r, $g, $b){
+  background-image:
+    radial-gradient(
+      circle closest-side,
+      rgba($r, $g, $b, 0.75),
+      transparent
+    );
+}
+
+$burstOpacity: 0.85;
+@mixin burst($color){
+  background-image:
+    radial-gradient(
+      circle closest-side,
+      rgba($color, $burstOpacity),
+      transparent
+    );
+}

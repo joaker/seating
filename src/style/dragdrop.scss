@@ -1,40 +1,20 @@
+@import "_variables";
+@import "_mixins";
 
+// $angry: #F33;
+// $happy: #3F3;
+// $normal: #51cbee;
+//
+// $bwidth: 5px;
+// $opacity: 0.25;
+//
+// $inactiveRatio: 0.5;
 
+// .droppableSeat{
+//   border: $bwidth solid transparent;
+// }
 
-$angry: #F33;
-$happy: #3F3;
-$normal: #51cbee;
-
-$bwidth: 1px;
 $opacity: 0.25;
-
-$inactiveRatio: 0.5;
-
-.droppableSeat{
-  border: $bwidth solid transparent;
-}
-
-$innerBlur: .5em;
-$innerWidth: .25em;
-@mixin inner-halo($color){
-   -moz-box-shadow:    inset 0 0 $innerBlur $innerWidth $color;
-   -webkit-box-shadow: inset 0 0 $innerBlur $innerWidth $color;
-   box-shadow:         inset 0 0 $innerBlur $innerWidth $color;
-   border-color: $color;
-}
-
-@mixin accent($color){
-  &.over{
-    background-color: $color;
-  }
-  border-color: $color;
-  @include inner-halo($color);
-}
-
-@mixin accenta($color, $a){
-  @include accent(rgba($color, $a));
-  //border-color: rgba($color, $a);
-}
 
 .over{
   @include accenta($normal, 0.5);
