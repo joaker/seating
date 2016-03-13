@@ -120,8 +120,9 @@
   text-align:center;
 }
 
-$tableBackground: #777;
-$tableColor: #DDD;
+$tableBackground: #DDD;
+$tableColor: #333;
+$borderThickness: .4em;
 
 .tableArea label{
   white-space:nowrap;
@@ -151,7 +152,9 @@ $tableColor: #DDD;
   margin: .25em;
   // background-color: #EFEFEF;
   text-align: center;
-  border-left: .5em solid $tableBackground;
+  border-left: $borderThickness solid $tableBackground;
+  border-bottom: $borderThickness solid $tableBackground;
+  border-right: $borderThickness solid $tableBackground;
 }
 
 .seatMatrix{
