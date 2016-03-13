@@ -11,16 +11,7 @@ html, body {
   height:100%;
 }
 
-:global .NavSidebar{
-  overflow:hidden;
-}
 
-:global .ScrollingSidebar {
-  overflow-y:scroll;
-  overflow-x:hidden;
-  margin-right:-17px;
-
-}
 
 
 body {
@@ -60,11 +51,7 @@ ul {
   padding-bottom: .5em;
 }
 
-:global #app .nav > li > a{
-  padding: .25em .125em;
-  /*display: inline-block;*/
 
-}
 
 :global #app a:not(.btn):hover{
   color: #0E2E4A;
