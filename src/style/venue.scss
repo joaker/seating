@@ -322,13 +322,27 @@ $focusedTitle: #51cbee;
     max-width:2em;
   }
 
+  > li {
+    margin-bottom:.25em;
+
+    > h1,h2,h3,h4,label{
+      margin: .75em 0 .2em 0;
+    }
+  }
+
+
   $sliderSize: 1em;
 
   .sliderWrapper  {
     margin:0 $sliderSize*2 $sliderSize $sliderSize;
   }
-}
 
-.venueMenuItems > li {
-  margin-bottom:.25em;
+  .runtimeLabels{
+    font-size: 70%;
+
+    > label {
+      color: #AAA;
+      margin-top:0;
+    }
+  }
 }

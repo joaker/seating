@@ -97,10 +97,13 @@ AppLayout.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-const App = (props, context) => {
-  const {fullscreen} = props;
-  if(fullscreen) return (<div>{fullscreen}</div>);
-  return (<AppLayout {...props}>{props.children}</AppLayout>);
+class App extends React.Component {//(props, context) => {
+  render(){
+    const props = this.props;
+    const {fullscreen} = props;
+    if(fullscreen) return (<div>{fullscreen}</div>);
+    return (<AppLayout {...props}>{props.children}</AppLayout>);
+  }
 };
 
 App.contextTypes = {

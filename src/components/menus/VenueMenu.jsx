@@ -6,8 +6,18 @@ import React from 'react';
 import {Link} from 'react-router';
 import { connect } from 'react-redux';
 import {Loader} from 'react-loaders';
-var RCSlider = require('rc-slider');
-
+// var RCSlider = require('rc-slider');
+// var rcSlider = (
+//   <div className={styles.sliderWrapper}>
+//     <RCSlider
+//       marks={marks}
+//       min={params.minSize} max={params.maxSize}
+//       step={params.interval} defaultValue={params.defaultSize}
+//       onAfterChange={(size) => props.setTemperature(params.toTemperature(size))}
+//       className={cnames((noGuests?'hidden':'visibleSlider'))}
+//       />
+//   </div>
+// );
 
 import * as params from '../../data/venue.js';
 import {setMode, populateVenue, clearFocusedGuest, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../../app/action_creators';
@@ -106,7 +116,7 @@ const populateTip = hasGuests ? 'Clear and make new guests with new seat assignm
 
 const UnconnectedVenueMenu = (props) => {
 
-  const {mode = params.defaultMode, focusedGuest, clearFocus} = props;
+  const {mode = params.defaultMode, focusedGuest, clearFocus, temperature} = props;
   const hasGuests = props.guests && props.guests.length;
   const noGuests = !hasGuests;
 
@@ -145,6 +155,18 @@ const UnconnectedVenueMenu = (props) => {
             </button>
           </li>
           <li>
+            <h4 style={{color: '#777'}}><label>Run Time</label></h4>
+            <input type="range"
+              min={params.minSize} max={params.maxSize}
+              value={params.toSize(temperature)}
+              onChange={(e) => props.setTemperature(params.toTemperature(e.target.value))}
+              />
+            <div className={styles.runtimeLabels}>
+              <label className={cnames('pull-left', 'text-muted')}>Quick</label>
+              <label className={cnames('pull-right', 'text-muted')}>Thorough</label>
+            </div>
+          </li>
+          <li>
             <h4 style={{color: '#777'}}><label>Mode</label></h4>
             <select value={mode} onChange={(e) => {
                 console.log('mode is changing...')
@@ -154,20 +176,6 @@ const UnconnectedVenueMenu = (props) => {
               <option value='like'>Group likes</option>
               <option value='best'>Balanced</option>
             </select>
-          </li>
-          <li>
-            <div style={{padding: 0, paddingBottom: '1em', }}>
-              <h4 style={{color: '#777'}}><label>Run Time</label></h4>
-              <div className={styles.sliderWrapper}>
-                <RCSlider
-                  marks={marks}
-                  min={params.minSize} max={params.maxSize}
-                  step={params.interval} defaultValue={params.defaultSize}
-                  onAfterChange={(size) => props.setTemperature(params.toTemperature(size))}
-                  className={cnames((noGuests?'hidden':'visibleSlider'))}
-                  />
-              </div>
-            </div>
           </li>
           <li>
             <FocusOverview focusedGuest={focusedGuest} clearFocus={clearFocus}/>
@@ -187,7 +195,7 @@ const mapStateToProps = (state) => {
     progressRatio: state.get('optimizeProgressRatio'),
     difficulty: state.get('difficulty'),
     expanded: state.get('venueDetailsExpanded'),
-    temperature: state.get('temperature'),
+    temperature: state.get('temperature', params.defaultTemperature),
     seatsPerTable: state.get('seatsPerTable'),
     mode: state.get('optimizationMode', params.defaultMode),
     focusedGuest: state.get('focusedGuest'),
