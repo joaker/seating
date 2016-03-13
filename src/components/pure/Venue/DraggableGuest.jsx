@@ -22,11 +22,22 @@ const guestSource = {
 function collectSource(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging(),
   }
 }
 
+const guestIcon = (<span className={cnames('glyphicon', 'glyphicon-user')} />);
+
 class GuestContainer extends React.Component {
+  componentDidMount() {
+    const { connectDragPreview } = this.props;
+
+    // const img = new Image();
+    // img.src = 'http://mysite.com/image.jpg';
+    // img.onload = () => connectDragPreview(img);
+    connectDragPreview(guestIcon);
+  }
   render() {
     const { connectDragSource, isDragging } = this.props;
     return connectDragSource(
@@ -45,7 +56,7 @@ class GuestContainer extends React.Component {
 GuestContainer.propTypes = {
 
   seatNumber: PropTypes.number.isRequired,
-
+  connectDragPreview: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
 };

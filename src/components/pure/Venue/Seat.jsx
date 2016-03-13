@@ -82,7 +82,7 @@ export class Seat extends React.Component{
         <div
           data-guest-id={guestID}
           onMouseDown={() => focusGuest(guestID, 'guestChosen')}
-          className={cnames(styles.seatArea, scoreClass, hasFocus, focusState)}
+          className={cnames(styles.guest, 'glyphicon', 'glyphicon-user', scoreClass, hasFocus, focusState)}
           >{''}
         </div>
       </DraggableGuest>

@@ -113,18 +113,23 @@
 
 
 .tableCollection{
-  font-size:60%;
+  font-size:80%;
   text-align:center;
 }
+
+$tableBackground: #777;
+$tableColor: #DDD;
 
 .tableArea label{
   white-space:nowrap;
   margin-bottom: 0;
-  color: #777;
+  color: $tableColor;
   text-align:center;
   padding:auto;
-  display:inline-block;
+  display:block;
+  background-color: $tableBackground;
 }
+
 .edge-3 .tableArea .tableName,
 .edge-3 .tableArea .tableName{
   text-align:left;
@@ -140,12 +145,15 @@
 
 .tableArea{
   display: inline-block;
-  margin: .5em .5em;
+  margin: .25em;
+  // background-color: #EFEFEF;
   text-align: center;
+  border-left: .5em solid $tableBackground;
 }
 
 .seatMatrix{
   text-align:left;
+
 }
 
 .matrixRow{
@@ -153,12 +161,17 @@
 }
 
 .seatAreaWrapper{
-  font-size:80%;
+  font-size:90%;
   line-height:0;
   display:inline-block;
-  padding: .5em;
+  padding:.25em;
+  // padding: .5em;
   text-align:center;
 }
+
+$neutral: #778;
+$angry: #E66;
+$happy: #3B3;
 
 .seatArea{
   display:inline-block;
@@ -170,31 +183,68 @@
   cursor: pointer;
 
   &.neutral{
-    background-color:#778;
+    background-color:$neutral;
   }
 
   &.angry{
-    background-color:#E66;
+    background-color:$angry;
   }
 
   &.happy{
-    background-color:#3B3;
+    background-color:$happy;
   }
 
   &.emptySeat{
     border: .25em dashed #777;
   }
-
 }
+
+
+.guest{
+  display:inline-block;
+
+  overflow:hidden;
+  border: .1em solid transparent;
+  cursor: pointer;
+  padding: .1em;
+
+  &.neutral{
+    color: $neutral;
+
+  }
+
+  &.angry{
+    color: $angry;
+  }
+
+  &.happy{
+    color: $happy;
+  }
+
+  &.emptySeat{
+    border: .25em dashed #777;
+  }
+}
+
 
 @mixin focus-halo($r, $g, $b){
-  box-shadow: 0 0 1.2em .25em rgba($r, $g, $b, 1);
-  border: .1em solid rgba($r, $g, $b, .5);
+  box-shadow: 0 0 .55em .1em rgba($r, $g, $b, 1);
+  border-color: rgba($r, $g, $b, 1);
 }
 
-.seatArea:not(.emptySeat):not(.hasFocus):hover{
+$innerBlur: .5em;
+$innerWidth: .25em;
+@mixin inner-halo($color){
+   -moz-box-shadow:    inset 0 0 $innerBlur $innerWidth $color;
+   -webkit-box-shadow: inset 0 0 $innerBlur $innerWidth $color;
+   box-shadow:         inset 0 0 $innerBlur $innerWidth $color;
+   border-color: $color;
+}
+
+.seatArea:not(.emptySeat):not(.hasFocus):hover,
+.guest:not(.emptySeat):not(.hasFocus):hover {
   box-shadow: 0 0 1em rgba(203, 203, 203, 1);
-  border: .1em solid rgba(203, 203, 203, 1);
+  border-color: rgba(203, 203, 203, 1);
   background-color: rgba(203,203,203,1);
 }
 
