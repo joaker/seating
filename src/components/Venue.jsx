@@ -17,7 +17,7 @@ import * as scorer from '../app/scorer';
 import DifficultyChooser from './pure/DifficultyChooser';
 import StartHint from './pure/StartHint';
 
-import Layout from './pure/VenueTableCollection';
+import Layout from './pure/Venue/Layout';
 import Expander from './pure/Expander';
 import Progress from './pure/Progress';
 import optimizer from '../app/optimization/optimizer';

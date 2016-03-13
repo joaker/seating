@@ -1,10 +1,12 @@
-import styles from '../../style/dragdrop.scss';
+import styles from '../../../style/dragdrop.scss';
 
 import React,{PropTypes} from 'react';
 import { connect } from 'react-redux';
 
 import cnames from 'classnames/dedupe';
 import { DragSource, DropTarget } from 'react-dnd';
+
+import purify from '../Pure'
 
 const DraggableTypes = {
   guest: 'guest',
@@ -108,4 +110,4 @@ const DroppableSeat = DropTarget(DraggableTypes.guest, seatTarget, collectTarget
   UnconnectedSeatContainer
 );
 
-export default DroppableSeat;
+export default purify(DroppableSeat);

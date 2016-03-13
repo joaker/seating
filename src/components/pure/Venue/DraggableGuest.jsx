@@ -3,6 +3,8 @@ import React,{PropTypes} from 'react';
 import cnames from 'classnames/dedupe';
 import { DragSource, DropTarget } from 'react-dnd';
 
+import purify from '../Pure';
+
 const DraggableTypes = {
   guest: 'guest',
 };
@@ -51,4 +53,4 @@ GuestContainer.propTypes = {
 
 const DraggableGuest = DragSource(DraggableTypes.guest, guestSource, collectSource)(GuestContainer);
 
-export default DraggableGuest;
+export default purify(DraggableGuest);
