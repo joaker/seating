@@ -21,9 +21,11 @@ $opacity: 0.25;
 }
 
 .happy{
-  @include accenta($happy, $opacity);
+  // @include accenta($happy, $opacity);
+  @include burst($happy);
 }
 
 .angry{
-  @include accenta($angry, $opacity);
+  // @include accenta($angry, $opacity);
+  @include burst($angry);
 }

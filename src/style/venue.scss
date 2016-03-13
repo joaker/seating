@@ -261,20 +261,23 @@ $selectOpacity: 1;
   }
 }
 
-
+$focusOpacity: 0.5;
 .hasFocus{
   // @include halo(81, 203, 238);
-  @include burst($select);
+  //@include burst($select);
+  @include accenta($select, $focusOpacity);
 }
 
 .hasHateFocus{
   // @include halo(238, 81, 81);
-  @include burst($angry);
+  // @include burst($angry);
+  @include accenta($angry, $focusOpacity);
 }
 
 .hasLikeFocus{
   // @include halo(81, 238, 81);
-  @include burst($happy);
+  // @include burst($happy);
+  @include accenta($happy, $focusOpacity);
 }
 
 .venueMenu {
