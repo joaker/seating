@@ -74,7 +74,7 @@ const Breadcrumbs = (props) => {
 }
 
 const AppLayout = (props, context) => (
-  <div className="AppComponent row" >
+  <div className="AppComponent" >
     <div className="sidebarLayout hidden-xs col-sm-3 col-md-2">
       <Nav>{props.menu}</Nav>
     </div>
