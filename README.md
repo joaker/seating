@@ -1,3 +1,8 @@
+## Demo
+Check out the demo [here](https://immense-lake-53069.herokuapp.com)
+
+Note: the demo is not yet mobile-friendly
+
 ## Synopsis
 
 Seat guests for an event according to their relationships
