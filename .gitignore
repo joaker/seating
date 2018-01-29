@@ -2,7 +2,7 @@ node_modules
 npm-debug.log
 .DS_Store
 dist/bundle*
-dist/config*
+dist/config.js
 package-lock.json
 nested-dispatch.js
 test.js

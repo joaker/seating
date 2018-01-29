@@ -6,7 +6,7 @@
   "scripts": {
     "start": "babel-node index.js",
     "debug": "babel-node index-debug.js",
-    "pack": "webpack",
+    "pack": "./node_modules/.bin/webpack",
     "webpack": "babel-snode server/server.js",
     "postinstall": "webpack -p --config ./webpack.config.js",
     "test": "test"
