@@ -8,4 +8,5 @@ var server = require('http').createServer(app);
 // Server the /dist directory
 app.use(express.static('dist'));
 
+console.log('listening on port ' + port);
 server.listen(port);
