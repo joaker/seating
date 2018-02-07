@@ -17,19 +17,11 @@ import VenueMenu from './components/menus/VenueMenu';
 const routes = (
     <Route path="/" component={App} title="Home">
       <IndexRoute to="/" component={Main}/>
-      <Route path="Landing" title="Seatable" components={{fullscreen:Main}}>
-      </Route>
-      <Route path="Guests" title="Guests">
-        <IndexRoute to="/Guests" component={Guests}/>
-        <Route path=":id" component={Guest} title="Guest"></Route>
-      </Route>
-      <Route path="Table" title="Table">
-        <IndexRoute to="/Table" component={Table}></IndexRoute>
-        <Route path=":id" title="Seat Guest" component={SeatGuest}></Route>
-      </Route>
+      <Route path="Landing" title="Seatable" components={{fullscreen:Main}}></Route>
       <Route path="Venue" title="Venue" >
         <IndexRoute to="/Venue" components={{children:Venue, menu:VenueMenu}}></IndexRoute>
         <Route path="GenerateGuests" title="Generate Guests" component={GenerateGuests}></Route>
+        <Route path="Seating" title="Venue Seating" components={{children:Venue, menu:VenueMenu}}></Route>
       </Route>
     </Route>
 );
