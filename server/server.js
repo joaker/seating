@@ -4,8 +4,8 @@ import wds from '../webpack-dev-server'
 
 const server = {
   start: () => {
-    // Start our webpack dev server...
-    const io = wds.listen(port);
+    console.log('listening on port ', port);
+    return wds.listen(port);
   }
 }
 
