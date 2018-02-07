@@ -10,7 +10,7 @@ const Nav = ({children}) => (
     <div className={cnames('ScrollingSidebar', cnames.navContent)}>
       <ul className={cnames(styles['links'],'nav', 'nav-pills', 'nav-stacked')} >
         <li key={'main'}><Link to={`/`}>Main</Link></li>
-        <li key={'venue'}><Link to={`/Venue`}>Generate</Link></li>
+        <li key={'venue'}><Link to={`/Venue/GenerateGuests`}>Generate</Link></li>
       </ul>
       {children}
     </div>

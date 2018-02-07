@@ -3,12 +3,7 @@ import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 
 //Routable Components
 import App from './components/App';
-//import Landing from './components/Landing';
 import Main from './components/Main';
-import Guests from './components/Guests';
-import Guest from './components/Guest';
-import Table from './components/Table';
-import SeatGuest from './components/SeatGuest';
 import Venue from './components/Venue';
 import GenerateGuests from './components/GenerateGuests';
 import Children from './components/pure/Children';

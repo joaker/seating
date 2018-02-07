@@ -1,4 +1,3 @@
-import ioserver from './server/ioserver';
 import port from './src/app/port';
 import fs from 'fs';
 
