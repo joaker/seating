@@ -142,9 +142,6 @@ const UnconnectedVenueMenu = (props) => {
       <div className={styles.venueMenuItemsContainer}>
         <ul className={styles.venueMenuItems}>
           <li>
-            <Link to='/Venue/GenerateGuests' className="btn btn-block btn-info">Create Venue</Link>
-          </li>
-          <li>
             <button
               className={cnames('btn btn-block btn-default', (noGuests ? '' : 'btn-primary'))}
               onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score, props.seatsPerTable, props.mode)}
