@@ -16,7 +16,7 @@
     "url": "seating.git"
   },
   "engines": {
-    "node": "0.12.7"
+    "node": "8.9.4"
   },
   "keywords": [
     "react",
