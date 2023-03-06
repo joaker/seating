@@ -2,7 +2,6 @@ import range from '../util/range';
 
 const defaultLikeCount = 3;
 const defaultHateCount = 3;
-const defaultGuestCount = 100;
 
 const getRelationshipSize = (max) => Math.floor(Math.random() * max+1);
 const relate = (count) => {
@@ -13,12 +12,9 @@ const relate = (count) => {
 
 class GuestFactory {
   constructor(guestCount, maxHatred = defaultHateCount, maxLiking = defaultLikeCount){
-    // const hateCount = defaultHateCount, likeCount = defaultLikeCount;
     this.guestCount = guestCount;
     this.grumpyFactor = maxHatred;
     this.friendlyFactor = maxLiking;
-    // this.hates = relate(hateCount);
-    // this.likes = relate(likeCount);
   }
 
   randomGuestID(id){
@@ -55,8 +51,6 @@ class GuestFactory {
   create(id){
     const hates = this.createRelationships(id, this.grumpyFactor);
     const likes = this.createRelationships(id, this.friendlyFactor);
-    // const hates = relate(this.grumpyFactor).map(() => this.randomGuestID(id));//this.likes.map(() => this.randomGuestID(id));
-    // const likes = relate(this.friendlyFactor).map(() => this.randomGuestID(id));//this.likes.map(() => this.randomGuestID(id));
 
     const guest = {
       id: id,
