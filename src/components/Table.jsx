@@ -1,15 +1,9 @@
 import styles from '../style/table.css';
-import guestStyles from '../style/guests.css';
-
 import cnames from 'classnames/dedupe';
 import {List, Map} from 'immutable';
 import React from 'react';
-import {Link} from 'react-router';
 import { connect } from 'react-redux';
-
 import { clearTable } from '../app/action_creators';
-import range from '../util/range';
-
 import TableRow from './pure/TableRow';
 
 const maxColumns = 12;

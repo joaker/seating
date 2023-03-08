@@ -1,7 +1,7 @@
-import React,{PropTypes} from 'react';
+import React from 'react';
 
 import cnames from 'classnames/dedupe';
-import { DragSource, DropTarget } from 'react-dnd';
+import { DragSource } from 'react-dnd';
 
 import purify from '../Pure';
 
@@ -33,9 +33,6 @@ class GuestContainer extends React.Component {
   componentDidMount() {
     const { connectDragPreview } = this.props;
 
-    // const img = new Image();
-    // img.src = 'http://mysite.com/image.jpg';
-    // img.onload = () => connectDragPreview(img);
     connectDragPreview(guestIcon);
   }
   render() {
@@ -43,7 +40,7 @@ class GuestContainer extends React.Component {
     return connectDragSource(
       <div style={{
         opacity: isDragging ? 0.5 : 1,
-        color: isDragging ? 'blue': '',
+        color: isDragging ? 'blue' : '',
         cursor: 'move'
       }}>
         {this.props.children}
@@ -51,15 +48,6 @@ class GuestContainer extends React.Component {
     );
   }
 }
-
-//name: PropTypes.string.isRequired,
-GuestContainer.propTypes = {
-
-  seatNumber: PropTypes.number.isRequired,
-  connectDragPreview: PropTypes.func.isRequired,
-  connectDragSource: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-};
 
 
 const DraggableGuest = DragSource(DraggableTypes.guest, guestSource, collectSource)(GuestContainer);

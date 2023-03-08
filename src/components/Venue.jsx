@@ -1,26 +1,19 @@
 import styles from '../style/venue.scss';
-require('rc-slider/assets/index.css');
 
 import cnames from 'classnames/dedupe';
 import {List, Map} from 'immutable';
 import React from 'react';
-import {Link} from 'react-router';
 import { connect } from 'react-redux';
 import {Loader} from 'react-loaders';
-var RCSlider = require('rc-slider');
 
 import {populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature} from '../app/action_creators';
-import range from '../util/range';
 import * as params from '../data/venue.js';
-import anneal from '../app/optimization/annealing';
 import * as scorer from '../app/scorer';
-import DifficultyChooser from './pure/DifficultyChooser';
-import StartHint from './pure/StartHint';
 
 import Layout from './pure/Venue/Layout';
-import Expander from './pure/Expander';
 import Progress from './pure/Progress';
 import optimizer from '../app/optimization/optimizer';
+import createInjectNavigate from './createInjectNavigate';
 
 
 const layoutDimensions = {rowCount: params.rowCount, columnCount: params.tablesPerRow};
@@ -68,7 +61,7 @@ class UnconnectedVenue extends React.Component {
 
     if(numberOfGuests) return;
 
-    this.router.push('/Venue/GenerateGuests');
+    this.props.navigate('/generate-guests');
 
   }
 
@@ -153,9 +146,9 @@ class UnconnectedVenue extends React.Component {
   }
 }
 
-UnconnectedVenue.contextTypes = {
-  router: React.PropTypes.object.isRequired
-}
+// UnconnectedVenue.contextTypes = {
+//   router: React.PropTypes.object.isRequired
+// }
 
 const calculateVenueScore = (guests, tableSize) => {
   let score = 0;
@@ -206,8 +199,10 @@ const mapDispatchToProps = (dispatch) => ({
   setTemperature: (temperature) => dispatch(setTemperature(temperature)),
 });
 
-const Venue = connect(
+createInjectNavigate()
+
+const Venue = createInjectNavigate(connect(
   mapStateToProps,
   mapDispatchToProps
-)(UnconnectedVenue)
+)(UnconnectedVenue))
 export default Venue;

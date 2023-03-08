@@ -1,10 +1,9 @@
 import styles from '../../../style/dragdrop.scss';
 
-import React,{PropTypes} from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 
 import cnames from 'classnames/dedupe';
-import { DragSource, DropTarget } from 'react-dnd';
+import { DropTarget } from 'react-dnd';
 
 import purify from '../Pure'
 
@@ -12,24 +11,16 @@ const DraggableTypes = {
   guest: 'guest',
 };
 
-
-// This should trigger a swap action;
-const swapGuest = () => console.log('guest was dropped...')
-
 const seatTarget = {
-  canDrop: (props) => {
+  canDrop: () => {
     const result = true && true;
-    // console.log('has result?');
-    // console.log(result);
     return result;
   },
-  //drop: (props) => props.swapGuest(props.seatNumber),
   drop: (props, monitor) => {
     const item = monitor.getItem();
     const droppedSeatNumber = (item || {}).seatNumber;
     props.swapGuests(droppedSeatNumber, props.seatNumber );
   }
-  //drop: (props) => swapGuest(),
 };
 
 
@@ -79,31 +70,6 @@ class UnconnectedSeatContainer extends React.Component {
     );
   }
 }
-
-//name: PropTypes.string.isRequired,
-UnconnectedSeatContainer.propTypes = {
-
-  guestID: PropTypes.number,
-  seatNumber: PropTypes.number.isRequired,
-  //guestList: PropTypes.object.isRequired,
-
-  connectDropTarget: PropTypes.func.isRequired,
-  isOver: PropTypes.bool.isRequired,
-  canDrop: PropTypes.bool.isRequired,
-  className: PropTypes.string.isRequired,
-  sourceGuestID: PropTypes.number.isRequired,
-  sourceSeatNumber: PropTypes.number.isRequired,
-};
-
-// const mapStateToProps = (state) => {
-//   return {
-//     guestList: state.get('venueGuestList'),
-//   };
-// }
-// const SeatContainer = connect(
-//   mapStateToProps
-// )(UnconnectedSeatContainer);
-
 
 const DroppableSeat = DropTarget(DraggableTypes.guest, seatTarget, collectTarget)(
   // SeatContainer

@@ -5,12 +5,12 @@ export const contentColumns = 10;
 export const tablesPerRow = 10;
 export const guestsPerTable = 16;
 //export const tableCount = 100;
+export const tableCount = 16;
 export const rowCount = tableCount / tablesPerRow + ((tableCount % tablesPerRow) ? 1 : 0);
 
 export const tableColumnCount = 3;
 export const tableRowCount = 3;
 
-export const tableCount = 16;
 
 export const seatsPerTable = 16;//tableColumnCount * tableRowCount;
 export const tableSize = seatsPerTable;

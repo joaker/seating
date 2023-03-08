@@ -1,29 +1,13 @@
 import styles from '../style/guests.css';
 import cnames from 'classnames/dedupe';
-import {List, Map} from 'immutable';
+import { Map } from 'immutable';
 import React from 'react';
-import {Link} from 'react-router';
 import { connect } from 'react-redux';
-import {hashHistory} from 'react-router';
 import { seatGuest } from '../app/action_creators';
-import {InputGroup, GroupButton, GroupInput} from './pure/GroupButton';
-
-
-// class Component extends React.Component {
-//   constructor(props, ctx) {
-//     super(props, ctx)
-//     context = ctx
-//   }
-//   render() { return null }
-// }
-//
-// Component.contextTypes = {
-//   router: React.PropTypes.object.isRequired
-// }
 
 class SeatGuest extends React.Component {
   constructor(props, ctx) {
-    super(props, ctx);
+    this.props = props;
     this.context = ctx;
     //this.state = {count: props.initialCount};
 
@@ -64,9 +48,9 @@ class SeatGuest extends React.Component {
   }
 }
 
-SeatGuest.contextTypes = {
-  router: React.PropTypes.object.isRequired
-}
+// SeatGuest.contextTypes = {
+//   router: React.PropTypes.object.isRequired
+// }
 
 const getSeated = (state) => {
   const seats = state.get('seats', Map()).toJS();

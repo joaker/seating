@@ -3,7 +3,7 @@ import styles from '../../style/venue.scss';
 import cnames from 'classnames/dedupe';
 import {List, Map} from 'immutable';
 import React from 'react';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import {Loader} from 'react-loaders';
 // var RCSlider = require('rc-slider');
@@ -112,7 +112,6 @@ const hasGuests = (props) => {
 }
 
 const optimizeTip = hasGuests ? 'Search for a better arrangement' : 'Populate the venue to allow searching';
-const populateTip = hasGuests ? 'Clear and make new guests with new seat assignments' : 'Randomly fill the venue with new guests';
 
 const UnconnectedVenueMenu = (props) => {
 

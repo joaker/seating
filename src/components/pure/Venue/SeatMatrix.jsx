@@ -4,23 +4,19 @@ import dndstyles from '../../../style/dragdrop.scss';
 import React from 'react';
 import cnames from 'classnames/dedupe';
 import { connect } from 'react-redux';
-import {List, Map} from 'immutable';
-import sequal from 'shallowequal';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import { List, Map } from 'immutable';
 
-import {focusGuest, clearFocusedGuest, scoreVenue, swapGuests as swapGuestsAction} from '../../../app/action_creators';
+import { focusGuest, scoreVenue, swapGuests as swapGuestsAction } from '../../../app/action_creators';
 import * as params from '../../../data/venue.js';
 import * as scorer from '../../../app/scorer';
 
 import range from '../../../util/range';
-import purify from '../Pure';
-import {EmptySeat, Seat} from './Seat'
+import { Seat } from './Seat'
 
-const getRowRange = (rowWidth, rowIndex = 0, startOffset = 0, max = Number.MAX_VALUE) =>{
+const getRowRange = (rowWidth, rowIndex = 0, startOffset = 0, max = Number.MAX_VALUE) => {
   const rowStart = startOffset + rowIndex * rowWidth;
   const rowEnd = Math.min(rowStart + rowWidth, max);
-  if(rowStart >= rowEnd) return [];
+  if (rowStart >= rowEnd) return [];
   return range(rowEnd, rowStart);
 }
 
@@ -39,13 +35,13 @@ const hasLike = (source, target) => hasRelation(source, target, 'likes');
 // Get a style for the guest's reaction to the focused guest
 const getFocusReaction = (guest, focusedGuest) => {
   const noReaction = '';
-  if(!isGuest(focusedGuest)) return noReaction;
+  if (!isGuest(focusedGuest)) return noReaction;
 
-  if(hasHate(guest, focusedGuest)){
+  if (hasHate(guest, focusedGuest)) {
     return dndstyles.angry;
   }
 
-  if(hasLike(guest, focusedGuest)){
+  if (hasLike(guest, focusedGuest)) {
     return dndstyles.happy;
   }
 
@@ -54,30 +50,30 @@ const getFocusReaction = (guest, focusedGuest) => {
 
 // Get a style for the focused guest's reaction to the guest
 const getFocusState = (guest, focusedGuest) => {
-  if(!isGuest(focusedGuest)) return '';
+  if (!isGuest(focusedGuest)) return '';
 
-  if(guest.id == focusedGuest.id) return (styles.hasSelectFocus || 'hasSelectFocus');
-  if(hasHate(focusedGuest, guest)) return (styles.hasHateFocus || 'hasHateFocus');
-  if(hasLike(focusedGuest, guest)) return (styles.hasLikeFocus || 'hasLikeFocus');
+  if (guest.id == focusedGuest.id) return (styles.hasSelectFocus || 'hasSelectFocus');
+  if (hasHate(focusedGuest, guest)) return (styles.hasHateFocus || 'hasHateFocus');
+  if (hasLike(focusedGuest, guest)) return (styles.hasLikeFocus || 'hasLikeFocus');
   //if(focusedGuest.likes && focusedGuest.likes.includes(guest.id)) return (styles.hasLikeFocus || 'hasLikeFocus');
 
   return '';
 }
 
 const UnconnectedSeatMatrix = (props) => {
-  const {number, seatsPerTable, guestCount, start, end, edge} = props;
-  const {seatData = {}, focusGuest, swapGuests, clearFocusedGuest} = props;
+  const { number, seatsPerTable, guestCount, start, end, edge } = props;
+  const { seatData = {}, focusGuest, swapGuests, clearFocusedGuest } = props;
   const rows = range(edge).map(rowIndex => {
     return (
       <div key={'row' + rowIndex} className={cnames('matrixRow', styles.matrixRow)}>
         {getRowRange(edge, rowIndex, start, end).map(seatNumber => {
           const data = seatData[seatNumber] || {};
-          const {guest, score = {}, focusState, focusReaction} = data;
-          const {hate: hateScore, like: likeScore} = score;
+          const { guest, score = {}, focusState, focusReaction } = data;
+          const { hate: hateScore, like: likeScore } = score;
           const guestID = guest && guest.id;
-          const info = { seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, focusGuest, swapGuests, clearFocusedGuest};
+          const info = { seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, focusGuest, swapGuests, clearFocusedGuest };
           return (
-            <Seat  key={seatNumber} {...info} hasGuest={!!guest}/>
+            <Seat key={seatNumber} {...info} hasGuest={!!guest} />
           );
         })}
       </div>
@@ -87,7 +83,7 @@ const UnconnectedSeatMatrix = (props) => {
   return (<div className={cnames(styles.seatMatrix)} >{rows}</div>);
 }
 
-const mapStateForMatrix = (state = Map(), {start, end, }) => {
+const mapStateForMatrix = (state = Map(), { start, end, }) => {
 
   const focusedGuest = state.get('focusedGuest', Map()).toJS();
   const mode = state.get('optimizationMode', params.defaultMode);

@@ -1,13 +1,14 @@
-import {createStore,  applyMiddleware} from 'redux';
-import reducer, {defaultState} from '../app/reducer';
-import messenger from '../action_messenger';
-import {action_message} from '../app/messages';
+import { configureStore } from '@reduxjs/toolkit';
+import reducer, {defaultLocalState as preloadedState} from '../app/reducer';
 
 // Create a store that messages
-export const store = createStore(
+export const store = configureStore({
   reducer,
-  defaultState
-);
+  preloadedState,
+});
 
+if(typeof window !== 'undefined') {
+  window.__REDUX_STORE__ = store;
+}
 
 export default store;
