@@ -14,8 +14,6 @@ const defaultSeatCount = 14;
 class Table extends React.Component {
   constructor(props) {
     super(props);
-    //this.state = {count: props.initialCount};
-
     // Bind instance methods that need the "this" context
     this.handleChange = this.handleChange.bind(this);
   }
@@ -32,7 +30,7 @@ class Table extends React.Component {
       float: 'right',
     };
     return (
-      <div className={"Table", 'container-fluid'}>
+      <div className={cnames("Table", 'container-fluid')}>
           <div className={cnames('row')}>
             <div className={cnames('col-xs-12')}>
               <h2 style={{display: 'block'}}>
