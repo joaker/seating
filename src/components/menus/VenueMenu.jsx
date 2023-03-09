@@ -1,4 +1,4 @@
-import styles from '../../style/venue.scss';
+import styles from '../../style/venue.module.scss';
 
 import cnames from 'classnames/dedupe';
 import { List } from 'immutable';
@@ -88,6 +88,8 @@ const hasGuests = (props) => {
 const optimizeTip = hasGuests ? 'Search for a better arrangement' : 'Populate the venue to allow searching';
 
 const UnconnectedVenueMenu = (props) => {
+
+  console.log({styles})
 
   const { mode = params.defaultMode, focusedGuest, clearFocus, temperature } = props;
   const hasGuests = props.guests && props.guests.length;

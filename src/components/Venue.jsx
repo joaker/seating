@@ -1,4 +1,4 @@
-import styles from '../style/venue.scss';
+import styles from '../style/venue.module.scss';
 
 import cnames from 'classnames/dedupe';
 import { List, Map } from 'immutable';

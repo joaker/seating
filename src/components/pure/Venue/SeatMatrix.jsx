@@ -1,4 +1,4 @@
-import styles from '../../../style/venue.scss';
+import styles from '../../../style/venue.module.scss';
 import dndstyles from '../../../style/dragdrop.scss';
 
 import React from 'react';
