@@ -45,14 +45,6 @@ for (let i = params.minSize; i <= params.maxSize; i += params.interval) {
   marks[value] = message;
 }
 
-
-const calculateVenueScore = (guests, tableSize) => {
-  let score = 0;
-  for (let i = 0; i < guests.length; i += tableSize) {
-    score += scorer.scoreTable(guests.slice(i, i + tableSize));
-  }
-  return score;
-}
 const opimizationDispatchRelay = (dispatch) => ({
   start: () => dispatch(startOptimization()),
   update: (list, ratio) => dispatch(setVenueGuests(list, ratio)),

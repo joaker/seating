@@ -78,12 +78,10 @@ export const step = (guestList = {}, tableSize, temperature, maxTemperature, mod
   const table2Guest = table2.guests[guest2TableIndex];
 
   if(table1Guest.id != firstGuest.id){
-    var broken;
-    broken.willBreak;
+    throw new Error('An anneal step error has occurred');
   }
   if(table2Guest.id != secondGuest.id){
-    var broken;
-    broken.willBreak;
+    throw new Error('An anneal step error has occurred');
   }
 
   table1.guests.splice(guest1TableIndex, 1, secondGuest);

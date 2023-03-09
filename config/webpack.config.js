@@ -183,6 +183,14 @@ module.exports = function (webpackEnv) {
         }
       );
     }
+
+    loaders.push({
+      loader: require.resolve('sass-loader'),
+      options: {
+        sourceMap: true,
+      }
+    });
+
     return loaders;
   };
 
