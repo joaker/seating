@@ -1,4 +1,4 @@
-import styles from '../../../style/dragdrop.scss';
+import styles from '../../../style/dragdrop.module.scss';
 
 import React from 'react';
 

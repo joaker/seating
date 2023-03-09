@@ -1,5 +1,5 @@
 import styles from '../../../style/venue.module.scss';
-import dndstyles from '../../../style/dragdrop.scss';
+import dndstyles from '../../../style/dragdrop.module.scss';
 
 import React from 'react';
 import cnames from 'classnames/dedupe';

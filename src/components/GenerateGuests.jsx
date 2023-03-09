@@ -1,4 +1,4 @@
-import styles from '../style/generateGuests.scss';
+import styles from '../style/generateGuests.module.scss';
 
 import cnames from 'classnames/dedupe';
 import { Map } from 'immutable';
@@ -52,7 +52,7 @@ const UnconnectedGenerateGuests = (props) => {
   const changer = handlerFactory(props.setDraftProperty);
 
   return (
-    <div>
+    <div className={cnames(styles.panel)}>
       <h2 className={'text-muted'}>Generate Venue Guests</h2>
       <div className={cnames('container-fluid', styles.config)}>
         <Row>
