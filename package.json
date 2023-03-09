@@ -115,6 +115,8 @@
     "react-bootstrap":"2.7.2",
     "redux":"4.2.1",
     "history":"5.3.0",
+    "bootstrap":"5.2.3",
+    "react-bootstrap":"2.7.2",
     "sass":"1.58.3"
   },
   "jest": {

@@ -10,6 +10,7 @@ import {
 import routes from './routes';
 import store from './config/store';
 import { createHashHistory } from 'history';
+import 'bootstrap/dist/css/bootstrap.min.css';
 require('./style/global.css');
 
 const history = createHashHistory();
