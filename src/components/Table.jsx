@@ -1,15 +1,9 @@
 import styles from '../style/table.css';
-import guestStyles from '../style/guests.css';
-
 import cnames from 'classnames/dedupe';
 import {List, Map} from 'immutable';
 import React from 'react';
-import {Link} from 'react-router';
 import { connect } from 'react-redux';
-
 import { clearTable } from '../app/action_creators';
-import range from '../util/range';
-
 import TableRow from './pure/TableRow';
 
 const maxColumns = 12;
@@ -20,8 +14,6 @@ const defaultSeatCount = 14;
 class Table extends React.Component {
   constructor(props) {
     super(props);
-    //this.state = {count: props.initialCount};
-
     // Bind instance methods that need the "this" context
     this.handleChange = this.handleChange.bind(this);
   }
@@ -38,7 +30,7 @@ class Table extends React.Component {
       float: 'right',
     };
     return (
-      <div className={"Table", 'container-fluid'}>
+      <div className={cnames("Table", 'container-fluid')}>
           <div className={cnames('row')}>
             <div className={cnames('col-xs-12')}>
               <h2 style={{display: 'block'}}>

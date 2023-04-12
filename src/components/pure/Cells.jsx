@@ -1,15 +1,9 @@
 import styles from '../../style/table.css';
-import guestStyles from '../../style/guests.css';
 
 import cnames from 'classnames/dedupe';
 import {List, Map} from 'immutable';
 import React from 'react';
-import {Link} from 'react-router';
 import { connect } from 'react-redux';
-
-import { seatGuest } from '../../app/action_creators';
-import range from '../../util/range';
-
 
 export const BufferCell = () => (<div className={cnames('bufferCell col-md-1')}></div>);
 

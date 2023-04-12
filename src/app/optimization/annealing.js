@@ -52,7 +52,7 @@ export const step = (guestList = {}, tableSize, temperature, maxTemperature, mod
 
   const guestCount = guests.length;
 
-  if(!guestCount) return noChange;
+  if(!guestCount) return guestList;
 
   const guest1Index = pickGuest(guestCount);
   const guest2Index = pickGuest(guestCount);
@@ -78,12 +78,10 @@ export const step = (guestList = {}, tableSize, temperature, maxTemperature, mod
   const table2Guest = table2.guests[guest2TableIndex];
 
   if(table1Guest.id != firstGuest.id){
-    var broken;
-    broken.willBreak;
+    throw new Error('An anneal step error has occurred');
   }
   if(table2Guest.id != secondGuest.id){
-    var broken;
-    broken.willBreak;
+    throw new Error('An anneal step error has occurred');
   }
 
   table1.guests.splice(guest1TableIndex, 1, secondGuest);
@@ -107,9 +105,6 @@ export const step = (guestList = {}, tableSize, temperature, maxTemperature, mod
   // Swap the guests
   guests.splice(guest1Index, 1, secondGuest);
   guests.splice(guest2Index, 1, firstGuest);
-
-  // guestList.score += change;
-  // guestList.guests = guests;
 
   return {
     guests,

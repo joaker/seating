@@ -1,6 +1,10 @@
 $muted: #777;
 $very-muted: #AAA;
 
+.panel {
+  padding-left: 10em;
+}
+
 .generateLabel {
   color:$muted;
   /*text-align:right;*/

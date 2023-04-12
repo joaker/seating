@@ -1,6 +1,4 @@
-//require('../style/less/grayscale.less');
-//require('../style/sass/grayscale.scss');
-import styles from '../style/sass/grayscale.scss';
+import styles from '../style/sass/grayscale.module.scss';
 import cnames from 'classnames/dedupe';
 
 import React from 'react';

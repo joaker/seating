@@ -1,21 +1,24 @@
 // Inject the global style references
-require('./style/global.css');
-
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route, IndexRoute, hashHistory} from 'react-router';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 import routes from './routes';
 import store from './config/store';
+import { createHashHistory } from 'history';
+import 'bootstrap/dist/css/bootstrap.min.css';
+require('./style/global.css');
 
+const history = createHashHistory();
 
-
-
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter(routes);
+root.render(
   <Provider store={store}>
-    <Router  history={hashHistory} routes={routes}/>
+    <RouterProvider history={history} router={router} />
   </Provider>,
-  document.getElementById('app')
 );
