@@ -1,4 +1,4 @@
-const list = [
+const list: string[] = [
 'Ashley',
 'Wilcox',
 'Kirk',
@@ -998,22 +998,21 @@ const list = [
 'Thornton',
 'Lynn',
 'House',
-'Sanders'
-]
-
-
+'Sanders',
+];
 
 const length = list.length;
 
-const toOrdinal = (number) => Math.floor(number/length);
+const toOrdinal = (number: number): number => Math.floor(number / length);
+
 const names = {
-  get: (number) => {
+  get: (number: number): string => {
     const index = number % length;
     const first = list[index];
-    const suffix = number < length ? '' : ('('+toOrdinal(number)+')');
+    const suffix = number < length ? '' : ('(' + toOrdinal(number) + ')');
     const name = first + suffix;
     return name;
-  }
-}
+  },
+};
 
 export default names;

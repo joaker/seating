@@ -5,8 +5,8 @@ import { List, Map } from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature } from '../app/action_creators';
-import * as params from '../data/venue.js';
+import { populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature } from '../app/action-creators';
+import * as params from '../data/venue';
 
 import Layout from './pure/Venue/Layout';
 import Progress from './pure/Progress';

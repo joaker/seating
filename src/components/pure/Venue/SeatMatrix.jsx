@@ -6,8 +6,8 @@ import cnames from 'classnames/dedupe';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 
-import { focusGuest, scoreVenue, swapGuests as swapGuestsAction } from '../../../app/action_creators';
-import * as params from '../../../data/venue.js';
+import { focusGuest, scoreVenue, swapGuests as swapGuestsAction } from '../../../app/action-creators';
+import * as params from '../../../data/venue';
 import * as scorer from '../../../app/scorer';
 
 import range from '../../../util/range';

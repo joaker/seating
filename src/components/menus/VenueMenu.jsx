@@ -4,8 +4,8 @@ import cnames from 'classnames/dedupe';
 import { List } from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
-import * as params from '../../data/venue.js';
-import { setMode, populateVenue, clearFocusedGuest, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature } from '../../app/action_creators';
+import * as params from '../../data/venue';
+import { setMode, populateVenue, clearFocusedGuest, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature } from '../../app/action-creators';
 import { optimizeSeating } from '../../app/optimization/seating-adapter';
 import names from '../../data/names'
 

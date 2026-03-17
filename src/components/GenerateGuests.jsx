@@ -5,9 +5,9 @@ import { Map } from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { setDraftProperty, commitDraft, populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature } from '../app/action_creators';
+import { setDraftProperty, commitDraft, populateVenue, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature } from '../app/action-creators';
 import range from '../util/range';
-import * as params from '../data/venue.js';
+import * as params from '../data/venue';
 import createInjectNavigate from './createInjectNavigate';
 
 const Row = ({ children }) => (<div className={cnames('row', styles.row)}>{children}</div>);
