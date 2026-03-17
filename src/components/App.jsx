@@ -85,10 +85,10 @@ const AppLayout = (props, context) => (
     <div className="col-10">
       <main>
         <div className="row">
-          <div className="col-xs-8">
+          <div className="col-8">
             <Breadcrumbs {...props} {...context} />
           </div>
-          <div className="col-xs-4" style={{ textAlign: 'right' }}>
+          <div className="col-4" style={{ textAlign: 'right' }}>
             <h2 className={styles.brandName} style={{}}><strong>Seatable</strong></h2>
           </div>
         </div>

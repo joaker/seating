@@ -102,7 +102,8 @@ export const startOptimization = (state: ImmutableMap): ImmutableMap => {
 
 export const endOptimization = (state: ImmutableMap): ImmutableMap => {
   const now = new Date();
-  const lastOptimization: Date = state.get('optimizing', now);
+  const stored = state.get('optimizing');
+  const lastOptimization: Date = stored instanceof Date ? stored : now;
 
   const ms = now.getTime() - lastOptimization.getTime();
   const s = ms / 1000;

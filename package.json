@@ -1,7 +1,9 @@
 {
   "name": "seating",
   "version": "2.0.0",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "description": "An application for organizing seating by social arrangements",
   "main": "index.js",
   "scripts": {
@@ -59,7 +61,7 @@
     "babel-plugin-named-asset-import": "^0.3.8",
     "babel-preset-react-app": "^10.0.1",
     "bfj": "^7.0.2",
-    "bootstrap": "^3.0.0",
+    "bootstrap": "^5.3.0",
     "browserslist": "^4.18.1",
     "camelcase": "^6.2.1",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
@@ -72,6 +74,7 @@
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^3.1.1",
     "file-loader": "^6.2.0",
+    "font-awesome": "^4.7.0",
     "fs-extra": "^10.0.0",
     "history": "5.3.0",
     "html-webpack-plugin": "^5.5.0",
@@ -108,6 +111,7 @@
     "sass-loader": "^12.3.0",
     "semver": "^7.3.5",
     "shallowequal": "1.1.0",
+    "simulated-annealing": "*",
     "source-map-loader": "^3.0.0",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.0.2",
@@ -116,8 +120,7 @@
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
-    "workbox-webpack-plugin": "^6.4.1",
-    "simulated-annealing": "*"
+    "workbox-webpack-plugin": "^6.4.1"
   },
   "jest": {
     "roots": [
@@ -171,12 +174,12 @@
     "resetMocks": true
   },
   "devDependencies": {
-    "react-dev-utils": "^12.0.1",
-    "typescript": "^5.0.0",
+    "@types/node": "^18.0.0",
     "@types/react": "^18.0.0",
+    "@types/react-dnd": "^3.0.2",
     "@types/react-dom": "^18.0.0",
     "@types/react-redux": "^7.1.25",
-    "@types/react-dnd": "^3.0.2",
-    "@types/node": "^18.0.0"
+    "react-dev-utils": "^12.0.1",
+    "typescript": "^5.0.0"
   }
 }

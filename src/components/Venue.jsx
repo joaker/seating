@@ -81,7 +81,7 @@ class UnconnectedVenue extends React.Component {
       <div className={cnames(styles.venue, "Venue")}>
         <div className={cnames('headerTable', 'container-fluid')}>
           <div className={cnames('row')}>
-            <div className={cnames('col-xs-12')}>
+            <div className={cnames('col-12')}>
               <h2 style={{ display: 'block' }}>
                 Venue {this.props.lastRunTime ? (<div style={{ display: 'inline-block' }}><h4 className="text-muted text-veryMuted" style={{ display: 'inline-block' }}>Last Run: {this.props.lastRunTime}</h4></div>) : ''}
                 <Progress ratio={this.props.progressRatio} />

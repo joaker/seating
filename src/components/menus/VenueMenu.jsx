@@ -19,7 +19,7 @@ const FocusOverview = ({ focusedGuest, clearFocus }) => {
   return (
     <div className={cnames(styles.focusOverview, 'focusOverview')}>
       <h4 className={cnames(styles.focusName)} onClick={() => clearFocus()}>
-        <label>Focused <span className={cnames(styles.icon, 'glyphicon', 'glyphicon-remove')}></span></label>
+        <label>Focused <span className={cnames(styles.icon, 'fa', 'fa-times')}></span></label>
       </h4>
       <div className={cnames('text-muted', styles.related)}>{names.get(focused.id)}</div>
       <label style={{ color: '#AAA' }}>Conflicts</label>
@@ -118,7 +118,7 @@ const UnconnectedVenueMenu = (props) => {
         <ul className={styles.venueMenuItems}>
           <li>
             <button
-              className={cnames('btn btn-block btn-default', (noGuests ? '' : 'btn-primary'))}
+              className={cnames('btn btn-block btn-outline-secondary', (noGuests ? '' : 'btn-primary'))}
               onClick={() => props.optimizeGuests(props.guests, props.temperature, props.score, props.seatsPerTable, props.mode)}
               title={optimizeTip}
               disabled={noGuests}
@@ -134,8 +134,8 @@ const UnconnectedVenueMenu = (props) => {
               onChange={(e) => props.setTemperature(params.toTemperature(e.target.value))}
             />
             <div className={styles.runtimeLabels}>
-              <label className={cnames('pull-left', 'text-muted')}>Quick</label>
-              <label className={cnames('pull-right', 'text-muted')}>Thorough</label>
+              <label className={cnames('float-start', 'text-muted')}>Quick</label>
+              <label className={cnames('float-end', 'text-muted')}>Thorough</label>
             </div>
           </li>
           <li>

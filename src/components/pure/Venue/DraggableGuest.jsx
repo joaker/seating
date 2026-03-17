@@ -27,7 +27,7 @@ function collectSource(connect, monitor) {
   }
 }
 
-const guestIcon = (<span className={cnames('glyphicon', 'glyphicon-user')} />);
+const guestIcon = (<span className={cnames('fa', 'fa-user')} />);
 
 class GuestContainer extends React.Component {
   componentDidMount() {

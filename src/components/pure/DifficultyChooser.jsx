@@ -1,5 +1,6 @@
 import React from 'react';
 import cnames from 'classnames/dedupe';
+import { Dropdown } from 'react-bootstrap';
 
 export const easy = 2;
 export const normal = 8;
@@ -34,9 +35,10 @@ const DifficultyChoice = ({difficulty, setDifficulty}) => {
   const difficultyName = getDifficultyName(difficulty);
   const choiceClass = classNames.Choice[difficultyName];
   return (
-    <li><a className={choiceClass} title={'0 - '+ difficulty +' dislikes per guest, average of ' + (difficulty/2) } onClick={() => {
+    // Dropdown.Item replaces <li><a> — BS3 data-toggle is gone, react-bootstrap manages state
+    <Dropdown.Item className={choiceClass} title={'0 - '+ difficulty +' dislikes per guest, average of ' + (difficulty/2) } onClick={() => {
         setDifficulty(difficulty);
-      }}>{difficultyName}</a></li>
+      }}>{difficultyName}</Dropdown.Item>
   );
 }
 
@@ -48,18 +50,18 @@ const DifficultyChooser = ({difficulty = normal, setDifficulty, onClick, childre
   const actionContent = children || difficultyName;
 
   return (
-    <div className={cnames("btn-group", className)}>
+    // BS5 split-button dropdown via react-bootstrap: no data-toggle, no jQuery
+    <Dropdown as="div" className={cnames("btn-group", className)}>
       <button type="button" className={cnames('btn', actionClass)} onClick={onClick}>{actionContent}</button>
-      <button type="button" className={cnames("btn dropdown-toggle", actionClass)} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span className="caret"></span>
-        <span className="sr-only">Toggle Dropdown</span>
-      </button>
-      <ul className="dropdown-menu">
+      <Dropdown.Toggle split className={cnames('btn', actionClass)} id="difficulty-dropdown">
+        <span className="visually-hidden">Toggle Dropdown</span>
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
         <DifficultyChoice difficulty={easy} setDifficulty={setDifficulty} />
         <DifficultyChoice difficulty={normal} setDifficulty={setDifficulty} />
         <DifficultyChoice difficulty={hard} setDifficulty={setDifficulty} />
-      </ul>
-    </div>
+      </Dropdown.Menu>
+    </Dropdown>
   );
 }
 
