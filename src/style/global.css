@@ -1,74 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-html, body {
-  height:100%;
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-:global #app,
-:global .AppComponent,
-:global .NavSidebar,
-:global .sidebarLayout,
-:global .ScrollingSidebar {
-  height:100%;
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
 }
-
-
-
 
 body {
-  font-size: 2em;
-  color: #000;
-  font-family: "Helvetica Neue", Arial;
-  //font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-weight: 200;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  background-color: var(--surface-0);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3 {
-  font-weight: 100;
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
-  color: hsl(200, 50%, 50%);
-}
-
-:global a.active {
-  color: hsl(20, 50%, 50%);
-}
-
-:global .breadcrumbs a {
+  color: var(--accent);
   text-decoration: none;
 }
 
-ul {
-  list-style: none;
-  padding-left: 0;
+a:hover {
+  color: var(--accent-hover);
 }
 
-:global .AppComponent .container-fluid {
-  padding-left: 0;
-  padding-right:0;
-}
-:global #app .nav {
-  padding-bottom: .5em;
+button {
+  cursor: pointer;
+  font-family: var(--font-sans);
 }
 
-
-
-:global #app a:not(.btn):hover{
-  color: #0E2E4A;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
-
-:global .text-very-muted {
-  color: #AAA;
-}
-
-:global .noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* IE/Edge */
-  user-select: none;           /* non-prefixed version, currently
-                                  not supported by any browser */
-}
-
-

@@ -10,9 +10,10 @@ import {
 import routes from './routes';
 import store from './config/store';
 import { createHashHistory } from 'history';
+import './style/tokens.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
-require('./style/global.css');
+import './style/global.css';
 
 const history = createHashHistory();
 

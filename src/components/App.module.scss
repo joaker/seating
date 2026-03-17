@@ -1,0 +1,35 @@
+.appShell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--surface-0);
+}
+
+.appContent {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.pageContent {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: calc(var(--bottombar-height) + env(safe-area-inset-bottom));
+
+  @media (min-width: 640px) {
+    padding-bottom: 0;
+  }
+}
+
+.controlSidebar {
+  display: none;
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  background: var(--surface-1);
+  border-left: 1px solid var(--surface-3);
+  overflow-y: auto;
+
+  @media (min-width: 1024px) {
+    display: block;
+  }
+}

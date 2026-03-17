@@ -1,115 +1,78 @@
-import styles from '../style/app.module.scss';
+import styles from './App.module.scss';
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd'
+import { DndProvider } from 'react-dnd';
 
-import Nav from './Nav';
+import TopBar from './TopBar';
+import BottomTabBar from './BottomTabBar';
+import { useVenueState } from '../hooks/useVenueState';
+import { useOptimizer } from '../hooks/useOptimizer';
+import * as venueParams from '../data/venue';
 
-const separators = {
-  slash: '/',
-  arrow: '\u2192',
-}
-
-const separator = separators.slash;
-
-const LTitle = ({ item = {}, params = {} }) => {
-  const title = (item.title == 'Guest' && params && params.id) || item.title || 'unknown'
-  return <span>{title}</span>;
-};
-
-const getHashPath = () => {
-  const bigHash = window.location.hash.substring(1);
-
-  const hashpath = (bigHash.match(/^[^?]*/i) || [])[0];
-
-  return hashpath;
-};
-const resolveParam = (path, params) => (path && path.includes(':') && params[path.substring(1)]) || path;
-const Breadcrumbs = (props) => {
-  const { routes = [], params = {}, location, router } = props;
-  const titledRoutes = routes.filter(r => (r.path || r.to) && r.title);
-
-
-  const resolvedRoutes = [];
-  titledRoutes.reduce((pieces, r) => {
-    const piece = r.path == '/' ? '' : resolveParam(r.path, params);
-    pieces.push(piece);
-
-    const fullPath = pieces.join('/');
-    const resolved = { item: r, fullPath };
-    resolvedRoutes.push(resolved);
-
-    return pieces;
-  }, []);
-
-  const routeCount = titledRoutes.length;
-
-
-
-//  const currentPathName = typeof window !== 'undefined' && window.location && window.location.basename + window.location.pathname;
-  // const hashpath = getHashPath();
-  console.log('creating breadcrumbs');
-  return (
-    <ul className={styles["breadcrumbs-list"]}>
-      {resolvedRoutes.map(({ item, fullPath }, index) => {
-        const rawPath = item.path;
-        const path = resolveParam(rawPath, params);
-        const to = item.to;
-        const l = location + '';
-
-        return (
-          <li key={index}>
-            {
-              <Link
-                activeClassName={styles["breadcrumb-active"]}
-                to={fullPath}>
-                <LTitle params={params} item={item} />
-              </Link>
-            }
-            {(index + 1) < routeCount && separator}
-          </li>)
-      }
-      )
-      }
-    </ul>
-  );
-}
-
-const AppLayout = (props, context) => (
-  <div className="AppComponent row" >
-    <div className="sidebarLayout col-4">
-      <Nav>{props.menu}</Nav>
-    </div>
-    <div className="col-10">
-      <main>
-        <div className="row">
-          <div className="col-8">
-            <Breadcrumbs {...props} {...context} />
-          </div>
-          <div className="col-4" style={{ textAlign: 'right' }}>
-            <h2 className={styles.brandName} style={{}}><strong>Seatable</strong></h2>
-          </div>
-        </div>
-        {props.children}
-      </main>
-    </div>
-  </div>
-);
-// AppLayout.contextTypes = {
-//   router: React.PropTypes.object.isRequired
-// }
+const getFriendlyScore = (score) => venueParams.maxScore + score;
 
 export const App = (props) => {
-  const { fullscreen } = props;
-  if (fullscreen) return (<div>{fullscreen}</div>);
+  const { children, menu } = props;
+  const location = useLocation();
+  const venueState = useVenueState();
+  const optimize = useOptimizer();
+
+  const {
+    guests,
+    score,
+    hasScore,
+    optimizing,
+    progressRatio,
+    temperature,
+    seatsPerTable,
+    mode,
+  } = venueState;
+
+  const hasGuests = guests && guests.length > 0;
+  const friendlyScore = hasScore ? getFriendlyScore(score) : undefined;
+
+  const handleOptimize = () => {
+    if (hasGuests) {
+      optimize(guests, temperature, score, seatsPerTable, mode);
+    }
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <AppLayout {...props}>{props.children}</AppLayout>
+      <div className={styles.appShell}>
+        <TopBar
+          score={friendlyScore}
+          hasScore={!!hasScore}
+          optimizing={optimizing}
+          progressRatio={progressRatio ?? 0}
+          onOptimize={handleOptimize}
+          canOptimize={hasGuests && !optimizing}
+        />
+
+        <div className={styles.appContent}>
+          <main className={styles.pageContent}>
+            {children}
+          </main>
+
+          {menu && (
+            <aside className={styles.controlSidebar}>
+              {menu}
+            </aside>
+          )}
+        </div>
+
+        <BottomTabBar
+          currentPath={location.pathname}
+          optimizing={optimizing}
+          progressRatio={progressRatio ?? 0}
+          onOptimize={handleOptimize}
+          canOptimize={hasGuests && !optimizing}
+        />
+      </div>
     </DndProvider>
   );
 };
 
-export default (props) => <DndProvider backend={HTML5Backend}><App {...props} /></DndProvider>
+export default App;

@@ -1,0 +1,98 @@
+.topBar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--topbar-height);
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--surface-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-4);
+  flex-shrink: 0;
+}
+
+.brand {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.scorePill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: #fff;
+  min-width: 40px;
+  text-align: center;
+}
+
+.scoreHappy {
+  background: var(--happy);
+}
+
+.scoreAccent {
+  background: var(--accent);
+}
+
+.scoreWarning {
+  background: var(--warning);
+}
+
+.scoreAngry {
+  background: var(--angry);
+}
+
+.optimizeButton {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--optimize);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: background var(--transition-fast);
+
+  &:hover:not(:disabled) {
+    background: var(--optimize-hover);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (min-width: 640px) {
+    display: inline-flex;
+  }
+}
+
+.progressTrack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--surface-3);
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--optimize), var(--accent));
+  transition: width 300ms ease-out;
+}

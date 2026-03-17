@@ -1,0 +1,65 @@
+:root {
+  /* Surfaces */
+  --surface-0: #0d1117;
+  --surface-1: #161b22;
+  --surface-2: #21262d;
+  --surface-3: #30363d;
+
+  /* Text */
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+
+  /* Accent */
+  --accent: #58a6ff;
+  --accent-hover: #79c0ff;
+  --accent-subtle: rgba(56, 139, 253, 0.15);
+
+  /* Semantic */
+  --happy: #3fb950;
+  --happy-subtle: rgba(63, 185, 80, 0.15);
+  --angry: #f85149;
+  --angry-subtle: rgba(248, 81, 73, 0.15);
+  --neutral: #8b949e;
+  --neutral-subtle: rgba(139, 148, 158, 0.10);
+  --warning: #d29922;
+
+  /* Optimize action */
+  --optimize: #a371f7;
+  --optimize-hover: #b992ff;
+  --optimize-subtle: rgba(163, 113, 247, 0.15);
+
+  /* Spacing (8px grid) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  --text-xs:   clamp(0.625rem, 0.5rem + 0.25vw, 0.75rem);
+  --text-sm:   clamp(0.75rem, 0.675rem + 0.25vw, 0.875rem);
+  --text-base: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
+  --text-lg:   clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-xl:   clamp(1.5rem, 1.25rem + 0.75vw, 2rem);
+
+  /* Layout */
+  --topbar-height: 56px;
+  --bottombar-height: 64px;
+  --sidebar-width: 280px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}
