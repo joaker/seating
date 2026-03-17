@@ -2,24 +2,28 @@ import styles from '../../../style/venue.module.scss';
 
 import React from 'react';
 import cnames from 'classnames/dedupe';
-import purify from '../Pure';
 import SeatMatrix from './SeatMatrix';
 
-const getEdgeSize = (seatCount) => Math.ceil(Math.sqrt(seatCount));
+interface TableAreaProps {
+  number: number;
+  guestCount: number;
+  seatsPerTable?: number;
+  [key: string]: any;
+}
 
-const PureTableArea = (props) => {
-  const {number, guestCount, seatsPerTable} = props;
+const PureTableArea = React.memo((props: TableAreaProps) => {
+  const { number, guestCount, seatsPerTable = 16 } = props;
   const start = number * seatsPerTable;
   const end = Math.min(start + seatsPerTable, guestCount);
 
   return (
     <div className={cnames(styles.tableArea)}>
       <div className={cnames(styles.tableName)}><label>Table {props.number}</label></div>
-      <SeatMatrix {...props} start={start} end={end}/>
+      <SeatMatrix {...props} start={start} end={end} />
     </div>
   );
-};
+});
 
-export const TableArea = purify(PureTableArea);
+export const TableArea = PureTableArea;
 
 export default TableArea;

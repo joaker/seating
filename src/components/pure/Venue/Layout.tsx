@@ -3,27 +3,32 @@ import React from 'react';
 import cnames from 'classnames/dedupe';
 
 import range from '../../../util/range';
-import purify from '../Pure';
 import TableArea from './TableArea';
 
-const getEdgeSize = (seatCount) => Math.ceil(Math.sqrt(seatCount));
+const getEdgeSize = (seatCount: number) => Math.ceil(Math.sqrt(seatCount));
 
-const Layout = (props) => {
-  const {guestCount, seatsPerTable = 25} = props;
+interface LayoutProps {
+  guestCount: number;
+  seatsPerTable?: number;
+  [key: string]: any;
+}
+
+const Layout = React.memo((props: LayoutProps) => {
+  const { guestCount, seatsPerTable = 25 } = props;
   const edge = getEdgeSize(seatsPerTable);
   const tableCount = Math.ceil(guestCount / seatsPerTable);
-  const tables = range(tableCount).map((number ) => {
-    const others = {key: number, tableCount, number, edge, };
+  const tables = range(tableCount).map((number: number) => {
+    const others = { key: number, tableCount, number, edge };
     return (
       <TableArea {...props} {...others} />
     );
   });
-  const edgeClass = styles['edge-' + edge];
+  const edgeClass = (styles as any)['edge-' + edge];
   return (
     <div className={cnames(styles.tableCollection, edgeClass, 'container-fluid')}>
       {tables}
     </div>
   );
-}
+});
 
-export default purify(Layout);
+export default Layout;
