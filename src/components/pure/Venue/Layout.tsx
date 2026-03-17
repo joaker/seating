@@ -7,6 +7,14 @@ import TableArea from './TableArea';
 
 const getEdgeSize = (seatCount: number) => Math.ceil(Math.sqrt(seatCount));
 
+const tableMinSize = (seatsPerTable: number): string => {
+  if (seatsPerTable <= 4) return '80px';
+  if (seatsPerTable <= 9) return '100px';
+  if (seatsPerTable <= 16) return '140px';
+  if (seatsPerTable <= 25) return '180px';
+  return '320px';
+};
+
 interface LayoutProps {
   guestCount: number;
   seatsPerTable?: number;
@@ -23,9 +31,16 @@ const Layout = React.memo((props: LayoutProps) => {
       <TableArea {...props} {...others} />
     );
   });
-  const edgeClass = (styles as any)['edge-' + edge];
+
+  const gridStyle = {
+    '--table-min-size': tableMinSize(seatsPerTable),
+  } as React.CSSProperties;
+
   return (
-    <div className={cnames(styles.tableCollection, edgeClass, 'container-fluid')}>
+    <div
+      className={cnames(styles.tableCollection)}
+      style={gridStyle}
+    >
       {tables}
     </div>
   );

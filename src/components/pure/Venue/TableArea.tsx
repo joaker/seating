@@ -18,7 +18,10 @@ const PureTableArea = React.memo((props: TableAreaProps) => {
 
   return (
     <div className={cnames(styles.tableArea)}>
-      <div className={cnames(styles.tableName)}><label>Table {props.number}</label></div>
+      <div className={cnames(styles.tableHeader)}>
+        <span className={cnames(styles.tableLabel)}>Table {number + 1}</span>
+        <span className={cnames(styles.tableScore)}></span>
+      </div>
       <SeatMatrix {...props} start={start} end={end} />
     </div>
   );

@@ -1,354 +1,353 @@
-@import "_variables";
-@import "_mixins";
+/* ==========================================================================
+   Venue – dark-theme seating chart styles
+   Uses CSS custom properties from tokens.css
+   ========================================================================== */
 
-.venueGrid {
-  background-color:#EEE;
-  padding: 2em 0;
-  /*margin-right: 2em;*/
+/* Seat sizing custom property */
+:root {
+  --seat-size: clamp(20px, 3.5vw, 32px);
 }
 
-.table{
-  font-size:70%;
-  text-align:center;
-  margin:2px;
-  margin-bottom:1em;
-
-  > div > label{
-    white-space:nowrap;
-    margin-bottom: 0;
-    color: #777;
-  }
-}
-
-.seat{
-  width: 100%;
-  height:100%;
-  background-color: #333;
-
-
-  .empty{
-    background-color: transparent;
-    border: 2px solid black;
-  }
-
-  &.happy{
-    background-color: green;
-  }
-
-  &.angry{
-    background-color: #D00;
-  }
-
-  &:not(.empty):hover,
-  &.happy:hover,
-  &.angry:hover
-  {
-    background-color:#77A;
-  }
-
-  &.focused{
-    background-color:#77A;
-  }
-
-}
-
-.seatRow{
-  line-height: 0;
-}
-
-.venue :global .col-1 {
-  padding-left: 1px;
-  padding-right: 1px;
+/* -------------------------------------------------------------------------
+   Venue wrapper
+   ------------------------------------------------------------------------- */
+.venue {
+  background: var(--surface-0);
+  min-height: 100%;
 }
 
 .venue h4 {
-  color: #777;
-  text-align:center;
+  color: var(--text-secondary);
+  text-align: center;
 }
 
+/* -------------------------------------------------------------------------
+   Table collection – CSS Grid layout
+   ------------------------------------------------------------------------- */
+.tableCollection {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--table-min-size, 140px), 1fr));
+  gap: var(--space-3);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+/* -------------------------------------------------------------------------
+   Table area
+   ------------------------------------------------------------------------- */
+.tableArea {
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-3);
+  text-align: center;
+  transition: border-color var(--transition-fast);
+  overflow: hidden;
+}
+
+.tableArea:hover {
+  border-color: var(--accent);
+}
+
+/* Table header */
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--surface-3);
+}
+
+.tableLabel {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.tableScore {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* Legacy .tableName — kept for backward compat */
+.tableName {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--surface-3);
+}
+
+.tableArea label {
+  white-space: nowrap;
+  margin-bottom: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  display: block;
+  text-align: center;
+}
+
+/* -------------------------------------------------------------------------
+   Seat matrix
+   ------------------------------------------------------------------------- */
+.seatMatrix {
+  text-align: left;
+  padding: var(--space-2);
+}
+
+.matrixRow {
+  line-height: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* -------------------------------------------------------------------------
+   Seat wrapper and seat area
+   ------------------------------------------------------------------------- */
+.seatAreaWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--seat-size);
+  height: var(--seat-size);
+  line-height: 0;
+  padding: 2px;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: box-shadow var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast);
+}
+
+.seatAreaWrapper:hover {
+  box-shadow: 0 0 0 2px var(--accent-subtle);
+  border-color: var(--accent);
+}
+
+/* Focus glow ring */
+.hasFocus {
+  box-shadow: 0 0 0 2px var(--accent-subtle), 0 0 8px var(--accent-subtle);
+  border-color: var(--accent);
+}
+
+.hasSelectFocus {
+  box-shadow: 0 0 0 2px var(--accent-subtle), 0 0 12px rgba(88, 166, 255, 0.4);
+  border-color: var(--accent);
+}
+
+.hasHateFocus {
+  box-shadow: 0 0 0 2px var(--angry-subtle), 0 0 8px var(--angry-subtle);
+  border-color: var(--angry);
+}
+
+.hasLikeFocus {
+  box-shadow: 0 0 0 2px var(--happy-subtle), 0 0 8px var(--happy-subtle);
+  border-color: var(--happy);
+}
+
+/* Dimmed state — non-related seats fade when a guest is focused */
+.dimmed {
+  opacity: 0.4;
+  transition: opacity var(--transition-fast);
+}
+
+/* -------------------------------------------------------------------------
+   Seat area (inner)
+   ------------------------------------------------------------------------- */
+.seatArea {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.seatArea.emptySeat {
+  border: 1px dashed var(--surface-3);
+  border-radius: 50%;
+  background: transparent;
+}
+
+/* Empty seat dashed circle (new class) */
+.emptySeatCircle {
+  width: calc(var(--seat-size) * 0.6);
+  height: calc(var(--seat-size) * 0.6);
+  border: 1px dashed var(--surface-3);
+  border-radius: 50%;
+  margin: auto;
+}
+
+/* -------------------------------------------------------------------------
+   Guest icon
+   ------------------------------------------------------------------------- */
+.guest {
+  display: inline-block;
+  overflow: hidden;
+  border: 1px solid transparent;
+  cursor: pointer;
+  padding: 2px;
+  font-size: calc(var(--seat-size) * 0.5);
+  line-height: 1;
+}
+
+.guest.neutral,
+.neutral {
+  color: var(--neutral);
+}
+
+.guest.angry,
+.angry {
+  color: var(--angry);
+}
+
+.guest.happy,
+.happy {
+  color: var(--happy);
+}
+
+/* -------------------------------------------------------------------------
+   Score colors
+   ------------------------------------------------------------------------- */
 .scoring {
-  font-size:72%;
-  color:#777;
-  margin-left:2em;
-
-
-  .title{
-    font-weight:bold;
-  }
-
-  .value{
-    margin-left:.5em;
-    font-weight:600;
-    background-color: white;
-    padding:.1em;
-    border: .1em solid #777;
-  }
-
-  &.perfect .value,
-  &.bad .value{
-    font-weight:800;
-  }
-
-  &.perfect .value{
-    color: green;
-  }
-
-  &.good .value{
-    color: blue;
-  }
-
-  &.ok .value{
-    color: #CC0;
-  }
-
-  &.bad .value{
-    color:red;
-  }
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
 }
 
+.scoring .title {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.scoring .value {
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  border: none;
+}
+
+.perfect .value {
+  color: var(--happy);
+  font-weight: 800;
+}
+
+.good .value {
+  color: var(--accent);
+}
+
+.ok .value {
+  color: var(--warning);
+}
+
+.bad .value {
+  color: var(--angry);
+  font-weight: 800;
+}
+
+/* -------------------------------------------------------------------------
+   Busy indicator
+   ------------------------------------------------------------------------- */
 .busy {
   display: inline-block;
-  margin-left: 0.5em;
+  margin-left: var(--space-2);
   text-align: center;
-  color: green;
-  font-size: 90%;
+  color: var(--happy);
+  font-size: var(--text-sm);
 }
 
-
-.tableCollection{
-  font-size:80%;
-  text-align:center;
-}
-
-$tableBackground: #DDD;
-$tableColor: #777;
-$borderThickness: .3em;
-
-.tableArea .tableName{
-  background-color: $tableBackground;
-}
-.tableArea label{
-  white-space:nowrap;
-  margin-bottom: 0;
-  color: $tableColor;
-  text-align:center;
-  padding:auto;
-  display:block;
-  background-color: $tableBackground;
-}
-
-.edge-3 .tableArea .tableName,
-.edge-3 .tableArea .tableName{
-  text-align:left;
-}
-.edge-3 .tableArea label{
-  max-width:2em;
-}
-.edge-3 .tableArea label{
-  max-width:1em;
-}
-
-
-
-.tableArea{
-  display: inline-block;
-  margin: .25em;
-  // background-color: #EFEFEF;
-  text-align: center;
-  border-left: $borderThickness solid $tableBackground;
-  border-bottom: $borderThickness solid $tableBackground;
-  border-right: $borderThickness solid $tableBackground;
-}
-
-.seatMatrix{
-  text-align:left;
-  padding: $borderThickness 0;
-}
-
-.matrixRow{
-  line-height:0;
-}
-
-.seatAreaWrapper{
-  font-size:90%;
-  line-height:0;
-  display:inline-block;
-  padding:.25em;
-  // padding: .5em;
-  text-align:center;
-  border-bottom: $borderThickness solid $tableBackground;
-  margin: 0 $borderThickness;
-}
-
-// $neutral: #778;
-// $angry: #E66;
-// $happy: #3B3;
-
-.seatArea{
-  display:inline-block;
-  width:1.5em;
-  height:1.5em;
-
-  overflow:hidden;
-  border: .25em solid transparent;
-  cursor: pointer;
-
-  &.neutral{
-    background-color:$neutral;
-  }
-
-  &.angry{
-    background-color:$angry;
-  }
-
-  &.happy{
-    background-color:$happy;
-  }
-
-  &.emptySeat{
-    border: .25em dashed #777;
-  }
-}
-
-
-.guest{
-  display:inline-block;
-
-  overflow:hidden;
-  border: .1em solid transparent;
-  cursor: pointer;
-  padding: .1em;
-
-  &.neutral{
-    color: $neutral;
-
-  }
-
-  &.angry{
-    color: $angry;
-  }
-
-  &.happy{
-    color: $happy;
-  }
-
-  &.emptySeat{
-    border: .25em dashed #777;
-  }
-}
-
-
-
-// .seatArea:not(.emptySeat):not(.hasFocus):hover,
-// .guest:not(.emptySeat):not(.hasFocus):hover {
-//   box-shadow: 0 0 1em rgba(203, 203, 203, 1);
-//   border-color: rgba(203, 203, 203, 1);
-//   background-color: rgba(203,203,203,1);
-// }
-
-// .seatAreaWrapper:hover{
-//   box-shadow: 0 0 1em rgba(203, 203, 203, 1);
-//   border-color: rgba(203, 203, 203, 1);
-//   background-color: rgba(203,203,203,1);
-// }
-
-$selectOpacity: 1;
-.seatAreaWrapper:hover{
-  box-shadow: inset 0 0 .25em rgba($select, $selectOpacity);
-  border-color: rgba($select, $selectOpacity);
-  background-color: rgba($select, $selectOpacity/10);
-  color: black;
-  // background-image:none;
-  .guest {
-    background: none;
-  }
-}
-
-$focusOpacity: 0.5;
-.hasFocus{
-  // @include halo(81, 203, 238);
-  //@include burst($select);
-  @include accenta($select, $focusOpacity);
-}
-
-.hasHateFocus{
-  // @include halo(238, 81, 81);
-  // @include burst($angry);
-  @include accenta($angry, $focusOpacity);
-}
-
-.hasLikeFocus{
-  // @include halo(81, 238, 81);
-  // @include burst($happy);
-  @include accenta($happy, $focusOpacity);
-}
-
+/* -------------------------------------------------------------------------
+   Venue menu (sidebar)
+   ------------------------------------------------------------------------- */
 .venueMenu {
-  padding: 0 .0em;
-  height:100%;
-
-  > .venuMenuTitle {
-    width: 100em;
-    overflow-y: visible;
-  }
+  padding: 0;
+  height: 100%;
 }
 
-$focusedTitle: #51cbee;
-.focusOverview{
-
-    h4, label{
-      margin:.25em 0;
-    }
-
-    .focusName{
-      font-weight:bold;
-      color: $focusedTitle;
-
-      &:hover{
-        color: darken($focusedTitle, 30%);
-      }
-    }
-
-    .focusName .icon {
-      font-size: 80%;
-    }
-
-    .related{
-      line-height:1em;
-    }
+.venueMenu > .venuMenuTitle {
+  overflow-y: visible;
 }
 
-.venueMenuItemsContainer{
-
+.venueMenuItemsContainer {
+  /* no special styling needed */
 }
-.venueMenuItems{
 
+.venueMenuItems {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 
   .scoring > .value {
-    max-width:2em;
+    max-width: 2em;
   }
 
   > li {
-    margin-bottom:.25em;
+    margin-bottom: var(--space-2);
 
-    > h1,h2,h3,h4,label{
-      margin: .75em 0 .2em 0;
+    > h1, > h2, > h3, > h4, > label {
+      margin: var(--space-3) 0 var(--space-1) 0;
     }
   }
 
-
-  $sliderSize: 1em;
-
-  .sliderWrapper  {
-    margin:0 $sliderSize*2 $sliderSize $sliderSize;
+  .sliderWrapper {
+    margin: 0 var(--space-4) var(--space-2) var(--space-2);
   }
 
-  .runtimeLabels{
-    font-size: 70%;
+  .runtimeLabels {
+    font-size: var(--text-xs);
 
     > label {
-      color: #AAA;
-      margin-top:0;
+      color: var(--text-muted);
+      margin-top: 0;
     }
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Focus overview (sidebar)
+   ------------------------------------------------------------------------- */
+.focusOverview {
+  h4, label {
+    margin: var(--space-1) 0;
+  }
+
+  .focusName {
+    font-weight: bold;
+    color: var(--accent);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+
+    &:hover {
+      color: var(--accent-hover);
+    }
+  }
+
+  .focusName .icon {
+    font-size: 80%;
+  }
+
+  .related {
+    line-height: 1.4;
+    color: var(--text-primary);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Responsive adjustments
+   ------------------------------------------------------------------------- */
+@media (min-width: 640px) {
+  :root {
+    --seat-size: clamp(24px, 3vw, 36px);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --seat-size: clamp(28px, 2.5vw, 40px);
   }
 }

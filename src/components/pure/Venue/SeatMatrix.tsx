@@ -119,7 +119,9 @@ const SeatMatrix = (props: SeatMatrixProps) => {
           const { guest, score = {}, focusState, focusReaction } = data;
           const { hate: hateScore, like: likeScore } = score;
           const guestID = guest && guest.id;
-          const info = { seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, focusGuest: focusGuestFn, swapGuests, clearFocusedGuest: focusGuestFn };
+          const hasFocusedGuest = isGuest(focusedGuest);
+          const isDimmed = hasFocusedGuest && !focusState && !focusReaction;
+          const info = { seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, isDimmed, focusGuest: focusGuestFn, swapGuests, clearFocusedGuest: focusGuestFn };
           return (
             <Seat key={seatNumber} {...info} hasGuest={!!guest} />
           );

@@ -10,7 +10,7 @@ const happyStyle = styles.happy || 'happyGuest';
 
 export const EmptySeat = () => (
   <div className={cnames(styles.seatAreaWrapper)}>
-    <div className={cnames(styles.seatArea, styles.emptySeat)} />
+    <div className={cnames(styles.emptySeatCircle)} />
   </div>
 );
 
@@ -21,11 +21,11 @@ interface SeatProps {
   likeScore?: boolean;
   focusState?: string;
   focusReaction?: string;
+  isDimmed?: boolean;
   hasGuest: boolean;
   focusGuest: (id: number, type: string) => void;
   clearFocusedGuest: (id: number, type: string) => void;
   swapGuests: (source: number, target: number) => void;
-  // focusGuest prop is intentionally excluded from memo comparison (see below)
   [key: string]: any;
 }
 
@@ -34,15 +34,13 @@ interface SeatProps {
 const areSeatPropsEqual = (prevProps: SeatProps, nextProps: SeatProps): boolean => {
   const prev = Object.assign({}, prevProps);
   const next = Object.assign({}, nextProps);
-  // The original class deleted `focusGuest` from both sides before comparing,
-  // so changes to that callback alone never trigger a re-render.
   delete (prev as any).focusGuest;
   delete (next as any).focusGuest;
   return sequal(prev, next);
 };
 
 export const Seat = React.memo((props: SeatProps) => {
-  const { seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, hasGuest, focusGuest, clearFocusedGuest, swapGuests } = props;
+  const { seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, isDimmed, hasGuest, focusGuest, clearFocusedGuest, swapGuests } = props;
 
   const emptySeat = !hasGuest;
   if (emptySeat) return (<EmptySeat />);
@@ -58,7 +56,7 @@ export const Seat = React.memo((props: SeatProps) => {
       swapGuests={swapGuests}
       seatNumber={seatNumber}
       guestID={guestID}
-      className={cnames(styles.seatAreaWrapper, focusReaction, hasFocus, focusState)}>
+      className={cnames(styles.seatAreaWrapper, focusReaction, hasFocus, focusState, { [styles.dimmed]: isDimmed })}>
       <DraggableGuest
         {...props}
         guestID={guestID}
