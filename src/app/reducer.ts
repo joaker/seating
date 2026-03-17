@@ -1,15 +1,9 @@
-import { fromJS } from 'immutable';
 import { normal } from '../components/pure/DifficultyChooser';
 import * as reductions from './reductions';
 import * as params from '../data/venue';
-import { ImmutableMap } from './types';
+import { SeatingAppState } from './types';
 
-export const defaultServerState: ImmutableMap = fromJS({
-  guests: [],
-  seats: {},
-});
-
-export const defaultLocalState: ImmutableMap = fromJS({
+export const defaultServerState: SeatingAppState = {
   guests: [],
   seats: {},
   venueGuests: [],
@@ -17,10 +11,22 @@ export const defaultLocalState: ImmutableMap = fromJS({
   seatsPerTable: params.seatsPerTable,
   guestCount: params.guestCount,
   temperature: params.defaultTemperature,
-});
+  optimizing: false,
+};
 
-export const reducerFactory = (initialState: ImmutableMap = defaultLocalState) =>
-  (state: ImmutableMap = initialState, action: any): ImmutableMap => {
+export const defaultLocalState: SeatingAppState = {
+  guests: [],
+  seats: {},
+  venueGuests: [],
+  difficulty: normal,
+  seatsPerTable: params.seatsPerTable,
+  guestCount: params.guestCount,
+  temperature: params.defaultTemperature,
+  optimizing: false,
+};
+
+export const reducerFactory = (initialState: SeatingAppState = defaultLocalState) =>
+  (state: SeatingAppState = initialState, action: any): SeatingAppState => {
     console.log('action');
     switch (action.type) {
       case 'SET_STATE':

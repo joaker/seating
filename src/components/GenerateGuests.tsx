@@ -1,10 +1,10 @@
 import styles from '../style/generateGuests.module.scss';
 
 import cnames from 'classnames/dedupe';
-import { Map } from 'immutable';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { SeatingAppState } from '../app/types';
 
 import { setDraftProperty, commitDraft, populateVenue, scoreVenue } from '../app/action-creators';
 import * as params from '../data/venue';
@@ -60,12 +60,12 @@ const GenerateGuests = () => {
   const navigate = useNavigate();
 
   // Inline mapStateToProps
-  const liveConfig = useSelector((state: any) => ({
-    difficulty: state.get('difficulty'),
-    guestCount: state.get('guestCount'),
-    seatsPerTable: state.get('seatsPerTable'),
+  const liveConfig = useSelector((state: SeatingAppState) => ({
+    difficulty: state.difficulty,
+    guestCount: state.guestCount,
+    seatsPerTable: state.seatsPerTable,
   }));
-  const draftConfig = useSelector((state: any) => state.get('draftConfig', Map()).toJS());
+  const draftConfig = useSelector((state: SeatingAppState) => state.draftConfig ?? {});
 
   const config = mergeConfigs([defaultConfig, liveConfig, draftConfig]);
   const { guestCount, seatsPerTable, difficulty } = config as { guestCount: number; seatsPerTable: number; difficulty: number };

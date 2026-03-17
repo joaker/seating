@@ -4,12 +4,11 @@ import dndstyles from '../../../style/dragdrop.module.scss';
 import React from 'react';
 import cnames from 'classnames/dedupe';
 import { useSelector, useDispatch } from 'react-redux';
-import { List, Map } from 'immutable';
 
 import { focusGuest, scoreVenue, swapGuests as swapGuestsAction } from '../../../app/action-creators';
 import * as params from '../../../data/venue';
 import * as scorer from '../../../app/scorer';
-import { OptimizationMode } from '../../../app/types';
+import { OptimizationMode, SeatingAppState } from '../../../app/types';
 
 import range from '../../../util/range';
 import { Seat } from './Seat';
@@ -78,15 +77,15 @@ const SeatMatrix = (props: SeatMatrixProps) => {
 
   const dispatch = useDispatch();
 
-  // Inline mapStateForMatrix — Immutable.js boundary, use any per project rules
-  const focusedGuest: any = useSelector((state: any) =>
-    state.get('focusedGuest', Map()).toJS()
+  // Inline mapStateForMatrix
+  const focusedGuest: any = useSelector((state: SeatingAppState) =>
+    state.focusedGuest ?? {}
   );
-  const mode = useSelector((state: any) =>
-    state.get('optimizationMode', params.defaultMode) as OptimizationMode
+  const mode = useSelector((state: SeatingAppState) =>
+    (state.optimizationMode ?? params.defaultMode) as OptimizationMode
   );
-  const tableSeats: any[] = useSelector((state: any) =>
-    state.get('venueGuests', List()).slice(start, end).toJS()
+  const tableSeats: any[] = useSelector((state: SeatingAppState) =>
+    (state.venueGuests ?? []).slice(start, end)
   );
 
   const guestIDs = scorer.toIDs(tableSeats);

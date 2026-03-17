@@ -1,5 +1,3 @@
-import { Map, List } from 'immutable';
-
 export interface Guest {
   id: number;
   hates: number[];
@@ -30,18 +28,14 @@ export interface BatchConfig {
   updateDelay: number;
 }
 
-// The Immutable.js Map shape held by the Redux store.
-// .get() / .set() on ImmutableMap use `any` at the boundary per project rules.
-export type ImmutableMap = Map<string, any>;
-
 export interface SeatingAppState {
   // Guest lists
-  guests: List<any>;
-  venueGuests: List<any>;
-  venueGuestList?: List<any>;
+  guests: any[];
+  venueGuests: any[];
+  venueGuestList?: any[];
 
   // Seating
-  seats: Map<string | number, any>;
+  seats: Record<string | number, any>;
 
   // Configuration
   guestCount: number;
@@ -64,8 +58,8 @@ export interface SeatingAppState {
   // UI
   focusedGuest?: any;
   venueDetailsExpanded?: boolean;
-  draftConfig?: Map<string, any>;
+  draftConfig?: Record<string, any>;
 
   // Draft / relationships
-  relationships?: Map<string, any>;
+  relationships?: Record<string, any>;
 }

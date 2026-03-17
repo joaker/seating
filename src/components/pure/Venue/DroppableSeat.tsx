@@ -49,13 +49,13 @@ interface SeatContainerProps {
 const getDescriptor = (guestList: any, guestID: number, sourceGuestID: number): string => {
   if (!(guestList && guestID >= 0 && sourceGuestID >= 0)) return '';
 
-  const guest = guestList.get(guestID);
+  const guest = guestList[guestID];
 
-  const angry = guest.get('hates').includes(sourceGuestID);
+  const angry = (guest.hates || []).includes(sourceGuestID);
   if (angry) {
     return styles.angry;
   }
-  const happy = guest.get('likes').includes(sourceGuestID);
+  const happy = (guest.likes || []).includes(sourceGuestID);
   if (happy) {
     return styles.happy;
   }

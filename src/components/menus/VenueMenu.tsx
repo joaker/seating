@@ -8,13 +8,14 @@ import { setMode, clearFocusedGuest, scoreVenue, setTemperature } from '../../ap
 import names from '../../data/names';
 import { useVenueState } from '../../hooks/useVenueState';
 import { useOptimizer } from '../../hooks/useOptimizer';
+import { SeatingAppState } from '../../app/types';
 
 const EmptyFocusOverview = (<div className="noFocusOverview" />);
 const NoItemNode = (<div><label style={{ color: '#AAA' }}>None</label></div>);
 
 const FocusOverview = ({ focusedGuest, clearFocus }: { focusedGuest: any; clearFocus: () => void }) => {
   if (!focusedGuest) return EmptyFocusOverview;
-  const focused = focusedGuest.toJS();
+  const focused = focusedGuest;
   const hates = focused.hates || [];
   const likes = focused.likes || [];
   return (
@@ -66,7 +67,7 @@ const VenueMenu = () => {
   const optimize = useOptimizer();
 
   // focusedGuest is not in useVenueState (venue-slice concern, not optimization state)
-  const focusedGuest = useSelector((state: any) => state.get('focusedGuest'));
+  const focusedGuest = useSelector((state: SeatingAppState) => state.focusedGuest);
 
   const { guests, score, hasScore, temperature, seatsPerTable, mode = params.defaultMode } = venueState;
 

@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { List } from 'immutable';
 import * as params from '../data/venue';
+import { SeatingAppState } from '../app/types';
 
 export interface VenueState {
   guests: any[];
@@ -19,21 +19,20 @@ export interface VenueState {
 
 /**
  * Encapsulates all useSelector calls for the venue state slice.
- * Immutable.js boundary — all .get() calls return any per project rules.
  */
 export const useVenueState = (): VenueState => {
-  const guests = useSelector((state: any) => state.get('venueGuests', List()).toJS());
-  const guestCount = useSelector((state: any) => state.get('guestCount'));
-  const lastRunTime = useSelector((state: any) => state.get('lastRunTime'));
-  const seatsPerTable = useSelector((state: any) => state.get('seatsPerTable'));
-  const score = useSelector((state: any) => state.get('venueScore'));
-  const hasScore = useSelector((state: any) => state.get('hasVenueScore'));
-  const optimizing = useSelector((state: any) => state.get('optimizing'));
-  const progressRatio = useSelector((state: any) => state.get('optimizeProgressRatio'));
-  const difficulty = useSelector((state: any) => state.get('difficulty'));
-  const expanded = useSelector((state: any) => state.get('venueDetailsExpanded'));
-  const temperature = useSelector((state: any) => state.get('temperature', params.defaultTemperature));
-  const mode = useSelector((state: any) => state.get('optimizationMode', params.defaultMode));
+  const guests = useSelector((state: SeatingAppState) => state.venueGuests ?? []);
+  const guestCount = useSelector((state: SeatingAppState) => state.guestCount);
+  const lastRunTime = useSelector((state: SeatingAppState) => state.lastRunTime);
+  const seatsPerTable = useSelector((state: SeatingAppState) => state.seatsPerTable);
+  const score = useSelector((state: SeatingAppState) => state.venueScore);
+  const hasScore = useSelector((state: SeatingAppState) => state.hasVenueScore);
+  const optimizing = useSelector((state: SeatingAppState) => state.optimizing);
+  const progressRatio = useSelector((state: SeatingAppState) => state.optimizeProgressRatio);
+  const difficulty = useSelector((state: SeatingAppState) => state.difficulty);
+  const expanded = useSelector((state: SeatingAppState) => state.venueDetailsExpanded);
+  const temperature = useSelector((state: SeatingAppState) => state.temperature ?? params.defaultTemperature);
+  const mode = useSelector((state: SeatingAppState) => state.optimizationMode ?? params.defaultMode);
 
   return {
     guests,
