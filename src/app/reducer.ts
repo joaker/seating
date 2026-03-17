@@ -1,4 +1,4 @@
-import { normal } from '../components/pure/DifficultyChooser';
+import { normal } from '../data/venue';
 import * as reductions from './reductions';
 import * as params from '../data/venue';
 import { SeatingAppState } from './types';
