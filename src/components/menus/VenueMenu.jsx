@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as params from '../../data/venue.js';
 import { setMode, populateVenue, clearFocusedGuest, setVenueGuests, scoreVenue, startOptimization, endOptimization, setMaxDifficulty, toggleVenueDetails, setTemperature } from '../../app/action_creators';
-import optimizer from '../../app/optimization/optimizer';
+import { optimizeSeating } from '../../app/optimization/seating-adapter';
 import names from '../../data/names'
 
 const EmptyFocusOverview = (<div className="noFocusOverview" />)
@@ -178,7 +178,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     populate: () => { dispatch(populateVenue()); dispatch(scoreVenue()); },
-    optimizeGuests: (guests, temperature, score, tableSize, mode) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, tableSize, mode),
+    optimizeGuests: (guests, temperature, score, tableSize, mode) => optimizeSeating(guests, score, tableSize, temperature, mode, opimizationDispatchRelay(dispatch)),
     scoreTables: () => dispatch(scoreVenue()),
     setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
     toggleVenueDetails: () => dispatch(toggleVenueDetails()),

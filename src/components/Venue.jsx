@@ -10,7 +10,7 @@ import * as params from '../data/venue.js';
 
 import Layout from './pure/Venue/Layout';
 import Progress from './pure/Progress';
-import optimizer from '../app/optimization/optimizer';
+import { optimizeSeating } from '../app/optimization/seating-adapter';
 import createInjectNavigate from './createInjectNavigate';
 
 
@@ -130,7 +130,7 @@ const mapStateToProps = (state = Map()) => {
 
 const mapDispatchToProps = (dispatch) => ({
   populate: () => { dispatch(populateVenue()); dispatch(scoreVenue()); },
-  optimizeGuests: (guests, temperature = params.defaultTemperature, mode = params.defaultMode, score) => optimizer.run(makeScoredList(guests, score), opimizationDispatchRelay(dispatch), temperature, mode),
+  optimizeGuests: (guests, temperature = params.defaultTemperature, mode = params.defaultMode, score) => optimizeSeating(guests, score, params.tableSize, temperature, mode, opimizationDispatchRelay(dispatch)),
   scoreTables: () => dispatch(scoreVenue()),
   setDifficulty: (difficulty) => dispatch(setMaxDifficulty(difficulty)),
   toggleVenueDetails: () => dispatch(toggleVenueDetails()),

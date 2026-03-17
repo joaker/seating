@@ -1,6 +1,7 @@
 {
   "name": "seating",
   "version": "2.0.0",
+  "workspaces": ["packages/*"],
   "description": "An application for organizing seating by social arrangements",
   "main": "index.js",
   "scripts": {
@@ -115,7 +116,8 @@
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
-    "workbox-webpack-plugin": "^6.4.1"
+    "workbox-webpack-plugin": "^6.4.1",
+    "simulated-annealing": "*"
   },
   "jest": {
     "roots": [
@@ -169,6 +171,12 @@
     "resetMocks": true
   },
   "devDependencies": {
-    "react-dev-utils": "^12.0.1"
+    "react-dev-utils": "^12.0.1",
+    "typescript": "^5.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/react-redux": "^7.1.25",
+    "@types/react-dnd": "^3.0.2",
+    "@types/node": "^18.0.0"
   }
 }
