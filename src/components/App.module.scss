@@ -15,9 +15,17 @@
   flex: 1;
   overflow-y: auto;
   padding-bottom: calc(var(--bottombar-height) + env(safe-area-inset-bottom));
+  opacity: 1;
+  transition: opacity 150ms ease;
 
   @media (min-width: 640px) {
     padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pageFaded {
+    opacity: 0;
   }
 }
 

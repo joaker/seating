@@ -1,5 +1,5 @@
 import styles from '../../../style/venue.module.scss';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import cnames from 'classnames/dedupe';
 import sequal from 'shallowequal';
 import DraggableGuest from './DraggableGuest';
@@ -41,6 +41,19 @@ const areSeatPropsEqual = (prevProps: SeatProps, nextProps: SeatProps): boolean 
 
 export const Seat = React.memo((props: SeatProps) => {
   const { seatNumber, guestID, hateScore, likeScore, focusState, focusReaction, isDimmed, hasGuest, focusGuest, clearFocusedGuest, swapGuests } = props;
+  const [justFocused, setJustFocused] = useState(false);
+  const prevFocusRef = useRef(focusState);
+
+  // Detect when this seat becomes focused and trigger pulse
+  useEffect(() => {
+    if (focusState && !prevFocusRef.current) {
+      setJustFocused(true);
+      const t = setTimeout(() => setJustFocused(false), 300);
+      prevFocusRef.current = focusState;
+      return () => clearTimeout(t);
+    }
+    prevFocusRef.current = focusState;
+  }, [focusState]);
 
   const emptySeat = !hasGuest;
   if (emptySeat) return (<EmptySeat />);
@@ -56,7 +69,7 @@ export const Seat = React.memo((props: SeatProps) => {
       swapGuests={swapGuests}
       seatNumber={seatNumber}
       guestID={guestID}
-      className={cnames(styles.seatAreaWrapper, focusReaction, hasFocus, focusState, { [styles.dimmed]: isDimmed })}>
+      className={cnames(styles.seatAreaWrapper, focusReaction, hasFocus, focusState, { [styles.dimmed]: isDimmed, [styles.justFocused]: justFocused })}>
       <DraggableGuest
         {...props}
         guestID={guestID}

@@ -1,0 +1,38 @@
+/* ProgressStrip – slim animated bar at bottom of TopBar */
+
+.strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--surface-3);
+  transition: opacity 300ms ease;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--optimize), var(--accent));
+  transition: width 300ms ease-out;
+}
+
+.complete .fill {
+  background: var(--happy);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .complete .fill {
+    animation: flashComplete 600ms ease-out;
+  }
+
+  @keyframes flashComplete {
+    0% { background: #fff; }
+    50% { background: var(--happy); }
+    100% { background: var(--happy); }
+  }
+}

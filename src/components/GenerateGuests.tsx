@@ -28,6 +28,7 @@ const mergeConfigs = (configs: Record<string, any>[]) => {
 const GenerateGuests = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [building, setBuilding] = React.useState(false);
 
   const liveConfig = useSelector((state: SeatingAppState) => ({
     difficulty: state.difficulty,
@@ -50,6 +51,7 @@ const GenerateGuests = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setBuilding(true);
     dispatch(commitDraft());
     dispatch(populateVenue(guestCount));
     dispatch(scoreVenue(seatsPerTable));
@@ -117,8 +119,14 @@ const GenerateGuests = () => {
         </div>
 
         {/* CTA */}
-        <button type="submit" className={styles.buildBtn}>
-          Build this venue
+        <button type="submit" className={styles.buildBtn} disabled={building}>
+          {building ? (
+            <>
+              <span className="fa fa-spinner fa-spin" /> Building your venue&hellip;
+            </>
+          ) : (
+            'Build this venue'
+          )}
         </button>
       </form>
     </div>

@@ -26,33 +26,9 @@
   gap: var(--space-3);
 }
 
-.scorePill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-full);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: #fff;
-  min-width: 40px;
-  text-align: center;
-}
-
-.scoreHappy {
-  background: var(--happy);
-}
-
-.scoreAccent {
-  background: var(--accent);
-}
-
-.scoreWarning {
-  background: var(--warning);
-}
-
-.scoreAngry {
-  background: var(--angry);
+/* Wrapper for Optimize button + popover sheet */
+.optimizeWrapper {
+  position: relative;
 }
 
 .optimizeButton {
@@ -77,22 +53,12 @@
     cursor: not-allowed;
   }
 
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
   @media (min-width: 640px) {
     display: inline-flex;
   }
-}
-
-.progressTrack {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--surface-3);
-}
-
-.progressFill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--optimize), var(--accent));
-  transition: width 300ms ease-out;
 }

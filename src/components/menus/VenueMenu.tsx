@@ -1,13 +1,12 @@
 import styles from './VenueMenu.module.scss';
 
-import cnames from 'classnames/dedupe';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as params from '../../data/venue';
 import { setMode, clearFocusedGuest, scoreVenue, setTemperature } from '../../app/action-creators';
-import names from '../../data/names';
 import { useVenueState } from '../../hooks/useVenueState';
 import { SeatingAppState } from '../../app/types';
+import GuestFocusPanel from '../GuestFocusPanel';
 
 const getFriendlyScore = (score: any) => params.maxScore + score;
 
@@ -19,50 +18,6 @@ const getScoreClass = (guests: any[], score: any): string => {
   if (s >= 90) return styles.scoreGood;
   if (s >= 80) return styles.scoreOk;
   return styles.scoreBad;
-};
-
-const FocusOverview = ({ focusedGuest, clearFocus }: { focusedGuest: any; clearFocus: () => void }) => {
-  if (!focusedGuest) return <div />;
-
-  const focused = focusedGuest;
-  const hates = focused.hates || [];
-  const likes = focused.likes || [];
-
-  return (
-    <div className={styles.focusOverview}>
-      <div className={styles.focusHeader} onClick={() => clearFocus()}>
-        <span className={styles.focusName}>Focused</span>
-        <span className={cnames(styles.focusClose, 'fa', 'fa-times')} />
-      </div>
-      <div className={styles.guestName}>{names.get(focused.id)}</div>
-
-      <div className={styles.relationSection}>
-        <label className={styles.sectionLabel}>Conflicts</label>
-        {hates.length ? (
-          hates.map((i: number) => (
-            <div key={i} className={cnames(styles.relationItem, styles.relationConflict)}>
-              {names.get(i)}
-            </div>
-          ))
-        ) : (
-          <div className={styles.emptyRelation}>None</div>
-        )}
-      </div>
-
-      <div className={styles.relationSection}>
-        <label className={styles.sectionLabel}>Friends</label>
-        {likes.length ? (
-          likes.map((i: number) => (
-            <div key={i} className={cnames(styles.relationItem, styles.relationFriend)}>
-              {names.get(i)}
-            </div>
-          ))
-        ) : (
-          <div className={styles.emptyRelation}>None</div>
-        )}
-      </div>
-    </div>
-  );
 };
 
 const VenueMenu = () => {
@@ -79,7 +34,7 @@ const VenueMenu = () => {
     <div className={styles.venueMenu}>
       {/* Score display */}
       {hasScore ? (
-        <div className={cnames(styles.scoreBlock, scoreClass)}>
+        <div className={`${styles.scoreBlock} ${scoreClass}`}>
           <span className={styles.scoreTitle}>Score</span>
           <span className={styles.scoreValue}>{getFriendlyScore(score)}</span>
         </div>
@@ -121,9 +76,9 @@ const VenueMenu = () => {
       </div>
 
       {/* Focused guest overview */}
-      <FocusOverview
+      <GuestFocusPanel
         focusedGuest={focusedGuest}
-        clearFocus={() => dispatch(clearFocusedGuest())}
+        onClear={() => dispatch(clearFocusedGuest())}
       />
     </div>
   );
