@@ -30,12 +30,12 @@ export interface BatchConfig {
 
 export interface SeatingAppState {
   // Guest lists
-  guests: any[];
-  venueGuests: any[];
-  venueGuestList?: any[];
+  guests: Guest[];
+  venueGuests: Guest[];
+  venueGuestList?: Guest[];
 
   // Seating
-  seats: Record<string | number, any>;
+  seats: Record<string | number, Guest>;
 
   // Configuration
   guestCount: number;
@@ -56,10 +56,10 @@ export interface SeatingAppState {
   hasVenueScore?: boolean;
 
   // UI
-  focusedGuest?: any;
+  focusedGuest?: Guest;
   venueDetailsExpanded?: boolean;
-  draftConfig?: Record<string, any>;
+  draftConfig?: Record<string, number>;
 
   // Draft / relationships
-  relationships?: Record<string, any>;
+  relationships?: Record<string, number[]>;
 }

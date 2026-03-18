@@ -81,7 +81,7 @@ export const Seat = React.memo((props: SeatProps) => {
           data-guest-id={guestID}
           onMouseDown={() => focusGuest(guestID!, 'guestChosen')}
           className={cnames(styles.guest, 'fa', 'fa-user', scoreClass)}
-        >{''}</div>
+        />
       </DraggableGuest>
     </DroppableSeat>
   );

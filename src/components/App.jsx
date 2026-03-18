@@ -11,9 +11,6 @@ import BottomTabBar from './BottomTabBar';
 import { useVenueState } from '../hooks/useVenueState';
 import { useOptimizer } from '../hooks/useOptimizer';
 import { setMode, setTemperature } from '../app/action-creators';
-import * as venueParams from '../data/venue';
-
-const getFriendlyScore = (score) => venueParams.maxScore + score;
 
 export const App = (props) => {
   const { children, menu } = props;
@@ -25,7 +22,6 @@ export const App = (props) => {
   const {
     guests,
     score,
-    hasScore,
     optimizing,
     progressRatio,
     temperature,
@@ -34,7 +30,6 @@ export const App = (props) => {
   } = venueState;
 
   const hasGuests = guests && guests.length > 0;
-  const friendlyScore = hasScore ? getFriendlyScore(score) : undefined;
 
   const handleOptimize = (optMode, optTemperature) => {
     if (!hasGuests) return;
@@ -65,8 +60,6 @@ export const App = (props) => {
     <DndProvider backend={HTML5Backend}>
       <div className={styles.appShell}>
         <TopBar
-          score={friendlyScore}
-          hasScore={!!hasScore}
           optimizing={optimizing}
           progressRatio={progressRatio ?? 0}
           onOptimize={handleOptimize}

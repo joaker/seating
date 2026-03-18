@@ -2,10 +2,7 @@ import React, { useEffect } from 'react';
 
 import cnames from 'classnames/dedupe';
 import { DragSource } from 'react-dnd';
-
-const DraggableTypes = {
-  guest: 'guest',
-};
+import { DraggableTypes } from './dnd-types';
 
 const guestSource = {
   beginDrag(props: any) {

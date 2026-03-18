@@ -40,13 +40,7 @@ export const defaultTemperature = toTemperature(defaultSize);
 export const maxTemperature = toTemperature(defaultSize);
 
 export const fromDifficultyRating = (rating: number): number => (rating * 2);
-export const toDifficultyRating = (value: number): number => {
-  const rating = (value / 2);
-  console.log('I am converting a difficulty rating, value: ' + value);
-  console.log('I am converting a difficulty rating, rating: ' + rating);
-  console.log('I am converting a difficulty rating');
-  return rating;
-};
+export const toDifficultyRating = (value: number): number => value / 2;
 
 export const difficultyRatings: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 export const difficulty = 8;
@@ -56,3 +50,11 @@ export const hard = 12;
 
 export const defaultMode: OptimizationMode = 'best';
 export const defaultModePart: ModePart = 'hate';
+
+export const getFriendlyScore = (score: number): number => maxScore + score;
+
+export const defaultVenueConfig = {
+  guestCount,
+  seatsPerTable,
+  difficulty,
+};

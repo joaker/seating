@@ -1,20 +1,20 @@
 import { useSelector } from 'react-redux';
 import * as params from '../data/venue';
-import { SeatingAppState } from '../app/types';
+import { SeatingAppState, Guest, OptimizationMode } from '../app/types';
 
 export interface VenueState {
-  guests: any[];
+  guests: Guest[];
   guestCount: number;
-  lastRunTime: any;
+  lastRunTime: number | undefined;
   seatsPerTable: number;
-  score: any;
-  hasScore: any;
-  optimizing: any;
-  progressRatio: any;
-  difficulty: any;
-  expanded: any;
+  score: number | undefined;
+  hasScore: boolean | undefined;
+  optimizing: Date | false;
+  progressRatio: number | undefined;
+  difficulty: number;
+  expanded: boolean | undefined;
   temperature: number;
-  mode: string;
+  mode: OptimizationMode;
 }
 
 /**

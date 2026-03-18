@@ -9,18 +9,15 @@ import {
 
 import routes from './routes';
 import store from './config/store';
-import { createHashHistory } from 'history';
 import './style/tokens.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './style/global.css';
 
-const history = createHashHistory();
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter(routes);
 root.render(
   <Provider store={store}>
-    <RouterProvider history={history} router={router} />
+    <RouterProvider router={router} />
   </Provider>,
 );

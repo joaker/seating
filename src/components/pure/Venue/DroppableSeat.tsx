@@ -4,16 +4,10 @@ import React from 'react';
 
 import cnames from 'classnames/dedupe';
 import { DropTarget } from 'react-dnd';
-
-const DraggableTypes = {
-  guest: 'guest',
-};
+import { DraggableTypes } from './dnd-types';
 
 const seatTarget = {
-  canDrop: () => {
-    const result = true && true;
-    return result;
-  },
+  canDrop: () => true,
   drop: (props: any, monitor: any) => {
     const item = monitor.getItem();
     const droppedSeatNumber = (item || {}).seatNumber;

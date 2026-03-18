@@ -18,4 +18,3 @@ declare module '*.css' {
 // Third-party modules without type declarations
 declare module 'shallowequal';
 declare module 'classnames/dedupe';
-declare module 'react-pure-render/component';

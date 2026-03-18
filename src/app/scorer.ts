@@ -8,8 +8,6 @@ export const sameTable = (guest1Index: number, guest2Index: number, tableSize: n
   return same;
 };
 
-export const hateWeight = 1;
-export const likeWeight = 0;
 export const selectHate = (guest: Guest): number[] => guest && guest.hates;
 export const selectLike = (guest: Guest): number[] => guest && guest.likes;
 

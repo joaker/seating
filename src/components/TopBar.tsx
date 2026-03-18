@@ -3,22 +3,16 @@ import styles from './TopBar.module.scss';
 import ScorePill from './ScorePill';
 import ProgressStrip from './ProgressStrip';
 import OptimizeSheet from './OptimizeSheet';
-import * as venueParams from '../data/venue';
+import { getFriendlyScore } from '../data/venue';
 import { useVenueState } from '../hooks/useVenueState';
 
 interface TopBarProps {
-  score?: number;
-  hasScore: boolean;
   optimizing: boolean | Date;
   progressRatio: number;
   onOptimize: (mode?: string, temperature?: number) => void;
   canOptimize: boolean;
   currentMode?: string;
   currentTemperature?: number;
-}
-
-const getFriendlyScore = (score: number | undefined) => {
-  return venueParams.maxScore + (score ?? 0);
 }
 
 const TopBar: React.FC<TopBarProps> = ({
@@ -67,8 +61,7 @@ const TopBar: React.FC<TopBarProps> = ({
       : 'Optimize';
 
   const { score, hasScore } = useVenueState();
-
-  const friendlyScore = getFriendlyScore(score);
+  const friendlyScore = getFriendlyScore(score ?? 0);
 
   return (
     <header className={styles.topBar}>

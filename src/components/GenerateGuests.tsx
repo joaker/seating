@@ -7,24 +7,6 @@ import * as params from '../data/venue';
 import StepperInput from './StepperInput';
 import styles from './GenerateGuests.module.scss';
 
-const defaultConfig = {
-  guestCount: params.guestCount,
-  seatsPerTable: params.seatsPerTable,
-  difficulty: params.difficulty,
-};
-
-const mergeConfigs = (configs: Record<string, any>[]) => {
-  const merged: Record<string, any> = {};
-  configs.forEach(config => {
-    for (const k in config) {
-      const v = config[k];
-      if (!v) continue;
-      merged[k] = v;
-    }
-  });
-  return merged;
-};
-
 const GenerateGuests = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,7 +19,7 @@ const GenerateGuests = () => {
   }));
   const draftConfig = useSelector((state: SeatingAppState) => state.draftConfig ?? {});
 
-  const config = mergeConfigs([defaultConfig, liveConfig, draftConfig]);
+  const config = { ...params.defaultVenueConfig, ...liveConfig, ...draftConfig };
   const { guestCount, seatsPerTable, difficulty } = config as {
     guestCount: number;
     seatsPerTable: number;

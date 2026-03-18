@@ -3,12 +3,11 @@ import styles from './VenueMenu.module.scss';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as params from '../../data/venue';
+import { getFriendlyScore } from '../../data/venue';
 import { setMode, clearFocusedGuest, scoreVenue, setTemperature } from '../../app/action-creators';
 import { useVenueState } from '../../hooks/useVenueState';
 import { SeatingAppState } from '../../app/types';
 import GuestFocusPanel from '../GuestFocusPanel';
-
-const getFriendlyScore = (score: any) => params.maxScore + score;
 
 const getScoreClass = (guests: any[], score: any): string => {
   const hasG = guests && guests.length;
@@ -36,7 +35,7 @@ const VenueMenu = () => {
       {hasScore ? (
         <div className={`${styles.scoreBlock} ${scoreClass}`}>
           <span className={styles.scoreTitle}>Score</span>
-          <span className={styles.scoreValue}>{getFriendlyScore(score)}</span>
+          <span className={styles.scoreValue}>{getFriendlyScore(score ?? 0)}</span>
         </div>
       ) : null}
 

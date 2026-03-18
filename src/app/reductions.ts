@@ -13,7 +13,7 @@ export const setGuests = (state: SeatingAppState, guests: any[]): SeatingAppStat
   return { ...state, guests };
 };
 
-export const setRelationships = (state: SeatingAppState, relationships: object = {}): SeatingAppState => {
+export const setRelationships = (state: SeatingAppState, relationships: Record<string, number[]> = {}): SeatingAppState => {
   return { ...state, relationships };
 };
 
@@ -52,7 +52,7 @@ export const setVenueGuests = (state: SeatingAppState, guests: any[] = [], ratio
   };
 };
 
-export const setVenueGuestList = (state: SeatingAppState, guests: any[] = []): SeatingAppState => {
+const setVenueGuestList = (state: SeatingAppState, guests: any[] = []): SeatingAppState => {
   return { ...state, venueGuestList: guests };
 };
 
@@ -115,7 +115,7 @@ export const setTemperature = (state: SeatingAppState, temperature: number): Sea
   return { ...state, temperature };
 };
 
-export const focusGuest = (state: SeatingAppState, guestID: number, force: boolean = false): SeatingAppState => {
+export const focusGuest = (state: SeatingAppState, guestID: number): SeatingAppState => {
   const guests: any[] = state.venueGuests ?? [];
   const guest = guests.find((g: any) => g.id === guestID);
   return { ...state, focusedGuest: guest };
@@ -136,19 +136,13 @@ export const setDraftProperty = (state: SeatingAppState, property: string, value
   return { ...state, draftConfig: newDraft };
 };
 
-const defaultConfig = {
-  guestCount: params.guestCount,
-  seatsPerTable: params.seatsPerTable,
-  difficulty: params.difficulty,
-};
-
 export const commitDraft = (state: SeatingAppState): SeatingAppState => {
   const draft: Record<string, any> = state.draftConfig ?? {};
   const { draftConfig: _removed, ...stateWithoutDraft } = state;
   const stateWithDraft = { ...stateWithoutDraft, ...draft };
 
-  const guestCount: number = stateWithDraft.guestCount || defaultConfig.guestCount;
-  const seatsPerTable: number = stateWithDraft.seatsPerTable || defaultConfig.seatsPerTable;
+  const guestCount: number = stateWithDraft.guestCount || params.defaultVenueConfig.guestCount;
+  const seatsPerTable: number = stateWithDraft.seatsPerTable || params.defaultVenueConfig.seatsPerTable;
 
   const tableCount = Math.ceil(guestCount / seatsPerTable);
   const seatCount = tableCount * seatsPerTable;

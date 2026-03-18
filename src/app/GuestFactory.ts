@@ -17,12 +17,6 @@ class GuestFactory {
     this.friendlyFactor = maxLiking;
   }
 
-  randomGuestID(id: number): number {
-    const guestID = Math.floor(Math.random() * this.guestCount);
-    const randomID = guestID !== id ? guestID : (guestID + 1);
-    return randomID;
-  }
-
   getRandomID(): number {
     const randomID = Math.floor(Math.random() * this.guestCount);
     return randomID;

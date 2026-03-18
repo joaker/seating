@@ -3,10 +3,7 @@ import App from './components/App';
 import Venue from './components/Venue';
 import GenerateGuests from './components/GenerateGuests';
 import VenueMenu from './components/menus/VenueMenu';
-
-import {
-  Route,
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const routes = ([
   {
@@ -23,9 +20,7 @@ const routes = ([
   },
   {
     path: "seating",
-    element: (
-      <App menu={<VenueMenu />} children={<Venue />} />
-    )
+    element: <Navigate to="/" replace />,
   },
 ]);
 

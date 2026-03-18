@@ -20,10 +20,7 @@ const getRowRange = (rowWidth: number, rowIndex: number = 0, startOffset: number
   return range(rowEnd, rowStart);
 };
 
-const isGuest = (guest: any): boolean => {
-  var validGuest = !(!guest || guest.id == null || guest.id == undefined);
-  return validGuest;
-};
+const isGuest = (guest: any): boolean => guest != null && guest.id != null;
 
 const hasRelation = (source: any, target: any, type: string): boolean => {
   const relates = (source[type] && source[type].includes(target.id));
@@ -53,7 +50,7 @@ const getFocusReaction = (guest: any, focusedGuest: any): string => {
 const getFocusState = (guest: any, focusedGuest: any): string => {
   if (!isGuest(focusedGuest)) return '';
 
-  if (guest.id == focusedGuest.id) return (styles.hasSelectFocus || 'hasSelectFocus');
+  if (guest.id === focusedGuest.id) return (styles.hasSelectFocus || 'hasSelectFocus');
   if (hasHate(focusedGuest, guest)) return (styles.hasHateFocus || 'hasHateFocus');
   if (hasLike(focusedGuest, guest)) return (styles.hasLikeFocus || 'hasLikeFocus');
 
