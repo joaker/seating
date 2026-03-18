@@ -5,7 +5,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 2px;
   background: var(--surface-3);
   transition: opacity 300ms ease;
 }
@@ -17,22 +17,33 @@
 
 .fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--optimize), var(--accent));
+  background: linear-gradient(90deg, var(--optimize), var(--accent), var(--optimize));
+  background-size: 200% 100%;
   transition: width 300ms ease-out;
 }
 
 .complete .fill {
   background: var(--happy);
+  background-size: 100% 100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .fill {
+    animation: shimmer 2s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+
   .complete .fill {
     animation: flashComplete 600ms ease-out;
   }
 
   @keyframes flashComplete {
-    0% { background: #fff; }
-    50% { background: var(--happy); }
+    0% { background: rgba(255, 255, 255, 0.8); }
+    40% { background: var(--accent); }
     100% { background: var(--happy); }
   }
 }

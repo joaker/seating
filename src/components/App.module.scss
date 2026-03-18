@@ -16,7 +16,7 @@
   overflow-y: auto;
   padding-bottom: calc(var(--bottombar-height) + env(safe-area-inset-bottom));
   opacity: 1;
-  transition: opacity 150ms ease;
+  transition: opacity 200ms ease;
 
   @media (min-width: 640px) {
     padding-bottom: 0;
@@ -36,6 +36,19 @@
   background: var(--surface-1);
   border-left: 1px solid var(--surface-3);
   overflow-y: auto;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background: var(--gold-line-v);
+    opacity: 0.4;
+    pointer-events: none;
+  }
 
   @media (min-width: 1024px) {
     display: block;

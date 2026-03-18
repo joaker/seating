@@ -1,34 +1,35 @@
 :root {
-  /* Surfaces */
-  --surface-0: #0d1117;
-  --surface-1: #161b22;
-  --surface-2: #21262d;
-  --surface-3: #30363d;
+  /* Surfaces — black */
+  --surface-0: #0a0a0a;
+  --surface-1: #111111;
+  --surface-2: #1a1a1a;
+  --surface-3: #242424;
+  --surface-4: #2e2e2e;
 
-  /* Text */
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --text-muted: #484f58;
+  /* Text — bone foreground */
+  --text-primary: #e8e2d8;
+  --text-secondary: #9a9590;
+  --text-muted: #585450;
 
-  /* Accent */
-  --accent: #58a6ff;
-  --accent-hover: #79c0ff;
-  --accent-subtle: rgba(56, 139, 253, 0.15);
+  /* Accent — purple */
+  --accent: #9b72cf;
+  --accent-hover: #b48de0;
+  --accent-subtle: rgba(155, 114, 207, 0.15);
 
   /* Semantic */
-  --happy: #3fb950;
-  --happy-subtle: rgba(63, 185, 80, 0.15);
-  --angry: #f85149;
-  --angry-subtle: rgba(248, 81, 73, 0.15);
-  --neutral: #8b949e;
-  --neutral-subtle: rgba(139, 148, 158, 0.10);
-  --warning: #d29922;
-  --warning-subtle: rgba(210, 153, 34, 0.15);
+  --happy: #5aaa74;
+  --happy-subtle: rgba(90, 170, 116, 0.14);
+  --angry: #c95f5f;
+  --angry-subtle: rgba(201, 95, 95, 0.14);
+  --neutral: #6e6b68;
+  --neutral-subtle: rgba(110, 107, 104, 0.10);
+  --warning: #c88c4a;
+  --warning-subtle: rgba(200, 140, 74, 0.15);
 
-  /* Optimize action */
-  --optimize: #a371f7;
-  --optimize-hover: #b992ff;
-  --optimize-subtle: rgba(163, 113, 247, 0.15);
+  /* Optimize action — purple (same as accent) */
+  --optimize: #9b72cf;
+  --optimize-hover: #b48de0;
+  --optimize-subtle: rgba(155, 114, 207, 0.15);
 
   /* Spacing (8px grid) */
   --space-1: 0.25rem;
@@ -41,26 +42,32 @@
   --space-8: 4rem;
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --font-display: Arial, sans-serif;
+  --font-sans: Arial, sans-serif;
+  --font-mono: Arial, sans-serif;
 
   --text-xs:   clamp(0.625rem, 0.5rem + 0.25vw, 0.75rem);
   --text-sm:   clamp(0.75rem, 0.675rem + 0.25vw, 0.875rem);
   --text-base: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
   --text-lg:   clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
   --text-xl:   clamp(1.5rem, 1.25rem + 0.75vw, 2rem);
+  --text-2xl:  clamp(2rem, 1.75rem + 1vw, 2.75rem);
 
   /* Layout */
-  --topbar-height: 56px;
+  --topbar-height: 60px;
   --bottombar-height: 64px;
-  --sidebar-width: 280px;
-  --radius-sm: 4px;
-  --radius-md: 8px;
+  --sidebar-width: 288px;
+  --radius-sm: 3px;
+  --radius-md: 6px;
   --radius-lg: 12px;
   --radius-full: 9999px;
 
   /* Transitions */
   --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  --transition-slow: 400ms ease;
+  --transition-base: 280ms ease;
+  --transition-slow: 420ms ease;
+
+  /* Accent shimmer for decorative lines */
+  --gold-line: linear-gradient(90deg, transparent, var(--accent), transparent);
+  --gold-line-v: linear-gradient(180deg, transparent, var(--accent), transparent);
 }

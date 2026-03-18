@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Venue – dark-theme seating chart styles
+   Venue – warm noir seating chart styles
    Uses CSS custom properties from tokens.css
    ========================================================================== */
 
@@ -19,6 +19,8 @@
 .venue h4 {
   color: var(--text-secondary);
   text-align: center;
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 
 /* -------------------------------------------------------------------------
@@ -28,7 +30,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--table-min-size, 140px), 1fr));
   gap: var(--space-3);
-  padding: var(--space-3);
+  padding: var(--space-4);
   text-align: center;
 }
 
@@ -37,15 +39,34 @@
    ------------------------------------------------------------------------- */
 .tableArea {
   background: var(--surface-2);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   border: 1px solid var(--surface-3);
   text-align: center;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
   overflow: hidden;
+  position: relative;
+
+  /* Subtle warm glow at top edge */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: var(--gold-line);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
 }
 
 .tableArea:hover {
-  border-color: var(--accent);
+  border-color: rgba(200, 164, 94, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(200, 164, 94, 0.1);
+
+  &::before {
+    opacity: 0.6;
+  }
 }
 
 /* Table header */
@@ -55,13 +76,15 @@
   align-items: center;
   padding: var(--space-1) var(--space-2);
   border-bottom: 1px solid var(--surface-3);
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .tableLabel {
   font-size: var(--text-xs);
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   color: var(--text-secondary);
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .tableScore {
@@ -77,6 +100,7 @@
   align-items: center;
   padding: var(--space-1) var(--space-2);
   border-bottom: 1px solid var(--surface-3);
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .tableArea label {
@@ -84,7 +108,7 @@
   margin-bottom: 0;
   color: var(--text-secondary);
   font-size: var(--text-xs);
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   display: block;
   text-align: center;
 }
@@ -115,52 +139,52 @@
   line-height: 0;
   padding: 2px;
   text-align: center;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   border: 1px solid transparent;
   transition: box-shadow var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast);
 }
 
 .seatAreaWrapper:hover {
   box-shadow: 0 0 0 2px var(--accent-subtle);
-  border-color: var(--accent);
+  border-color: rgba(200, 164, 94, 0.5);
 }
 
-/* Focus glow ring */
+/* Focus glow ring — gold for selected guest */
 .hasFocus {
   box-shadow: 0 0 0 2px var(--accent-subtle), 0 0 8px var(--accent-subtle);
-  border-color: var(--accent);
+  border-color: rgba(200, 164, 94, 0.6);
 }
 
 .hasSelectFocus {
-  box-shadow: 0 0 0 2px var(--accent-subtle), 0 0 12px rgba(88, 166, 255, 0.4);
+  box-shadow: 0 0 0 2px var(--accent-subtle), 0 0 12px rgba(200, 164, 94, 0.35);
   border-color: var(--accent);
 }
 
 .hasHateFocus {
   box-shadow: 0 0 0 2px var(--angry-subtle), 0 0 8px var(--angry-subtle);
-  border-color: var(--angry);
+  border-color: rgba(201, 95, 95, 0.6);
 }
 
 .hasLikeFocus {
   box-shadow: 0 0 0 2px var(--happy-subtle), 0 0 8px var(--happy-subtle);
-  border-color: var(--happy);
+  border-color: rgba(90, 170, 116, 0.6);
 }
 
 /* Dimmed state — non-related seats fade when a guest is focused */
 .dimmed {
-  opacity: 0.4;
+  opacity: 0.3;
   transition: opacity var(--transition-fast);
 }
 
 /* Pulse animation when a seat first receives focus */
 @media (prefers-reduced-motion: no-preference) {
   .justFocused .guest {
-    animation: seatPulse 300ms ease-out;
+    animation: seatPulse 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   @keyframes seatPulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
+    50% { transform: scale(1.35); }
     100% { transform: scale(1); }
   }
 }
@@ -175,11 +199,11 @@
   overflow: hidden;
   border: 2px solid transparent;
   cursor: pointer;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
 }
 
 .seatArea.emptySeat {
-  border: 1px dashed var(--surface-3);
+  border: 1px dashed var(--surface-4);
   border-radius: 50%;
   background: transparent;
 }
@@ -188,9 +212,10 @@
 .emptySeatCircle {
   width: calc(var(--seat-size) * 0.6);
   height: calc(var(--seat-size) * 0.6);
-  border: 1px dashed var(--surface-3);
+  border: 1px dashed var(--surface-4);
   border-radius: 50%;
   margin: auto;
+  opacity: 0.5;
 }
 
 /* -------------------------------------------------------------------------
@@ -204,6 +229,7 @@
   padding: 2px;
   font-size: calc(var(--seat-size) * 0.5);
   line-height: 1;
+  border-radius: 50%;
 }
 
 .guest.neutral,
@@ -230,11 +256,13 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+  font-family: var(--font-mono);
 }
 
 .scoring .title {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-secondary);
+  font-family: var(--font-sans);
 }
 
 .scoring .value {
@@ -242,25 +270,33 @@
   padding: 2px 6px;
   border-radius: var(--radius-sm);
   background: var(--surface-3);
-  border: none;
+  border: 1px solid var(--surface-4);
 }
 
 .perfect .value {
   color: var(--happy);
-  font-weight: 800;
+  font-weight: 700;
+  background: var(--happy-subtle);
+  border-color: rgba(90, 170, 116, 0.3);
 }
 
 .good .value {
   color: var(--accent);
+  background: var(--accent-subtle);
+  border-color: rgba(200, 164, 94, 0.3);
 }
 
 .ok .value {
   color: var(--warning);
+  background: var(--warning-subtle);
+  border-color: rgba(200, 140, 74, 0.3);
 }
 
 .bad .value {
   color: var(--angry);
-  font-weight: 800;
+  font-weight: 700;
+  background: var(--angry-subtle);
+  border-color: rgba(201, 95, 95, 0.3);
 }
 
 /* -------------------------------------------------------------------------
@@ -330,7 +366,8 @@
   }
 
   .focusName {
-    font-weight: bold;
+    font-family: var(--font-display);
+    font-weight: 600;
     color: var(--accent);
     cursor: pointer;
     transition: color var(--transition-fast);

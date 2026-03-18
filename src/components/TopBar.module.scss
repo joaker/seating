@@ -4,20 +4,36 @@
   z-index: 50;
   height: var(--topbar-height);
   background: var(--surface-1);
-  border-bottom: 1px solid var(--surface-3);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-5);
   flex-shrink: 0;
+  overflow: visible;
+
+  /* Thin gold shimmer border at bottom */
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gold-line);
+    opacity: 0.5;
+  }
 }
 
 .brand {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: var(--text-lg);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.375rem, 1.25rem + 0.5vw, 1.75rem);
   color: var(--text-primary);
   line-height: 1;
+  letter-spacing: 0.01em;
+
+  /* Subtle warm glow on the brand name */
+  text-shadow: 0 0 40px rgba(200, 164, 94, 0.2);
 }
 
 .rightGroup {
@@ -35,21 +51,25 @@
   display: none;
   align-items: center;
   gap: var(--space-2);
-  background: var(--optimize);
-  color: #fff;
-  border: none;
+  background: linear-gradient(135deg, var(--optimize) 0%, rgba(142, 107, 181, 0.85) 100%);
+  color: #f0e6d0;
+  border: 1px solid rgba(200, 164, 94, 0.2);
   border-radius: var(--radius-md);
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
-  font-weight: 600;
-  transition: background var(--transition-fast);
+  font-weight: 500;
+  font-family: var(--font-sans);
+  letter-spacing: 0.04em;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 
   &:hover:not(:disabled) {
-    background: var(--optimize-hover);
+    background: linear-gradient(135deg, var(--optimize-hover) 0%, var(--optimize) 100%);
+    box-shadow: 0 0 20px rgba(142, 107, 181, 0.3);
+    border-color: rgba(200, 164, 94, 0.4);
   }
 
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
   }
 
