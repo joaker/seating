@@ -7,8 +7,6 @@ interface ScorePillProps {
   celebrate?: boolean;
 }
 
-const clamp = (v: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, v));
 
 const easeInOutQuad = (t: number) =>
   t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;

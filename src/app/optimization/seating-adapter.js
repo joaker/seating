@@ -80,8 +80,6 @@ export const optimizeSeating = (guests, initialScore, tableSize, maxTemperature,
   return new Promise((resolve) => {
     let state = initialState;
     let temperature = maxTemperature;
-    let step = 0;
-
     function runBatch() {
       if (temperature < 1) {
         relay.finish(state.guests);
@@ -95,7 +93,6 @@ export const optimizeSeating = (guests, initialScore, tableSize, maxTemperature,
         if (transition !== null && config.acceptance(transition.energyDelta, t)) {
           state = transition.nextState;
         }
-        step++;
       }
 
       batchCount++;
