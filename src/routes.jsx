@@ -9,7 +9,7 @@ const routes = ([
   {
     path: "/",
     element: (
-      <App menu={<VenueMenu />} children={<Venue />} />
+      <App children={<Venue />} />
     ),
   },
   {
