@@ -1,4 +1,4 @@
-import { annealAsync, linearCooling } from 'simulated-annealing';
+import { linearCooling } from '@joaker/simulated-annealing';
 import { scoreTable, sameTable } from '../scorer';
 
 // CONFIG_C values from the original const.js
