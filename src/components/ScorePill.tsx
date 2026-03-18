@@ -21,7 +21,7 @@ const getColorClass = (friendlyScore: number): string => {
 };
 
 const ScorePill: React.FC<ScorePillProps> = ({ score, hasScore, celebrate }) => {
-  const friendlyScore = clamp(100 + score, 0, 100);
+  const friendlyScore = score; // Assuming score is already in friendly format
   const prevRef = useRef(friendlyScore);
   const [displayValue, setDisplayValue] = useState(friendlyScore);
   const [popping, setPopping] = useState(false);

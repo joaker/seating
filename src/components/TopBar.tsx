@@ -3,6 +3,8 @@ import styles from './TopBar.module.scss';
 import ScorePill from './ScorePill';
 import ProgressStrip from './ProgressStrip';
 import OptimizeSheet from './OptimizeSheet';
+import * as venueParams from '../data/venue';
+import { useVenueState } from '../hooks/useVenueState';
 
 interface TopBarProps {
   score?: number;
@@ -15,9 +17,11 @@ interface TopBarProps {
   currentTemperature?: number;
 }
 
+const getFriendlyScore = (score: number | undefined) => {
+  return venueParams.maxScore + (score ?? 0);
+}
+
 const TopBar: React.FC<TopBarProps> = ({
-  score,
-  hasScore,
   optimizing,
   progressRatio,
   onOptimize,
@@ -62,13 +66,17 @@ const TopBar: React.FC<TopBarProps> = ({
       ? '\u2713 Done!'
       : 'Optimize';
 
+  const { score, hasScore } = useVenueState();
+
+  const friendlyScore = getFriendlyScore(score);
+
   return (
     <header className={styles.topBar}>
       <span className={styles.brand}>Seatable</span>
 
       <div className={styles.rightGroup}>
         <ScorePill
-          score={score ?? 0}
+          score={friendlyScore}
           hasScore={!!hasScore && score != null}
           celebrate={celebrating}
         />
