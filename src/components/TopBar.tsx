@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './TopBar.module.scss';
 import ScorePill from './ScorePill';
 import ProgressStrip from './ProgressStrip';
@@ -65,7 +66,7 @@ const TopBar: React.FC<TopBarProps> = ({
 
   return (
     <header className={styles.topBar}>
-      <span className={styles.brand}>Seatable</span>
+      <Link to="/generate-guests" className={styles.brand}>Seatable</Link>
 
       <div className={styles.rightGroup}>
         <ScorePill

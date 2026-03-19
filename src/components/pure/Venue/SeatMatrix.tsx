@@ -5,7 +5,7 @@ import React from 'react';
 import cnames from 'classnames/dedupe';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { focusGuest, scoreVenue, swapGuests as swapGuestsAction } from '../../../app/action-creators';
+import { focusGuest, clearFocusedGuest, scoreVenue, swapGuests as swapGuestsAction } from '../../../app/action-creators';
 import * as params from '../../../data/venue';
 import * as scorer from '../../../app/scorer';
 import { OptimizationMode, SeatingAppState } from '../../../app/types';
@@ -102,7 +102,13 @@ const SeatMatrix = (props: SeatMatrixProps) => {
   });
 
   // Inline mapDispatchForMatrix
-  const focusGuestFn = (guest: any) => dispatch(focusGuest(guest));
+  const focusGuestFn = (guestID: number) => {
+    if (focusedGuest && focusedGuest.id === guestID) {
+      dispatch(clearFocusedGuest());
+    } else {
+      dispatch(focusGuest(guestID));
+    }
+  };
   const swapGuests = (source: number, target: number) => {
     dispatch(swapGuestsAction(source, target));
     dispatch(scoreVenue(seatsPerTable));
