@@ -1,23 +1,51 @@
-# Seating
+# Seatable
 
 An event seating optimizer. Given a guest list with social relationships (likes and dislikes), it uses **simulated annealing** to find the best table arrangement — keeping friends together and feuds apart.
 
 ## Demo
 
-[immense-lake-53069.herokuapp.com](https://immense-lake-53069.herokuapp.com)
+**→ [seating-2ae.pages.dev/generate-guests](https://seating-2ae.pages.dev/generate-guests)**
 
-> Note: the demo is not yet mobile-friendly.
+Fully responsive: works on phone, tablet, and desktop.
 
-## Features
+## The story
 
-- **Configure your venue** — set guest count (20–5,000), seats per table, and how dramatic your guests are
-- **Simulated annealing optimizer** — three modes: minimize feuds (`hate`), maximize friendships (`like`), or balance both (`best`)
-- **Drag-and-drop seating** — manually rearrange guests on the visual seating map
-- **Live scoring** — per-guest and per-table happiness scores update in real time
-- **Guest focus panel** — click any guest to see how their neighbors feel about them
-- **Adjustable temperature** — control how aggressively the optimizer explores swaps
+I built the original version of this over a decade ago as a novel demonstration that simulated annealing — an algorithm borrowed from metallurgy — could chew through an NP-hard combinatorial problem (seating arrangements) inside a browser. It was a desktop-only web app, frozen in the tech of its era: class components, Create React App, Bootstrap 3, Immutable.js, JavaScript, no mobile support.
 
-## Getting Started
+In an afternoon of pairing with Claude, it was rebuilt on a modern stack:
+
+- Create React App → **Vite 8**
+- JavaScript → **TypeScript 5**
+- Class components → **functional components + hooks**
+- Immutable.js Redux state → **plain TS objects with Redux Toolkit**
+- Bootstrap 3 → **SCSS Modules + CSS custom properties** (and a real design system)
+- Glyphicons → **Font Awesome via npm**
+- Inline annealing loop → **extracted to [`@joaker/simulated-annealing`](https://www.npmjs.com/package/@joaker/simulated-annealing) on npm**
+- Desktop-only layout → **fully responsive**
+
+The algorithm is the same. The app is new.
+
+## How it works
+
+1. **Configure** your venue — guest count (20–5,000), seats per table, and how dramatic your guests are. The drama slider controls how many strong likes/dislikes each guest holds.
+2. **Generate** a guest list with randomized relationships.
+3. **Optimize** — the annealer proposes random pairwise seat swaps. It always accepts improvements; it sometimes accepts worse arrangements with probability `exp(-ΔE / scaledTemperature)`, which lets it escape local optima. As the temperature cools, it settles into a near-optimal arrangement.
+4. **Watch** the score converge live, or **drag** guests around to fine-tune.
+
+Three modes: minimize feuds (`hate`), maximize friendships (`like`), or balance both (`best`).
+
+## Tech stack
+
+| Layer | Libraries |
+|---|---|
+| UI | React 18, react-dnd |
+| State | Redux Toolkit, React Redux |
+| Routing | React Router 6 |
+| Optimization | [@joaker/simulated-annealing](https://www.npmjs.com/package/@joaker/simulated-annealing) |
+| Styling | SCSS Modules, CSS custom-property design tokens |
+| Build | Vite 8, TypeScript 5 |
+
+## Run it locally
 
 **Prerequisites:** Node.js ^19.7.0
 
@@ -25,28 +53,9 @@ An event seating optimizer. Given a guest list with social relationships (likes 
 git clone https://github.com/joaker/seating.git
 cd seating
 npm install
-npm start        # dev server at http://localhost:5173
+npm start        # dev server at http://localhost:3000
 npm run build    # production build
-npm test         # run tests
 ```
-
-## How It Works
-
-1. Go to **Generate** — configure guest count, seats per table, and drama level
-2. The app generates a guest list with randomized like/dislike relationships
-3. Hit **Optimize** — the simulated annealing algorithm shuffles guests across iterations, keeping arrangements that improve the score and occasionally accepting worse ones to escape local optima
-4. Watch the score converge; drag guests manually to fine-tune
-
-## Tech Stack
-
-| Layer | Libraries |
-|---|---|
-| UI | React 18, React Bootstrap, Tailwind CSS |
-| State | Redux Toolkit, React Redux |
-| Routing | React Router 6 |
-| Drag & Drop | react-dnd (HTML5 backend) |
-| Optimization | [@joaker/simulated-annealing](https://www.npmjs.com/package/@joaker/simulated-annealing) |
-| Build | Vite 8, TypeScript 5 |
 
 ## License
 
